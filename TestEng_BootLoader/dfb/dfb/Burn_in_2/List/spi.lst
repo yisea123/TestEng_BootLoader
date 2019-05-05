@@ -1,0 +1,228 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        30/Mar/2019  15:46:37
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\DFB_src\spi.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\DFB_src\spi.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\DFB_inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\spi.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\Obj\spi.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\DFB_src\spi.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    spi_device.c  burn in system
+      4            * @author  h&h
+      5            * @version 
+      6            * @date    
+      7          * @brief   SPI functions, DAC set DFB current, ADC update 
+      8            ******************************************************************************
+      9          **/ 
+     10          
+     11          #include "include.h"
+     12          
+     13          __ramfunc ErrorStatus drv_spi1_access_short(uint16_t data, uint16_t *ret_data);
+     14          __ramfunc ErrorStatus drv_spi2_access_short(uint16_t data, uint16_t *ret_data);
+     15          
+     16          /**
+     17            * @brief   drv_spi_access_short()
+     18            * @param   
+     19            * @retval 
+     20            * @Description:	
+     21               spi driver
+     22          **/
+     23          __ramfunc ErrorStatus drv_spi_access_short(SPI_TypeDef* SPIx, uint16_t data, uint16_t *ret_data)
+     24          {
+     25              unsigned short   loop = 0;
+     26              uint32_t spi_status;
+     27              ErrorStatus rc = SUCCESS;
+     28              assert_param(IS_SPI_ALL_PERIPH(SPIx));
+     29          
+     30              SPIx->DR = data;                               
+     31              while (1) 
+     32              {
+     33                 spi_status = SPIx->SR;      
+     34                 if ( (spi_status & SPI_I2S_FLAG_TXE)&& !(spi_status & (SPI_I2S_FLAG_BSY)) ) 
+     35                 {
+     36                      break;
+     37                 }
+     38          
+     39                 if( loop++ > 1000 )
+     40                 {
+     41                    rc = ERROR;
+     42                    break;
+     43                 }
+     44              }
+     45          
+     46              if (rc==SUCCESS) 
+     47              {    
+     48                  spi_status = SPIx->SR;
+     49                  while((spi_status & SPI_I2S_FLAG_RXNE)==RESET);
+     50                  *ret_data = SPIx->DR; 
+     51              }
+     52              return rc;
+     53          } 
+     54          
+     55          
+     56          
+     57          
+     58          
+     59          __ramfunc ErrorStatus drv_spi2_access_short(uint16_t data, uint16_t *ret_data)
+     60          {
+     61               unsigned short   loop = 0;
+     62              uint32_t spi_status;
+     63              ErrorStatus rc = SUCCESS;
+     64              
+     65              SPI2->DR = data;                               
+     66              while (1) 
+     67              {
+     68                 spi_status = SPI2->SR;      
+     69                 if ( (spi_status & SPI_I2S_FLAG_TXE)&& !(spi_status & (SPI_I2S_FLAG_BSY)) ) 
+     70                 {
+     71                      break;
+     72                 }
+     73          
+     74                 if( loop++ > 1000 )
+     75                 {
+     76                    rc = ERROR;
+     77                    break;
+     78                 }
+     79              }
+     80              
+     81              if(rc == ERROR)
+     82              return rc;
+     83              
+     84              loop = 0;
+     85              while (1) 
+     86              {
+     87                 spi_status = SPI2->SR;      
+     88                 if ((spi_status & SPI_I2S_FLAG_RXNE)!=RESET)
+     89                 {
+     90                 *ret_data = SPI2->DR;
+     91                      break;
+     92                 }
+     93          
+     94                 if( loop++ > 1000 )
+     95                 {
+     96                *ret_data = 0;
+     97                    rc = ERROR;
+     98                    break;
+     99                 }
+    100              }
+    101              return rc;
+    102          }
+    103          
+    104          
+    105          __ramfunc ErrorStatus drv_spi1_access_short(uint16_t data, uint16_t *ret_data)
+    106          {
+    107               unsigned short   loop = 0;
+    108              uint32_t spi_status;
+    109              ErrorStatus rc = SUCCESS;
+    110              
+    111              SPI1->DR = data;                               
+    112              while (1) 
+    113              {
+    114                 spi_status = SPI1->SR;      
+    115                 if ( (spi_status & SPI_I2S_FLAG_TXE)&& !(spi_status & (SPI_I2S_FLAG_BSY)) ) 
+    116                 {
+    117                      break;
+    118                 }
+    119          
+    120                 if( loop++ > 1000 )
+    121                 {
+    122                    rc = ERROR;
+    123                    break;
+    124                 }
+    125              }
+    126              
+    127              if(rc == ERROR)
+    128          	return rc;
+    129              
+    130              loop = 0;
+    131              while (1) 
+    132              {
+    133                 spi_status = SPI1->SR;      
+    134                 if ((spi_status & SPI_I2S_FLAG_RXNE)!=RESET)
+    135                 {
+    136          	   *ret_data = SPI1->DR;
+    137                      break;
+    138                 }
+    139          
+    140                 if( loop++ > 1000 )
+    141                 {
+    142          	  *ret_data = 0;
+    143                    rc = ERROR;
+    144                    break;
+    145                 }
+    146              }
+    147              return rc;
+    148          } 
+    149          
+    150          /******************* (C) COPYRIGHT 2018 *****END OF FILE****/
+    151           
+    152          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   drv_spi1_access_short
+       8   drv_spi2_access_short
+      12   drv_spi_access_short
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable1
+       4  ??DataTable1_1
+       4  ??DataTable1_2
+       4  ??DataTable1_3
+     104  drv_spi1_access_short
+     104  drv_spi2_access_short
+      62  drv_spi_access_short
+
+ 
+ 286 bytes in section .textrw
+ 
+ 286 bytes of CODE memory
+
+Errors: none
+Warnings: none

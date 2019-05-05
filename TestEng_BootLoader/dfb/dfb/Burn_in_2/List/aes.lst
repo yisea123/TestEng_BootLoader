@@ -1,0 +1,690 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        24/Sep/2018  11:06:53
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\aes\aes.c
+#    Command line =  
+#        F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\aes\aes.c -lcN
+#        F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\ -lb
+#        F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\ -o
+#        F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\DFB_inc\ -I
+#        F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\..\Libraries\CMSIS\
+#        -I
+#        F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\ascii\
+#        -I
+#        F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\include\
+#        -I
+#        F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\modbus_port\
+#        -I F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\rtu\
+#        -I F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\aes.lst
+#    Object file  =  
+#        F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\Obj\aes.o
+#
+###############################################################################
+
+F:\dfb\TestEng_FL0001A00\TestEng_FL0001A00\dfb\aes\aes.c
+      1          /*
+      2          
+      3          This is an implementation of the AES algorithm, specifically ECB, CTR and CBC mode.
+      4          Block size can be chosen in aes.h - available choices are AES128, AES192, AES256.
+      5          
+      6          The implementation is verified against the test vectors in:
+      7            National Institute of Standards and Technology Special Publication 800-38A 2001 ED
+      8          
+      9          ECB-AES128
+     10          ----------
+     11          
+     12            plain-text:
+     13              6bc1bee22e409f96e93d7e117393172a
+     14              ae2d8a571e03ac9c9eb76fac45af8e51
+     15              30c81c46a35ce411e5fbc1191a0a52ef
+     16              f69f2445df4f9b17ad2b417be66c3710
+     17          
+     18            key:
+     19              2b7e151628aed2a6abf7158809cf4f3c
+     20          
+     21            resulting cipher
+     22              3ad77bb40d7a3660a89ecaf32466ef97 
+     23              f5d3d58503b9699de785895a96fdbaaf 
+     24              43b1cd7f598ece23881b00e3ed030688 
+     25              7b0c785e27e8ad3f8223207104725dd4 
+     26          
+     27          
+     28          NOTE:   String length must be evenly divisible by 16byte (str_len % 16 == 0)
+     29                  You should pad the end of the string with zeros if this is not the case.
+     30                  For AES192/256 the key size is proportionally larger.
+     31          
+     32          */
+     33          
+     34          
+     35          /*****************************************************************************/
+     36          /* Includes:                                                                 */
+     37          /*****************************************************************************/
+     38          #include <stdint.h>
+     39          #include <string.h> // CBC mode, for memset
+     40          #include "aes.h"
+     41          
+     42          /*****************************************************************************/
+     43          /* Defines:                                                                  */
+     44          /*****************************************************************************/
+     45          // The number of columns comprising a state in AES. This is a constant in AES. Value=4
+     46          #define Nb 4
+     47          
+     48          #if defined(AES256) && (AES256 == 1)
+     49              #define Nk 8
+     50              #define Nr 14
+     51          #elif defined(AES192) && (AES192 == 1)
+     52              #define Nk 6
+     53              #define Nr 12
+     54          #else
+     55              #define Nk 4        // The number of 32 bit words in a key.
+     56              #define Nr 10       // The number of rounds in AES Cipher.
+     57          #endif
+     58          
+     59          // jcallan@github points out that declaring Multiply as a function 
+     60          // reduces code size considerably with the Keil ARM compiler.
+     61          // See this link for more information: https://github.com/kokke/tiny-AES-C/pull/3
+     62          #ifndef MULTIPLY_AS_A_FUNCTION
+     63            #define MULTIPLY_AS_A_FUNCTION 0
+     64          #endif
+     65          
+     66          
+     67          
+     68          
+     69          /*****************************************************************************/
+     70          /* Private variables:                                                        */
+     71          /*****************************************************************************/
+     72          // state - array holding the intermediate results during decryption.
+     73          typedef uint8_t state_t[4][4];
+     74          
+     75          
+     76          
+     77          // The lookup-tables are marked const so they can be placed in read-only storage instead of RAM
+     78          // The numbers below can be computed dynamically trading ROM for RAM - 
+     79          // This can be useful in (embedded) bootloader applications, where ROM is often limited.
+     80          static const uint8_t sbox[256] = {
+     81            //0     1    2      3     4    5     6     7      8    9     A      B    C     D     E     F
+     82            0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
+     83            0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0,
+     84            0xb7, 0xfd, 0x93, 0x26, 0x36, 0x3f, 0xf7, 0xcc, 0x34, 0xa5, 0xe5, 0xf1, 0x71, 0xd8, 0x31, 0x15,
+     85            0x04, 0xc7, 0x23, 0xc3, 0x18, 0x96, 0x05, 0x9a, 0x07, 0x12, 0x80, 0xe2, 0xeb, 0x27, 0xb2, 0x75,
+     86            0x09, 0x83, 0x2c, 0x1a, 0x1b, 0x6e, 0x5a, 0xa0, 0x52, 0x3b, 0xd6, 0xb3, 0x29, 0xe3, 0x2f, 0x84,
+     87            0x53, 0xd1, 0x00, 0xed, 0x20, 0xfc, 0xb1, 0x5b, 0x6a, 0xcb, 0xbe, 0x39, 0x4a, 0x4c, 0x58, 0xcf,
+     88            0xd0, 0xef, 0xaa, 0xfb, 0x43, 0x4d, 0x33, 0x85, 0x45, 0xf9, 0x02, 0x7f, 0x50, 0x3c, 0x9f, 0xa8,
+     89            0x51, 0xa3, 0x40, 0x8f, 0x92, 0x9d, 0x38, 0xf5, 0xbc, 0xb6, 0xda, 0x21, 0x10, 0xff, 0xf3, 0xd2,
+     90            0xcd, 0x0c, 0x13, 0xec, 0x5f, 0x97, 0x44, 0x17, 0xc4, 0xa7, 0x7e, 0x3d, 0x64, 0x5d, 0x19, 0x73,
+     91            0x60, 0x81, 0x4f, 0xdc, 0x22, 0x2a, 0x90, 0x88, 0x46, 0xee, 0xb8, 0x14, 0xde, 0x5e, 0x0b, 0xdb,
+     92            0xe0, 0x32, 0x3a, 0x0a, 0x49, 0x06, 0x24, 0x5c, 0xc2, 0xd3, 0xac, 0x62, 0x91, 0x95, 0xe4, 0x79,
+     93            0xe7, 0xc8, 0x37, 0x6d, 0x8d, 0xd5, 0x4e, 0xa9, 0x6c, 0x56, 0xf4, 0xea, 0x65, 0x7a, 0xae, 0x08,
+     94            0xba, 0x78, 0x25, 0x2e, 0x1c, 0xa6, 0xb4, 0xc6, 0xe8, 0xdd, 0x74, 0x1f, 0x4b, 0xbd, 0x8b, 0x8a,
+     95            0x70, 0x3e, 0xb5, 0x66, 0x48, 0x03, 0xf6, 0x0e, 0x61, 0x35, 0x57, 0xb9, 0x86, 0xc1, 0x1d, 0x9e,
+     96            0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf,
+     97            0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16 };
+     98          
+     99          static const uint8_t rsbox[256] = {
+    100            0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3, 0x9e, 0x81, 0xf3, 0xd7, 0xfb,
+    101            0x7c, 0xe3, 0x39, 0x82, 0x9b, 0x2f, 0xff, 0x87, 0x34, 0x8e, 0x43, 0x44, 0xc4, 0xde, 0xe9, 0xcb,
+    102            0x54, 0x7b, 0x94, 0x32, 0xa6, 0xc2, 0x23, 0x3d, 0xee, 0x4c, 0x95, 0x0b, 0x42, 0xfa, 0xc3, 0x4e,
+    103            0x08, 0x2e, 0xa1, 0x66, 0x28, 0xd9, 0x24, 0xb2, 0x76, 0x5b, 0xa2, 0x49, 0x6d, 0x8b, 0xd1, 0x25,
+    104            0x72, 0xf8, 0xf6, 0x64, 0x86, 0x68, 0x98, 0x16, 0xd4, 0xa4, 0x5c, 0xcc, 0x5d, 0x65, 0xb6, 0x92,
+    105            0x6c, 0x70, 0x48, 0x50, 0xfd, 0xed, 0xb9, 0xda, 0x5e, 0x15, 0x46, 0x57, 0xa7, 0x8d, 0x9d, 0x84,
+    106            0x90, 0xd8, 0xab, 0x00, 0x8c, 0xbc, 0xd3, 0x0a, 0xf7, 0xe4, 0x58, 0x05, 0xb8, 0xb3, 0x45, 0x06,
+    107            0xd0, 0x2c, 0x1e, 0x8f, 0xca, 0x3f, 0x0f, 0x02, 0xc1, 0xaf, 0xbd, 0x03, 0x01, 0x13, 0x8a, 0x6b,
+    108            0x3a, 0x91, 0x11, 0x41, 0x4f, 0x67, 0xdc, 0xea, 0x97, 0xf2, 0xcf, 0xce, 0xf0, 0xb4, 0xe6, 0x73,
+    109            0x96, 0xac, 0x74, 0x22, 0xe7, 0xad, 0x35, 0x85, 0xe2, 0xf9, 0x37, 0xe8, 0x1c, 0x75, 0xdf, 0x6e,
+    110            0x47, 0xf1, 0x1a, 0x71, 0x1d, 0x29, 0xc5, 0x89, 0x6f, 0xb7, 0x62, 0x0e, 0xaa, 0x18, 0xbe, 0x1b,
+    111            0xfc, 0x56, 0x3e, 0x4b, 0xc6, 0xd2, 0x79, 0x20, 0x9a, 0xdb, 0xc0, 0xfe, 0x78, 0xcd, 0x5a, 0xf4,
+    112            0x1f, 0xdd, 0xa8, 0x33, 0x88, 0x07, 0xc7, 0x31, 0xb1, 0x12, 0x10, 0x59, 0x27, 0x80, 0xec, 0x5f,
+    113            0x60, 0x51, 0x7f, 0xa9, 0x19, 0xb5, 0x4a, 0x0d, 0x2d, 0xe5, 0x7a, 0x9f, 0x93, 0xc9, 0x9c, 0xef,
+    114            0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61,
+    115            0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d };
+    116          
+    117          // The round constant word array, Rcon[i], contains the values given by 
+    118          // x to the power (i-1) being powers of x (x is denoted as {02}) in the field GF(2^8)
+    119          static const uint8_t Rcon[11] = {
+    120            0x8d, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36 };
+    121          
+    122          /*
+    123           * Jordan Goulder points out in PR #12 (https://github.com/kokke/tiny-AES-C/pull/12),
+    124           * that you can remove most of the elements in the Rcon array, because they are unused.
+    125           *
+    126           * From Wikipedia's article on the Rijndael key schedule @ https://en.wikipedia.org/wiki/Rijndael_key_schedule#Rcon
+    127           * 
+    128           * "Only the first some of these constants are actually used – up to rcon[10] for AES-128 (as 11 round keys are needed), 
+    129           *  up to rcon[8] for AES-192, up to rcon[7] for AES-256. rcon[0] is not used in AES algorithm."
+    130           */
+    131          
+    132          
+    133          /*****************************************************************************/
+    134          /* Private functions:                                                        */
+    135          /*****************************************************************************/
+    136          /*
+    137          static uint8_t getSBoxValue(uint8_t num)
+    138          {
+    139            return sbox[num];
+    140          }
+    141          */
+    142          #define getSBoxValue(num) (sbox[(num)])
+    143          /*
+    144          static uint8_t getSBoxInvert(uint8_t num)
+    145          {
+    146            return rsbox[num];
+    147          }
+    148          */
+    149          #define getSBoxInvert(num) (rsbox[(num)])
+    150          
+    151          // This function produces Nb(Nr+1) round keys. The round keys are used in each round to decrypt the states. 
+    152          static void KeyExpansion(uint8_t* RoundKey, const uint8_t* Key)
+    153          {
+    154            unsigned i, j, k;
+    155            uint8_t tempa[4]; // Used for the column/row operations
+    156            
+    157            // The first round key is the key itself.
+    158            for (i = 0; i < Nk; ++i)
+    159            {
+    160              RoundKey[(i * 4) + 0] = Key[(i * 4) + 0];
+    161              RoundKey[(i * 4) + 1] = Key[(i * 4) + 1];
+    162              RoundKey[(i * 4) + 2] = Key[(i * 4) + 2];
+    163              RoundKey[(i * 4) + 3] = Key[(i * 4) + 3];
+    164            }
+    165          
+    166            // All other round keys are found from the previous round keys.
+    167            for (i = Nk; i < Nb * (Nr + 1); ++i)
+    168            {
+    169              {
+    170                k = (i - 1) * 4;
+    171                tempa[0]=RoundKey[k + 0];
+    172                tempa[1]=RoundKey[k + 1];
+    173                tempa[2]=RoundKey[k + 2];
+    174                tempa[3]=RoundKey[k + 3];
+    175          
+    176              }
+    177          
+    178              if (i % Nk == 0)
+    179              {
+    180                // This function shifts the 4 bytes in a word to the left once.
+    181                // [a0,a1,a2,a3] becomes [a1,a2,a3,a0]
+    182          
+    183                // Function RotWord()
+    184                {
+    185                  k = tempa[0];
+    186                  tempa[0] = tempa[1];
+    187                  tempa[1] = tempa[2];
+    188                  tempa[2] = tempa[3];
+    189                  tempa[3] = k;
+    190                }
+    191          
+    192                // SubWord() is a function that takes a four-byte input word and 
+    193                // applies the S-box to each of the four bytes to produce an output word.
+    194          
+    195                // Function Subword()
+    196                {
+    197                  tempa[0] = getSBoxValue(tempa[0]);
+    198                  tempa[1] = getSBoxValue(tempa[1]);
+    199                  tempa[2] = getSBoxValue(tempa[2]);
+    200                  tempa[3] = getSBoxValue(tempa[3]);
+    201                }
+    202          
+    203                tempa[0] = tempa[0] ^ Rcon[i/Nk];
+    204              }
+    205          #if defined(AES256) && (AES256 == 1)
+    206              if (i % Nk == 4)
+    207              {
+    208                // Function Subword()
+    209                {
+    210                  tempa[0] = getSBoxValue(tempa[0]);
+    211                  tempa[1] = getSBoxValue(tempa[1]);
+    212                  tempa[2] = getSBoxValue(tempa[2]);
+    213                  tempa[3] = getSBoxValue(tempa[3]);
+    214                }
+    215              }
+    216          #endif
+    217              j = i * 4; k=(i - Nk) * 4;
+    218              RoundKey[j + 0] = RoundKey[k + 0] ^ tempa[0];
+    219              RoundKey[j + 1] = RoundKey[k + 1] ^ tempa[1];
+    220              RoundKey[j + 2] = RoundKey[k + 2] ^ tempa[2];
+    221              RoundKey[j + 3] = RoundKey[k + 3] ^ tempa[3];
+    222            }
+    223          }
+    224          
+    225          void AES_init_ctx(struct AES_ctx* ctx, const uint8_t* key)
+    226          {
+    227            KeyExpansion(ctx->RoundKey, key);
+    228          }
+    229          #if (defined(CBC) && (CBC == 1)) || (defined(CTR) && (CTR == 1))
+    230          void AES_init_ctx_iv(struct AES_ctx* ctx, const uint8_t* key, const uint8_t* iv)
+    231          {
+    232            KeyExpansion(ctx->RoundKey, key);
+    233            memcpy (ctx->Iv, iv, AES_BLOCKLEN);
+    234          }
+    235          void AES_ctx_set_iv(struct AES_ctx* ctx, const uint8_t* iv)
+    236          {
+    237            memcpy (ctx->Iv, iv, AES_BLOCKLEN);
+    238          }
+    239          #endif
+    240          
+    241          // This function adds the round key to state.
+    242          // The round key is added to the state by an XOR function.
+    243          static void AddRoundKey(uint8_t round,state_t* state,uint8_t* RoundKey)
+    244          {
+    245            uint8_t i,j;
+    246            for (i = 0; i < 4; ++i)
+    247            {
+    248              for (j = 0; j < 4; ++j)
+    249              {
+    250                (*state)[i][j] ^= RoundKey[(round * Nb * 4) + (i * Nb) + j];
+    251              }
+    252            }
+    253          }
+    254          
+    255          // The SubBytes Function Substitutes the values in the
+    256          // state matrix with values in an S-box.
+    257          static void SubBytes(state_t* state)
+    258          {
+    259            uint8_t i, j;
+    260            for (i = 0; i < 4; ++i)
+    261            {
+    262              for (j = 0; j < 4; ++j)
+    263              {
+    264                (*state)[j][i] = getSBoxValue((*state)[j][i]);
+    265              }
+    266            }
+    267          }
+    268          
+    269          // The ShiftRows() function shifts the rows in the state to the left.
+    270          // Each row is shifted with different offset.
+    271          // Offset = Row number. So the first row is not shifted.
+    272          static void ShiftRows(state_t* state)
+    273          {
+    274            uint8_t temp;
+    275          
+    276            // Rotate first row 1 columns to left  
+    277            temp           = (*state)[0][1];
+    278            (*state)[0][1] = (*state)[1][1];
+    279            (*state)[1][1] = (*state)[2][1];
+    280            (*state)[2][1] = (*state)[3][1];
+    281            (*state)[3][1] = temp;
+    282          
+    283            // Rotate second row 2 columns to left  
+    284            temp           = (*state)[0][2];
+    285            (*state)[0][2] = (*state)[2][2];
+    286            (*state)[2][2] = temp;
+    287          
+    288            temp           = (*state)[1][2];
+    289            (*state)[1][2] = (*state)[3][2];
+    290            (*state)[3][2] = temp;
+    291          
+    292            // Rotate third row 3 columns to left
+    293            temp           = (*state)[0][3];
+    294            (*state)[0][3] = (*state)[3][3];
+    295            (*state)[3][3] = (*state)[2][3];
+    296            (*state)[2][3] = (*state)[1][3];
+    297            (*state)[1][3] = temp;
+    298          }
+    299          
+    300          static uint8_t xtime(uint8_t x)
+    301          {
+    302            return ((x<<1) ^ (((x>>7) & 1) * 0x1b));
+    303          }
+    304          
+    305          // MixColumns function mixes the columns of the state matrix
+    306          static void MixColumns(state_t* state)
+    307          {
+    308            uint8_t i;
+    309            uint8_t Tmp, Tm, t;
+    310            for (i = 0; i < 4; ++i)
+    311            {  
+    312              t   = (*state)[i][0];
+    313              Tmp = (*state)[i][0] ^ (*state)[i][1] ^ (*state)[i][2] ^ (*state)[i][3] ;
+    314              Tm  = (*state)[i][0] ^ (*state)[i][1] ; Tm = xtime(Tm);  (*state)[i][0] ^= Tm ^ Tmp ;
+    315              Tm  = (*state)[i][1] ^ (*state)[i][2] ; Tm = xtime(Tm);  (*state)[i][1] ^= Tm ^ Tmp ;
+    316              Tm  = (*state)[i][2] ^ (*state)[i][3] ; Tm = xtime(Tm);  (*state)[i][2] ^= Tm ^ Tmp ;
+    317              Tm  = (*state)[i][3] ^ t ;              Tm = xtime(Tm);  (*state)[i][3] ^= Tm ^ Tmp ;
+    318            }
+    319          }
+    320          
+    321          // Multiply is used to multiply numbers in the field GF(2^8)
+    322          // Note: The last call to xtime() is unneeded, but often ends up generating a smaller binary
+    323          //       The compiler seems to be able to vectorize the operation better this way.
+    324          //       See https://github.com/kokke/tiny-AES-c/pull/34
+    325          #if MULTIPLY_AS_A_FUNCTION
+    326          static uint8_t Multiply(uint8_t x, uint8_t y)
+    327          {
+    328            return (((y & 1) * x) ^
+    329                 ((y>>1 & 1) * xtime(x)) ^
+    330                 ((y>>2 & 1) * xtime(xtime(x))) ^
+    331                 ((y>>3 & 1) * xtime(xtime(xtime(x)))) ^
+    332                 ((y>>4 & 1) * xtime(xtime(xtime(xtime(x)))))); /* this last call to xtime() can be omitted */
+    333            }
+    334          #else
+    335          #define Multiply(x, y)                                \
+    336                (  ((y & 1) * x) ^                              \
+    337                ((y>>1 & 1) * xtime(x)) ^                       \
+    338                ((y>>2 & 1) * xtime(xtime(x))) ^                \
+    339                ((y>>3 & 1) * xtime(xtime(xtime(x)))) ^         \
+    340                ((y>>4 & 1) * xtime(xtime(xtime(xtime(x))))))   \
+    341          
+    342          #endif
+    343          
+    344          // MixColumns function mixes the columns of the state matrix.
+    345          // The method used to multiply may be difficult to understand for the inexperienced.
+    346          // Please use the references to gain more information.
+    347          static void InvMixColumns(state_t* state)
+    348          {
+    349            int i;
+    350            uint8_t a, b, c, d;
+    351            for (i = 0; i < 4; ++i)
+    352            { 
+    353              a = (*state)[i][0];
+    354              b = (*state)[i][1];
+    355              c = (*state)[i][2];
+    356              d = (*state)[i][3];
+    357          
+    358              (*state)[i][0] = Multiply(a, 0x0e) ^ Multiply(b, 0x0b) ^ Multiply(c, 0x0d) ^ Multiply(d, 0x09);
+    359              (*state)[i][1] = Multiply(a, 0x09) ^ Multiply(b, 0x0e) ^ Multiply(c, 0x0b) ^ Multiply(d, 0x0d);
+    360              (*state)[i][2] = Multiply(a, 0x0d) ^ Multiply(b, 0x09) ^ Multiply(c, 0x0e) ^ Multiply(d, 0x0b);
+    361              (*state)[i][3] = Multiply(a, 0x0b) ^ Multiply(b, 0x0d) ^ Multiply(c, 0x09) ^ Multiply(d, 0x0e);
+    362            }
+    363          }
+    364          
+    365          
+    366          // The SubBytes Function Substitutes the values in the
+    367          // state matrix with values in an S-box.
+    368          static void InvSubBytes(state_t* state)
+    369          {
+    370            uint8_t i, j;
+    371            for (i = 0; i < 4; ++i)
+    372            {
+    373              for (j = 0; j < 4; ++j)
+    374              {
+    375                (*state)[j][i] = getSBoxInvert((*state)[j][i]);
+    376              }
+    377            }
+    378          }
+    379          
+    380          static void InvShiftRows(state_t* state)
+    381          {
+    382            uint8_t temp;
+    383          
+    384            // Rotate first row 1 columns to right  
+    385            temp = (*state)[3][1];
+    386            (*state)[3][1] = (*state)[2][1];
+    387            (*state)[2][1] = (*state)[1][1];
+    388            (*state)[1][1] = (*state)[0][1];
+    389            (*state)[0][1] = temp;
+    390          
+    391            // Rotate second row 2 columns to right 
+    392            temp = (*state)[0][2];
+    393            (*state)[0][2] = (*state)[2][2];
+    394            (*state)[2][2] = temp;
+    395          
+    396            temp = (*state)[1][2];
+    397            (*state)[1][2] = (*state)[3][2];
+    398            (*state)[3][2] = temp;
+    399          
+    400            // Rotate third row 3 columns to right
+    401            temp = (*state)[0][3];
+    402            (*state)[0][3] = (*state)[1][3];
+    403            (*state)[1][3] = (*state)[2][3];
+    404            (*state)[2][3] = (*state)[3][3];
+    405            (*state)[3][3] = temp;
+    406          }
+    407          
+    408          
+    409          // Cipher is the main function that encrypts the PlainText.
+    410          static void Cipher(state_t* state, uint8_t* RoundKey)
+    411          {
+    412            uint8_t round = 0;
+    413          
+    414            // Add the First round key to the state before starting the rounds.
+    415            AddRoundKey(0, state, RoundKey); 
+    416            
+    417            // There will be Nr rounds.
+    418            // The first Nr-1 rounds are identical.
+    419            // These Nr-1 rounds are executed in the loop below.
+    420            for (round = 1; round < Nr; ++round)
+    421            {
+    422              SubBytes(state);
+    423              ShiftRows(state);
+    424              MixColumns(state);
+    425              AddRoundKey(round, state, RoundKey);
+    426            }
+    427            
+    428            // The last round is given below.
+    429            // The MixColumns function is not here in the last round.
+    430            SubBytes(state);
+    431            ShiftRows(state);
+    432            AddRoundKey(Nr, state, RoundKey);
+    433          }
+    434          
+    435          static void InvCipher(state_t* state,uint8_t* RoundKey)
+    436          {
+    437            uint8_t round = 0;
+    438          
+    439            // Add the First round key to the state before starting the rounds.
+    440            AddRoundKey(Nr, state, RoundKey); 
+    441          
+    442            // There will be Nr rounds.
+    443            // The first Nr-1 rounds are identical.
+    444            // These Nr-1 rounds are executed in the loop below.
+    445            for (round = (Nr - 1); round > 0; --round)
+    446            {
+    447              InvShiftRows(state);
+    448              InvSubBytes(state);
+    449              AddRoundKey(round, state, RoundKey);
+    450              InvMixColumns(state);
+    451            }
+    452            
+    453            // The last round is given below.
+    454            // The MixColumns function is not here in the last round.
+    455            InvShiftRows(state);
+    456            InvSubBytes(state);
+    457            AddRoundKey(0, state, RoundKey);
+    458          }
+    459          
+    460          
+    461          /*****************************************************************************/
+    462          /* Public functions:                                                         */
+    463          /*****************************************************************************/
+    464          #if defined(ECB) && (ECB == 1)
+    465          
+    466          
+    467          void AES_ECB_encrypt(struct AES_ctx *ctx, uint8_t* buf)
+    468          {
+    469            // The next function call encrypts the PlainText with the Key using AES algorithm.
+    470            Cipher((state_t*)buf, ctx->RoundKey);
+    471          }
+    472          
+    473          void AES_ECB_decrypt(struct AES_ctx* ctx, uint8_t* buf)
+    474          {
+    475            // The next function call decrypts the PlainText with the Key using AES algorithm.
+    476            InvCipher((state_t*)buf, ctx->RoundKey);
+    477          }
+    478          
+    479          
+    480          #endif // #if defined(ECB) && (ECB == 1)
+    481          
+    482          
+    483          
+    484          
+    485          
+    486          #if defined(CBC) && (CBC == 1)
+    487          
+    488          
+    489          static void XorWithIv(uint8_t* buf, uint8_t* Iv)
+    490          {
+    491            uint8_t i;
+    492            for (i = 0; i < AES_BLOCKLEN; ++i) // The block in AES is always 128bit no matter the key size
+    493            {
+    494              buf[i] ^= Iv[i];
+    495            }
+    496          }
+    497          
+    498          void AES_CBC_encrypt_buffer(struct AES_ctx *ctx,uint8_t* buf, uint32_t length)
+    499          {
+    500            uintptr_t i;
+    501            uint8_t *Iv = ctx->Iv;
+    502            for (i = 0; i < length; i += AES_BLOCKLEN)
+    503            {
+    504              XorWithIv(buf, Iv);
+    505              Cipher((state_t*)buf, ctx->RoundKey);
+    506              Iv = buf;
+    507              buf += AES_BLOCKLEN;
+    508              //printf("Step %d - %d", i/16, i);
+    509            }
+    510            /* store Iv in ctx for next call */
+    511            memcpy(ctx->Iv, Iv, AES_BLOCKLEN);
+    512          }
+    513          
+    514          void AES_CBC_decrypt_buffer(struct AES_ctx* ctx, uint8_t* buf,  uint32_t length)
+    515          {
+    516            uintptr_t i;
+    517            uint8_t storeNextIv[AES_BLOCKLEN];
+    518            for (i = 0; i < length; i += AES_BLOCKLEN)
+    519            {
+    520              memcpy(storeNextIv, buf, AES_BLOCKLEN);
+    521              InvCipher((state_t*)buf, ctx->RoundKey);
+    522              XorWithIv(buf, ctx->Iv);
+    523              memcpy(ctx->Iv, storeNextIv, AES_BLOCKLEN);
+    524              buf += AES_BLOCKLEN;
+    525            }
+    526          
+    527          }
+    528          
+    529          #endif // #if defined(CBC) && (CBC == 1)
+    530          
+    531          
+    532          
+    533          #if defined(CTR) && (CTR == 1)
+    534          
+    535          /* Symmetrical operation: same function for encrypting as for decrypting. Note any IV/nonce should never be reused with the same key */
+    536          void AES_CTR_xcrypt_buffer(struct AES_ctx* ctx, uint8_t* buf, uint32_t length)
+    537          {
+    538            uint8_t buffer[AES_BLOCKLEN];
+    539            
+    540            unsigned i;
+    541            int bi;
+    542            for (i = 0, bi = AES_BLOCKLEN; i < length; ++i, ++bi)
+    543            {
+    544              if (bi == AES_BLOCKLEN) /* we need to regen xor compliment in buffer */
+    545              {
+    546                
+    547                memcpy(buffer, ctx->Iv, AES_BLOCKLEN);
+    548                Cipher((state_t*)buffer,ctx->RoundKey);
+    549          
+    550                /* Increment Iv and handle overflow */
+    551                for (bi = (AES_BLOCKLEN - 1); bi >= 0; --bi)
+    552                {
+    553          	/* inc will owerflow */
+    554                  if (ctx->Iv[bi] == 255)
+    555          	{
+    556                    ctx->Iv[bi] = 0;
+    557                    continue;
+    558                  } 
+    559                  ctx->Iv[bi] += 1;
+    560                  break;   
+    561                }
+    562                bi = 0;
+    563              }
+    564          
+    565              buf[i] = (buf[i] ^ buffer[bi]);
+    566            }
+    567          }
+    568          
+    569          #endif // #if defined(CTR) && (CTR == 1)
+    570          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      64   AES_CBC_decrypt_buffer
+        64   -> InvCipher
+        64   -> XorWithIv
+        64   -> __aeabi_memcpy
+      32   AES_CBC_encrypt_buffer
+        32   -> Cipher
+        32   -> XorWithIv
+        32   -> __aeabi_memcpy
+      24   AES_ctx_set_iv
+        24   -> __aeabi_memcpy
+      16   AES_init_ctx
+        16   -> KeyExpansion
+      24   AES_init_ctx_iv
+        24   -> KeyExpansion
+        24   -> __aeabi_memcpy
+      16   AddRoundKey
+      16   Cipher
+        16   -> AddRoundKey
+        16   -> MixColumns
+        16   -> ShiftRows
+        16   -> SubBytes
+      16   InvCipher
+        16   -> AddRoundKey
+        16   -> InvMixColumns
+        16   -> InvShiftRows
+        16   -> InvSubBytes
+      56   InvMixColumns
+        56   -> xtime
+       0   InvShiftRows
+       8   InvSubBytes
+      20   KeyExpansion
+      24   MixColumns
+        24   -> xtime
+       0   ShiftRows
+       8   SubBytes
+       4   XorWithIv
+       0   xtime
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable2
+       4  ??DataTable2_1
+       4  ??DataTable2_2
+      96  AES_CBC_decrypt_buffer
+      68  AES_CBC_encrypt_buffer
+      24  AES_ctx_set_iv
+      16  AES_init_ctx
+      38  AES_init_ctx_iv
+      72  AddRoundKey
+      86  Cipher
+      86  InvCipher
+    1912  InvMixColumns
+      58  InvShiftRows
+      58  InvSubBytes
+     296  KeyExpansion
+     266  MixColumns
+      12  Rcon
+      58  ShiftRows
+      60  SubBytes
+      34  XorWithIv
+     256  rsbox
+     256  sbox
+      16  xtime
+
+ 
+   524 bytes in section .rodata
+ 3 256 bytes in section .text
+ 
+ 3 256 bytes of CODE  memory
+   524 bytes of CONST memory
+
+Errors: none
+Warnings: 1

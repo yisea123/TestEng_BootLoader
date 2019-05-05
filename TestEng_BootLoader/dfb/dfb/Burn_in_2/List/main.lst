@@ -1,0 +1,265 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        30/Mar/2019  15:47:44
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\DFB_src\main.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\DFB_src\main.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\DFB_inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\main.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\Obj\main.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\DFB_src\main.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    main.c  burn in system
+      4            * @author  h&h
+      5            * @version 
+      6            * @date    
+      7            * @brief
+      8          
+      9            ******************************************************************************
+     10          **/ 
+     11          
+     12          #include "include.h"
+     13          #include "main.h"
+     14          #include "mb.h"
+     15          
+     16          #define RESET_STATE       0x00
+     17          #define INITIALIZE_STATE  0x01
+     18          #define READY_STATE       0x02
+     19          #define FAULT_STATE       0x03
+     20          #define ENGINEERING_STATE 0x04
+     21           
+     22          #define SUB_STATE_ON_ENTRY 0x00
+     23          #define SUB_STATE_ON_LOOP  0x01
+     24          #define SUB_STATE_ON_EXIT  0x02
+     25          void state_machine(void);
+     26          volatile uint8_t state,sub_state;
+     27          static uint32_t mainloop_counter=0;
+     28          
+     29          void set_module_state(uint8_t newstate)
+     30          {
+     31              state=newstate;
+     32              sub_state=SUB_STATE_ON_ENTRY;
+     33          }
+     34          
+     35           void main(void)
+     36          {
+     37              uint8_t slave_addr;
+     38              SystemInit();
+     39              Delay_Init(72); 
+     40          
+     41              /*Disable JTAG  Enable SWD*/
+     42              AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_JTAGDISABLE;
+     43          
+     44              __disable_irq();
+     45              init();
+     46              slave_addr = Get_board_address();
+     47              eMBInit(MB_RTU, slave_addr, 0x1, 19200, MB_PAR_EVEN);
+     48              eMBEnable(); 
+     49              __enable_irq(); 
+     50          
+     51              set_module_state(READY_STATE);
+     52          
+     53          
+     54              while(1)
+     55              {
+     56                  state_machine();
+     57              }
+     58          
+     59          }
+     60           
+     61          
+     62          
+     63          
+     64          /**
+     65            * @brief   state_machine
+     66            * @param  None
+     67            * @retval None
+     68            */ 
+     69          void state_machine(void)
+     70          {
+     71              switch( state )
+     72              {
+     73                  case RESET_STATE:
+     74                  switch( sub_state )
+     75                  {
+     76                      case SUB_STATE_ON_ENTRY:
+     77                      {
+     78                          __set_FAULTMASK(1);
+     79                          NVIC_SystemReset();
+     80                          sub_state = SUB_STATE_ON_LOOP;
+     81                      }
+     82                      break;
+     83          
+     84                      case SUB_STATE_ON_LOOP:
+     85                          sub_state = SUB_STATE_ON_EXIT;
+     86                      break;
+     87          
+     88                      case SUB_STATE_ON_EXIT:
+     89                          set_module_state(READY_STATE);
+     90                      break;
+     91                  }
+     92                  break;
+     93          
+     94                  case INITIALIZE_STATE:
+     95                  switch( sub_state )
+     96                  {
+     97                      case SUB_STATE_ON_ENTRY:
+     98                      sub_state = SUB_STATE_ON_LOOP;
+     99                      break;
+    100          
+    101                      case SUB_STATE_ON_LOOP:
+    102                      sub_state = SUB_STATE_ON_EXIT;
+    103                      break;
+    104          
+    105                      case SUB_STATE_ON_EXIT:
+    106                      set_module_state(READY_STATE);
+    107                      break;
+    108                  }
+    109                  break;
+    110          
+    111                  case READY_STATE:
+    112                  switch( sub_state )
+    113                  {
+    114                      case SUB_STATE_ON_ENTRY:
+    115                      sub_state = SUB_STATE_ON_LOOP;
+    116                      break;
+    117          
+    118                      case SUB_STATE_ON_LOOP:
+    119                      {
+    120                          if(Get_test_n())
+    121                          {
+    122                              Disable_sw_vs1();
+    123                          }
+    124                          eMBPoll();
+    125                          cmd_stage_fast_proc();
+    126                          mainloop_counter++;
+    127                          if(mainloop_counter==10000)
+    128                          {
+    129                              cmd_stage_slow_proc();
+    130                              mainloop_counter=0;
+    131                          }
+    132          
+    133                          break;
+    134          
+    135                          case SUB_STATE_ON_EXIT:
+    136                          break;
+    137                      }
+    138                      break;
+    139          
+    140                      case FAULT_STATE:
+    141                      switch( sub_state )
+    142                      {
+    143                          case SUB_STATE_ON_ENTRY:
+    144                          sub_state = SUB_STATE_ON_LOOP;
+    145                          break;
+    146          
+    147                          case SUB_STATE_ON_LOOP:
+    148                          sub_state = SUB_STATE_ON_EXIT;
+    149                          break;
+    150          
+    151                          case SUB_STATE_ON_EXIT:
+    152                          set_module_state(RESET_STATE);
+    153                          break;
+    154                      }
+    155                      break;
+    156                  } 
+    157              }
+    158          }
+    159          
+    160          
+    161          
+    162          
+    163          
+    164          
+    165          /******************* (C) COPYRIGHT 2018 *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   NVIC_SystemReset
+      16   main
+        16   -> Delay_Init
+        16   -> Get_board_address
+        16   -> SystemInit
+        16   -> eMBEnable
+        16   -> eMBInit
+        16   -> init
+        16   -> set_module_state
+        16   -> state_machine
+       0   set_module_state
+       8   state_machine
+         8   -> Disable_sw_vs1
+         8   -> Get_test_n
+         8   -> NVIC_SystemReset
+         8   -> cmd_stage_fast_proc
+         8   -> cmd_stage_slow_proc
+         8   -> eMBPoll
+         8   -> set_module_state
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable3
+       4  ??DataTable3_1
+       4  ??DataTable3_2
+       4  ??DataTable3_3
+       4  ??DataTable3_4
+       4  ??DataTable3_5
+      26  NVIC_SystemReset
+      76  main
+       4  mainloop_counter
+      12  set_module_state
+       1  state
+     232  state_machine
+       1  sub_state
+
+ 
+   6 bytes in section .bss
+ 370 bytes in section .text
+ 
+ 370 bytes of CODE memory
+   6 bytes of DATA memory
+
+Errors: none
+Warnings: none

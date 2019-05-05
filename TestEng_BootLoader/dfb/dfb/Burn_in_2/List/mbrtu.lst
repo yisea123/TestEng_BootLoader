@@ -1,0 +1,469 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        30/Mar/2019  15:46:35
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\modbus\rtu\mbrtu.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\modbus\rtu\mbrtu.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\DFB_inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\mbrtu.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\Obj\mbrtu.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\modbus\rtu\mbrtu.c
+      1          /* 
+      2           * FreeModbus Libary: A portable Modbus implementation for Modbus ASCII/RTU.
+      3           * Copyright (c) 2006 Christian Walter <wolti@sil.at>
+      4           * All rights reserved.
+      5           *
+      6           * Redistribution and use in source and binary forms, with or without
+      7           * modification, are permitted provided that the following conditions
+      8           * are met:
+      9           * 1. Redistributions of source code must retain the above copyright
+     10           *    notice, this list of conditions and the following disclaimer.
+     11           * 2. Redistributions in binary form must reproduce the above copyright
+     12           *    notice, this list of conditions and the following disclaimer in the
+     13           *    documentation and/or other materials provided with the distribution.
+     14           * 3. The name of the author may not be used to endorse or promote products
+     15           *    derived from this software without specific prior written permission.
+     16           *
+     17           * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+     18           * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+     19           * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+     20           * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+     21           * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     22           * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+     23           * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+     24           * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+     25           * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+     26           * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+     27           *
+     28           * File: $Id: mbrtu.c,v 1.18 2007/09/12 10:15:56 wolti Exp $
+     29           */
+     30          
+     31          /* ----------------------- System includes ----------------------------------*/
+     32          #include "stdlib.h"
+     33          #include "string.h"
+     34          
+     35          /* ----------------------- Platform includes --------------------------------*/
+     36          #include "port.h"
+     37          
+     38          /* ----------------------- Modbus includes ----------------------------------*/
+     39          #include "mb.h"
+     40          #include "mbrtu.h"
+     41          #include "mbframe.h"
+     42          
+     43          #include "mbcrc.h"
+     44          #include "mbport.h"
+     45          
+     46          /* ----------------------- Defines ------------------------------------------*/
+     47          #define MB_SER_PDU_SIZE_MIN     4       /*!< Minimum size of a Modbus RTU frame. */
+     48          #define MB_SER_PDU_SIZE_MAX     256     /*!< Maximum size of a Modbus RTU frame. */
+     49          #define MB_SER_PDU_SIZE_CRC     2       /*!< Size of CRC field in PDU. */
+     50          #define MB_SER_PDU_ADDR_OFF     0       /*!< Offset of slave address in Ser-PDU. */
+     51          #define MB_SER_PDU_PDU_OFF      1       /*!< Offset of Modbus-PDU in Ser-PDU. */
+     52          
+     53          /* ----------------------- Type definitions ---------------------------------*/
+     54          typedef enum
+     55          {
+     56              STATE_RX_INIT,              /*!< Receiver is in initial state. */
+     57              STATE_RX_IDLE,              /*!< Receiver is in idle state. */
+     58              STATE_RX_RCV,               /*!< Frame is beeing received. */
+     59              STATE_RX_ERROR              /*!< If the frame is invalid. */
+     60          } eMBRcvState;
+     61          
+     62          typedef enum
+     63          {
+     64              STATE_TX_IDLE,              /*!< Transmitter is in idle state. */
+     65              STATE_TX_XMIT               /*!< Transmitter is in transfer state. */
+     66          } eMBSndState;
+     67          
+     68          /* ----------------------- Static variables ---------------------------------*/
+     69          static volatile eMBSndState eSndState;
+     70          static volatile eMBRcvState eRcvState;
+     71          
+     72          volatile UCHAR  ucRTUBuf[MB_SER_PDU_SIZE_MAX];
+     73          
+     74          static volatile UCHAR *pucSndBufferCur;
+     75          static volatile USHORT usSndBufferCount;
+     76          
+     77          static volatile USHORT usRcvBufferPos;
+     78          
+     79          /* ----------------------- Start implementation -----------------------------*/
+     80          eMBErrorCode
+     81          eMBRTUInit( UCHAR ucSlaveAddress, UCHAR ucPort, ULONG ulBaudRate, eMBParity eParity )
+     82          {
+     83              eMBErrorCode    eStatus = MB_ENOERR;
+     84              ULONG           usTimerT35_50us;
+     85          
+     86              ( void )ucSlaveAddress;
+     87              ENTER_CRITICAL_SECTION(  );
+     88          
+     89              /* Modbus RTU uses 8 Databits. */
+     90              if( xMBPortSerialInit( ucPort, ulBaudRate, 8, eParity ) != TRUE )
+     91              {
+     92                  eStatus = MB_EPORTERR;
+     93              }
+     94              else
+     95              {
+     96                  /* If baudrate > 19200 then we should use the fixed timer values
+     97                   * t35 = 1750us. Otherwise t35 must be 3.5 times the character time.
+     98                   */
+     99                  if( ulBaudRate > 19200 )
+    100                  {
+    101                      usTimerT35_50us = 35;       /* 1800us. */
+    102                  }
+    103                  else
+    104                  {
+    105                      /* The timer reload value for a character is given by:
+    106                       *
+    107                       * ChTimeValue = Ticks_per_1s / ( Baudrate / 11 )
+    108                       *             = 11 * Ticks_per_1s / Baudrate
+    109                       *             = 220000 / Baudrate
+    110                       * The reload for t3.5 is 1.5 times this value and similary
+    111                       * for t3.5.
+    112                       */
+    113                      usTimerT35_50us = ( 7UL * 220000UL ) / ( 2UL * ulBaudRate );
+    114                  }
+    115                  if( xMBPortTimersInit( ( USHORT ) usTimerT35_50us ) != TRUE )
+    116                  {
+    117                      eStatus = MB_EPORTERR;
+    118                  }
+    119              }
+    120              EXIT_CRITICAL_SECTION(  );
+    121          
+    122              return eStatus;
+    123          }
+    124          
+    125          void
+    126          eMBRTUStart( void )
+    127          {
+    128              ENTER_CRITICAL_SECTION(  );
+    129              /* Initially the receiver is in the state STATE_RX_INIT. we start
+    130               * the timer and if no character is received within t3.5 we change
+    131               * to STATE_RX_IDLE. This makes sure that we delay startup of the
+    132               * modbus protocol stack until the bus is free.
+    133               */
+    134              eRcvState = STATE_RX_INIT;
+    135              vMBPortSerialEnable( TRUE, FALSE );
+    136              vMBPortTimersEnable(  );
+    137          
+    138              EXIT_CRITICAL_SECTION(  );
+    139          }
+    140          
+    141          void
+    142          eMBRTUStop( void )
+    143          {
+    144              ENTER_CRITICAL_SECTION(  );
+    145              vMBPortSerialEnable( FALSE, FALSE );
+    146              vMBPortTimersDisable(  );
+    147              EXIT_CRITICAL_SECTION(  );
+    148          }
+    149          
+    150          eMBErrorCode
+    151          eMBRTUReceive( UCHAR * pucRcvAddress, UCHAR ** pucFrame, USHORT * pusLength )
+    152          {
+    153              BOOL            xFrameReceived = FALSE;
+    154              eMBErrorCode    eStatus = MB_ENOERR;
+    155          
+    156              ENTER_CRITICAL_SECTION(  );
+    157              assert( usRcvBufferPos < MB_SER_PDU_SIZE_MAX );
+    158          
+    159              /* Length and CRC check */
+    160              if( ( usRcvBufferPos >= MB_SER_PDU_SIZE_MIN )
+    161                  && ( usMBCRC16( ( UCHAR * ) ucRTUBuf, usRcvBufferPos ) == 0 ) )
+    162              {
+    163                  /* Save the address field. All frames are passed to the upper layed
+    164                   * and the decision if a frame is used is done there.
+    165                   */
+    166                  *pucRcvAddress = ucRTUBuf[MB_SER_PDU_ADDR_OFF];
+    167          
+    168                  /* Total length of Modbus-PDU is Modbus-Serial-Line-PDU minus
+    169                   * size of address field and CRC checksum.
+    170                   */
+    171                  *pusLength = ( USHORT )( usRcvBufferPos - MB_SER_PDU_PDU_OFF - MB_SER_PDU_SIZE_CRC );
+    172          
+    173                  /* Return the start of the Modbus PDU to the caller. */
+    174                  *pucFrame = ( UCHAR * ) & ucRTUBuf[MB_SER_PDU_PDU_OFF];
+    175                  xFrameReceived = TRUE;
+    176              }
+    177              else
+    178              {
+    179                  eStatus = MB_EIO;
+    180              }
+    181          
+    182              EXIT_CRITICAL_SECTION(  );
+    183              return eStatus;
+    184          }
+    185          
+    186          eMBErrorCode
+    187          eMBRTUSend( UCHAR ucSlaveAddress, const UCHAR * pucFrame, USHORT usLength )
+    188          {
+    189              eMBErrorCode    eStatus = MB_ENOERR;
+    190              USHORT          usCRC16;
+    191          
+    192              ENTER_CRITICAL_SECTION(  );
+    193          
+    194              /* Check if the receiver is still in idle state. If not we where to
+    195               * slow with processing the received frame and the master sent another
+    196               * frame on the network. We have to abort sending the frame.
+    197               */
+    198              if( eRcvState == STATE_RX_IDLE )
+    199              {
+    200                  /* First byte before the Modbus-PDU is the slave address. */
+    201                  pucSndBufferCur = ( UCHAR * ) pucFrame - 1;
+    202                  usSndBufferCount = 1;
+    203          
+    204                  /* Now copy the Modbus-PDU into the Modbus-Serial-Line-PDU. */
+    205                  pucSndBufferCur[MB_SER_PDU_ADDR_OFF] = ucSlaveAddress;
+    206                  usSndBufferCount += usLength;
+    207          
+    208                  /* Calculate CRC16 checksum for Modbus-Serial-Line-PDU. */
+    209                  usCRC16 = usMBCRC16( ( UCHAR * ) pucSndBufferCur, usSndBufferCount );
+    210                  ucRTUBuf[usSndBufferCount++] = ( UCHAR )( usCRC16 & 0xFF );
+    211                  ucRTUBuf[usSndBufferCount++] = ( UCHAR )( usCRC16 >> 8 );
+    212          
+    213                  /* Activate the transmitter. */
+    214                  eSndState = STATE_TX_XMIT;
+    215                  vMBPortSerialEnable( FALSE, TRUE );
+    216              }
+    217              else
+    218              {
+    219                  eStatus = MB_EIO;
+    220              }
+    221              EXIT_CRITICAL_SECTION(  );
+    222              return eStatus;
+    223          }
+    224          
+    225          BOOL
+    226          xMBRTUReceiveFSM( void )
+    227          {
+    228              BOOL            xTaskNeedSwitch = FALSE;
+    229              UCHAR           ucByte;
+    230          
+    231              assert( eSndState == STATE_TX_IDLE );
+    232          
+    233              /* Always read the character. */
+    234              ( void )xMBPortSerialGetByte( ( CHAR * ) & ucByte );
+    235          
+    236              switch ( eRcvState )
+    237              {
+    238                  /* If we have received a character in the init state we have to
+    239                   * wait until the frame is finished.
+    240                   */
+    241              case STATE_RX_INIT:
+    242                  vMBPortTimersEnable(  );
+    243                  break;
+    244          
+    245                  /* In the error state we wait until all characters in the
+    246                   * damaged frame are transmitted.
+    247                   */
+    248              case STATE_RX_ERROR:
+    249                  vMBPortTimersEnable(  );
+    250                  break;
+    251          
+    252                  /* In the idle state we wait for a new character. If a character
+    253                   * is received the t1.5 and t3.5 timers are started and the
+    254                   * receiver is in the state STATE_RX_RECEIVCE.
+    255                   */
+    256              case STATE_RX_IDLE:
+    257                  usRcvBufferPos = 0;
+    258                  ucRTUBuf[usRcvBufferPos++] = ucByte;
+    259                  eRcvState = STATE_RX_RCV;
+    260          
+    261                  /* Enable t3.5 timers. */
+    262                  vMBPortTimersEnable(  );
+    263                  break;
+    264          
+    265                  /* We are currently receiving a frame. Reset the timer after
+    266                   * every character received. If more than the maximum possible
+    267                   * number of bytes in a modbus frame is received the frame is
+    268                   * ignored.
+    269                   */
+    270              case STATE_RX_RCV:
+    271                  if( usRcvBufferPos < MB_SER_PDU_SIZE_MAX )
+    272                  {
+    273                      ucRTUBuf[usRcvBufferPos++] = ucByte;
+    274                  }
+    275                  else
+    276                  {
+    277                      eRcvState = STATE_RX_ERROR;
+    278                  }
+    279                  vMBPortTimersEnable(  );
+    280                  break;
+    281              }
+    282              return xTaskNeedSwitch;
+    283          }
+    284          
+    285          BOOL
+    286          xMBRTUTransmitFSM( void )
+    287          {
+    288              BOOL            xNeedPoll = FALSE;
+    289          
+    290              assert( eRcvState == STATE_RX_IDLE );
+    291          
+    292              switch ( eSndState )
+    293              {
+    294                  /* We should not get a transmitter event if the transmitter is in
+    295                   * idle state.  */
+    296              case STATE_TX_IDLE:
+    297                  /* enable receiver/disable transmitter. */
+    298                  vMBPortSerialEnable( TRUE, FALSE );
+    299                  break;
+    300          
+    301              case STATE_TX_XMIT:
+    302                  /* check if we are finished. */
+    303                  if( usSndBufferCount != 0 )
+    304                  {
+    305                      xMBPortSerialPutByte( ( CHAR )*pucSndBufferCur );
+    306                      pucSndBufferCur++;  /* next byte in sendbuffer. */
+    307                      usSndBufferCount--;
+    308                  }
+    309                  else
+    310                  {
+    311                      xNeedPoll = xMBPortEventPost( EV_FRAME_SENT );
+    312                      /* Disable transmitter. This prevents another transmit buffer
+    313                       * empty interrupt. */
+    314                      vMBPortSerialEnable( TRUE, FALSE );
+    315                      eSndState = STATE_TX_IDLE;
+    316                  }
+    317                  break;
+    318              }
+    319          
+    320              return xNeedPoll;
+    321          }
+    322          
+    323          BOOL
+    324          xMBRTUTimerT35Expired( void )
+    325          {
+    326              BOOL            xNeedPoll = FALSE;
+    327          
+    328              switch ( eRcvState )
+    329              {
+    330                  /* Timer t35 expired. Startup phase is finished. */
+    331              case STATE_RX_INIT:
+    332                  xNeedPoll = xMBPortEventPost( EV_READY );
+    333                  break;
+    334          
+    335                  /* A frame was received and t35 expired. Notify the listener that
+    336                   * a new frame was received. */
+    337              case STATE_RX_RCV:
+    338                  xNeedPoll = xMBPortEventPost( EV_FRAME_RECEIVED );
+    339                  break;
+    340          
+    341                  /* An error occured while receiving the frame. */
+    342              case STATE_RX_ERROR:
+    343                  break;
+    344          
+    345                  /* Function called in an illegal state. */
+    346              default:
+    347                  assert( ( eRcvState == STATE_RX_INIT ) ||
+    348                          ( eRcvState == STATE_RX_RCV ) || ( eRcvState == STATE_RX_ERROR ) );
+    349              }
+    350          
+    351              vMBPortTimersDisable(  );
+    352              eRcvState = STATE_RX_IDLE;
+    353          
+    354              return xNeedPoll;
+    355          }
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      32   eMBRTUInit
+        32   -> xMBPortSerialInit
+        32   -> xMBPortTimersInit
+      24   eMBRTUReceive
+        24   -> usMBCRC16
+      24   eMBRTUSend
+        24   -> usMBCRC16
+        24   -> vMBPortSerialEnable
+       8   eMBRTUStart
+         8   -> vMBPortSerialEnable
+         8   -> vMBPortTimersEnable
+       8   eMBRTUStop
+         8   -> vMBPortSerialEnable
+         8   -> vMBPortTimersDisable
+      16   xMBRTUReceiveFSM
+        16   -> vMBPortTimersEnable
+        16   -> xMBPortSerialGetByte
+       8   xMBRTUTimerT35Expired
+         8   -> vMBPortTimersDisable
+         8   -> xMBPortEventPost
+       8   xMBRTUTransmitFSM
+         8   -> vMBPortSerialEnable
+         8   -> xMBPortEventPost
+         8   -> xMBPortSerialPutByte
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable6
+       4  ??DataTable6_1
+       4  ??DataTable6_2
+       4  ??DataTable6_3
+       4  ??DataTable6_4
+       4  ??DataTable6_5
+       4  ??DataTable6_6
+       4  ??DataTable6_7
+      92  eMBRTUInit
+      78  eMBRTUReceive
+     136  eMBRTUSend
+      26  eMBRTUStart
+      20  eMBRTUStop
+       1  eRcvState
+       1  eSndState
+       4  pucSndBufferCur
+     256  ucRTUBuf
+       2  usRcvBufferPos
+       2  usSndBufferCount
+     128  xMBRTUReceiveFSM
+      60  xMBRTUTimerT35Expired
+      96  xMBRTUTransmitFSM
+
+ 
+ 266 bytes in section .bss
+ 668 bytes in section .text
+ 
+ 668 bytes of CODE memory
+ 266 bytes of DATA memory
+
+Errors: none
+Warnings: 1

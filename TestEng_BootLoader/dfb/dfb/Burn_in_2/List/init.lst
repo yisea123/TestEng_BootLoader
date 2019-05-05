@@ -1,0 +1,592 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        30/Mar/2019  15:46:32
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\DFB_src\init.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\DFB_src\init.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\DFB_inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\init.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\Obj\init.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\DFB_src\init.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    spi_device.c  burn in system
+      4            * @author  h&h
+      5            * @version 
+      6            * @date    
+      7          * @brief   SPI functions, DAC set DFB current, ADC update 
+      8            ******************************************************************************
+      9          **/ 
+     10          
+     11          #include "include.h"
+     12          
+     13          void RCC_Configuration(void);
+     14          void NVIC_Configuration(void);
+     15          void GPIO_Configuration(void);
+     16          
+     17          void USART_1_Configuration(void);
+     18          void SPI_1_Configuration(void);
+     19          void SPI_2_Configuration(void);
+     20          void I2C_1_Configuration(void);
+     21          void I2C_2_Configuration(void);
+     22          void EXIT_Config(void);
+     23          void TIM_2_Configuration(void);
+     24          void IWDG_Configuration(void);
+     25          void USART_2_Configuration(void);
+     26          
+     27          
+     28          void init(void)
+     29          {
+     30              RCC_Configuration();
+     31              NVIC_Configuration();
+     32              GPIO_Configuration();
+     33          
+     34              EXIT_Config();
+     35              USART_1_Configuration();
+     36              SPI_2_Configuration();
+     37              I2C_1_Configuration();
+     38          
+     39              /*VCC output of U3*/
+     40              Disable_sw_vs1();
+     41              /*+5v power su*/
+     42              Disable_vo_en6();
+     43              /*-5v power su*/
+     44              Disable_vo_en7();
+     45              /*eep spi cs*/
+     46              Disable_cs_eep();
+     47              Enable_wp_eep();
+     48              Disable_usart_rx();
+     49              Disable_usart_tx();
+     50              /*SPI pins*/
+     51              Disable_spi_en();
+     52              /*isamp 1 to 16 mux enable*/
+     53              Disable_m_en1();
+     54              /*isamp 17 to 32 mux enable*/
+     55              Disable_m_en2();
+     56              /*mpd 1 to 16 mux enable*/
+     57              Disable_m_en3();
+     58              /*mpd 17 to 32 mux enable*/
+     59              Disable_m_en4();
+     60              /*vsamp 1 to 16 mux enable*/
+     61              Disable_m_en5();
+     62              /*vsamp 17 to 32 mux enable*/
+     63              Disable_m_en6();
+     64          
+     65          #if 0
+     66              /*VCC output of U3*/
+     67              Enable_sw_vs1();
+     68          #endif
+     69              /*+5v power su*/
+     70              Enable_vo_en6();
+     71              /*-5v power su*/
+     72              Enable_vo_en7();
+     73          
+     74          
+     75              /*SPI pins*/
+     76              Enable_spi_en();
+     77              /*isamp 1 to 16 mux enable*/
+     78              Enable_m_en1();
+     79              /*isamp 17 to 32 mux enable*/
+     80              Enable_m_en2();
+     81              /*mpd 1 to 16 mux enable*/
+     82              Enable_m_en3();
+     83              /*mpd 17 to 32 mux enable*/
+     84              Enable_m_en4();
+     85              /*vsamp 1 to 16 mux enable*/
+     86              Enable_m_en5();
+     87              /*vsamp 17 to 32 mux enable*/
+     88              Enable_m_en6();
+     89              
+     90              Set_spi_cs_n(SPI_CS_NONE);
+     91              Choose_MUX_Channel(0);
+     92          
+     93              /*init max5478 to max resistor*/
+     94              MAX5478_init();
+     95              Max7312_init();
+     96              LTC2620_init();
+     97              AD7949_init();
+     98          
+     99              Enable_usart_rx();
+    100              Disable_usart_tx();
+    101          
+    102          }
+    103          
+    104          
+    105          
+    106          
+    107          /**
+    108            * @brief  Configures the different system clocks.
+    109            * @param  None
+    110            * @retval None
+    111            */
+    112          void RCC_Configuration(void)
+    113          {    
+    114              RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB | 
+    115                                   RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD, ENABLE);
+    116          
+    117              RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2 | RCC_APB1Periph_I2C1 |
+    118                                     RCC_APB1Periph_TIM2, ENABLE); 
+    119           
+    120              RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1|RCC_APB2Periph_AFIO, ENABLE);
+    121          
+    122              RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
+    123          
+    124          }
+    125          
+    126          
+    127          
+    128          void NVIC_Configuration(void)
+    129          {
+    130              NVIC_InitTypeDef NVIC_InitStructure;
+    131              /* Configure the NVIC Preemption Priority Bits */  
+    132              NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
+    133          
+    134              /* Enable the USARTy Interrupt */
+    135              NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
+    136              NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0;
+    137              NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+    138              NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    139              NVIC_Init(&NVIC_InitStructure);
+    140              
+    141              NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+    142              NVIC_InitStructure.NVIC_IRQChannel = EXTI9_5_IRQn;
+    143              NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=2;
+    144              NVIC_InitStructure.NVIC_IRQChannelSubPriority=2;
+    145              NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    146              NVIC_Init(&NVIC_InitStructure);
+    147          
+    148          
+    149          }
+    150          
+    151          
+    152          /**
+    153            * @brief  Configures the different GPIO ports.
+    154            * @param  None
+    155            * @retval None
+    156            */
+    157          void GPIO_Configuration(void)
+    158          {
+    159              GPIO_InitTypeDef GPIO_InitStructure;
+    160          
+    161          #if 0 
+    162              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;  
+    163              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
+    164              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;  
+    165              GPIO_Init(GPIOA, &GPIO_InitStructure);
+    166              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;  
+    167              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
+    168              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;  
+    169              GPIO_Init(GPIOB, &GPIO_InitStructure);
+    170              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;  
+    171              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
+    172              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;  
+    173              GPIO_Init(GPIOC, &GPIO_InitStructure);
+    174          #endif
+    175          
+    176          
+    177              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1|GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_4|
+    178                                            GPIO_Pin_6|GPIO_Pin_8|GPIO_Pin_11|GPIO_Pin_12;
+    179              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    180              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    181              GPIO_Init(GPIOA, &GPIO_InitStructure);
+    182              
+    183              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+    184              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    185              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+    186              GPIO_Init(GPIOA, &GPIO_InitStructure);
+    187          
+    188              /* USART1 Rx as input floating */
+    189              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+    190              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    191              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+    192              GPIO_Init(GPIOA, &GPIO_InitStructure);
+    193              
+    194              /* USART1 Tx as alternate function push-pull */
+    195              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+    196              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    197              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+    198              GPIO_Init(GPIOA, &GPIO_InitStructure);
+    199          
+    200              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1|GPIO_Pin_5|GPIO_Pin_8|GPIO_Pin_9|GPIO_Pin_10;  
+    201              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
+    202              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+    203              GPIO_Init(GPIOB, &GPIO_InitStructure);
+    204              /*I2C1*/
+    205              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6| GPIO_Pin_7;
+    206              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    207              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
+    208              GPIO_Init(GPIOB, &GPIO_InitStructure);
+    209              /*SPI2*/
+    210              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13| GPIO_Pin_14 | GPIO_Pin_15;
+    211              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    212              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+    213              GPIO_Init(GPIOB, &GPIO_InitStructure);
+    214              
+    215              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11|GPIO_Pin_12;
+    216              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
+    217              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    218              GPIO_Init(GPIOB, &GPIO_InitStructure);
+    219          
+    220              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1|GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_4|
+    221                                            GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7|GPIO_Pin_8|GPIO_Pin_9|
+    222                                            GPIO_Pin_10|GPIO_Pin_11|GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14|
+    223                                            GPIO_Pin_15;
+    224              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    225              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    226              GPIO_Init(GPIOC, &GPIO_InitStructure);
+    227          
+    228          }
+    229          
+    230          void USART_2_Configuration(void)
+    231          {
+    232              USART_InitTypeDef USART_InitStructure;
+    233              USART_InitStructure.USART_BaudRate = 19200;
+    234              USART_InitStructure.USART_WordLength = USART_WordLength_9b;
+    235              USART_InitStructure.USART_StopBits = USART_StopBits_1;
+    236              USART_InitStructure.USART_Parity = USART_Parity_Even;
+    237              USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+    238              USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+    239          
+    240              /* Configure USART1 */
+    241              USART_Init(USART2, &USART_InitStructure);
+    242          
+    243              /* Enable USARTy Receive and Transmit interrupts */
+    244              USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+    245          
+    246              /* Enable the USART1 */
+    247              USART_Cmd(USART2, ENABLE);
+    248          }
+    249          
+    250          void USART_1_Configuration(void)
+    251          {
+    252              USART_InitTypeDef USART_InitStructure;
+    253              USART_InitStructure.USART_BaudRate = 19200;
+    254              USART_InitStructure.USART_WordLength = USART_WordLength_9b;
+    255              USART_InitStructure.USART_StopBits = USART_StopBits_1;
+    256              USART_InitStructure.USART_Parity = USART_Parity_Even;
+    257              USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+    258              USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+    259          
+    260              /* Configure USART1 */
+    261              USART_Init(USART1, &USART_InitStructure);
+    262          
+    263              /* Enable USARTy Receive and Transmit interrupts */
+    264              USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+    265          
+    266              /* Enable the USART1 */
+    267              USART_Cmd(USART1, ENABLE);
+    268          
+    269          }
+    270          
+    271          void SPI_2_Configuration(void)
+    272          {
+    273              SPI_InitTypeDef   SPI_InitStructure;
+    274          
+    275              SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+    276              SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
+    277              SPI_InitStructure.SPI_DataSize = SPI_DataSize_16b;
+    278              SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
+    279              SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
+    280              SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
+    281              SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;
+    282              SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+    283              //SPI_InitStructure.SPI_CRCPolynomial = 7;
+    284              SPI_Init(SPI2, &SPI_InitStructure);
+    285          
+    286              SPI_Cmd(SPI2, ENABLE);
+    287          }
+    288          
+    289          
+    290          void SPI_1_Configuration(void)
+    291          {
+    292          
+    293              SPI_InitTypeDef   SPI_InitStructure;
+    294              SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;  
+    295              SPI_InitStructure.SPI_Mode = SPI_Mode_Master;  
+    296              SPI_InitStructure.SPI_DataSize = SPI_DataSize_16b;  
+    297              SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;  
+    298              SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;  
+    299              SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;  
+    300              SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;  
+    301              SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;  
+    302              SPI_InitStructure.SPI_CRCPolynomial = 7;  
+    303              SPI_Init(SPI1, &SPI_InitStructure);  
+    304              SPI_Cmd(SPI1, ENABLE); 
+    305          
+    306          
+    307          }
+    308          
+    309          
+    310          /**
+    311            * @brief  Configures the i2c2.
+    312            * @param  None
+    313            * @retval None
+    314          
+    315            */
+    316          void I2C_2_Configuration(void)
+    317          {
+    318              I2C_InitTypeDef I2C_InitStructure;
+    319              I2C_InitStructure.I2C_Mode = I2C_Mode_SMBusHost;
+    320              I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
+    321              I2C_InitStructure.I2C_OwnAddress1 = 0x31;
+    322              I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
+    323              I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+    324              I2C_InitStructure.I2C_ClockSpeed = 400000;
+    325          
+    326              I2C_Init(I2C2, &I2C_InitStructure);
+    327          
+    328              /* disable I2C1 PEC Transmission */
+    329              I2C_CalculatePEC(I2C2, DISABLE);
+    330          
+    331          }
+    332          
+    333          void I2C_1_Configuration(void)
+    334          {
+    335              I2C_InitTypeDef I2C_InitStructure;
+    336              I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
+    337              I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
+    338              I2C_InitStructure.I2C_OwnAddress1 = 0x30;
+    339              I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
+    340              I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+    341              I2C_InitStructure.I2C_ClockSpeed = 10000; 
+    342              I2C_Init(I2C1, &I2C_InitStructure);
+    343              /* disable I2C1 PEC Transmission */
+    344              I2C_CalculatePEC(I2C1, DISABLE);
+    345              I2C_Cmd(I2C1,ENABLE);  
+    346          }
+    347          
+    348          void EXIT_Config(void)
+    349          {
+    350            EXTI_InitTypeDef EXTI_InitStructure;
+    351            
+    352            EXTI_ClearITPendingBit(EXTI_Line5);
+    353            
+    354            GPIO_EXTILineConfig(GPIO_PortSourceGPIOA, GPIO_PinSource5);
+    355            
+    356            EXTI_InitStructure.EXTI_Line = EXTI_Line5;
+    357            EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    358            EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+    359            EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    360            EXTI_Init(&EXTI_InitStructure);
+    361          }
+    362          
+    363          /**
+    364            * @brief  Configures the tim2.  1s
+    365            * @param  None
+    366            * @retval None
+    367            */
+    368          void TIM_2_Configuration(void)
+    369          {
+    370              TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+    371          
+    372            //TIM_DeInit(TIM3);
+    373              /* Time base configuration */
+    374            TIM_TimeBaseStructure.TIM_Period = 1999;
+    375            TIM_TimeBaseStructure.TIM_Prescaler = 35999;
+    376            TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+    377            TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    378            
+    379            TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
+    380            TIM_ClearFlag(TIM2, TIM_FLAG_Update);
+    381            /* TIM IT enable */
+    382            TIM_ITConfig(TIM2, TIM_IT_Update , ENABLE);
+    383          
+    384          
+    385            /* TIM2 enable counter */
+    386            TIM_Cmd(TIM2, ENABLE);
+    387          }
+    388          
+    389          
+    390          
+    391          
+    392          /**
+    393            * @brief  Configures the IWDG.
+    394            * @param  None
+    395            * @retval None
+    396            */
+    397          void IWDG_Configuration(void)
+    398          {
+    399            /* IWDG timeout equal to 2s (the timeout may varies due to LSI frequency
+    400               dispersion) */
+    401            /* Enable write access to IWDG_PR and IWDG_RLR registers */
+    402            IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
+    403          
+    404            /* IWDG counter clock: 40KHz(LSI) / 32 = 1.25 KHz, 0.8ms to 3276ms */
+    405            IWDG_SetPrescaler(IWDG_Prescaler_32);
+    406          
+    407            /* Set counter reload value to 2500,   2500*0.8ms=2s */
+    408            IWDG_SetReload(2500);
+    409          
+    410            /* Reload IWDG counter */
+    411            IWDG_ReloadCounter();
+    412          
+    413            /* Enable IWDG (the LSI oscillator will be enabled by hardware) */
+    414            IWDG_Enable();
+    415          }
+    416          
+    417          
+    418          /******************* (C) COPYRIGHT 2018 *****END OF FILE****/
+    419           
+    420          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      16   EXIT_Config
+        16   -> EXTI_ClearITPendingBit
+        16   -> EXTI_Init
+        16   -> GPIO_EXTILineConfig
+       8   GPIO_Configuration
+         8   -> GPIO_Init
+      24   I2C_1_Configuration
+        24   -> I2C_CalculatePEC
+        24   -> I2C_Cmd
+        24   -> I2C_Init
+      24   I2C_2_Configuration
+        24   -> I2C_CalculatePEC
+        24   -> I2C_Init
+       8   IWDG_Configuration
+         8   -> IWDG_Enable
+         8   -> IWDG_ReloadCounter
+         8   -> IWDG_SetPrescaler
+         8   -> IWDG_SetReload
+         8   -> IWDG_WriteAccessCmd
+       8   NVIC_Configuration
+         8   -> NVIC_Init
+         8   -> NVIC_PriorityGroupConfig
+       8   RCC_Configuration
+         8   -> RCC_APB1PeriphClockCmd
+         8   -> RCC_APB2PeriphClockCmd
+      24   SPI_1_Configuration
+        24   -> SPI_Cmd
+        24   -> SPI_Init
+      24   SPI_2_Configuration
+        24   -> SPI_Cmd
+        24   -> SPI_Init
+      16   TIM_2_Configuration
+        16   -> TIM_ClearFlag
+        16   -> TIM_Cmd
+        16   -> TIM_ITConfig
+        16   -> TIM_TimeBaseInit
+      24   USART_1_Configuration
+        24   -> USART_Cmd
+        24   -> USART_ITConfig
+        24   -> USART_Init
+      24   USART_2_Configuration
+        24   -> USART_Cmd
+        24   -> USART_ITConfig
+        24   -> USART_Init
+       8   init
+         8   -> AD7949_init
+         8   -> Choose_MUX_Channel
+         8   -> Disable_cs_eep
+         8   -> Disable_m_en1
+         8   -> Disable_m_en2
+         8   -> Disable_m_en3
+         8   -> Disable_m_en4
+         8   -> Disable_m_en5
+         8   -> Disable_m_en6
+         8   -> Disable_spi_en
+         8   -> Disable_sw_vs1
+         8   -> Disable_usart_rx
+         8   -> Disable_usart_tx
+         8   -> Disable_vo_en6
+         8   -> Disable_vo_en7
+         8   -> EXIT_Config
+         8   -> Enable_m_en1
+         8   -> Enable_m_en2
+         8   -> Enable_m_en3
+         8   -> Enable_m_en4
+         8   -> Enable_m_en5
+         8   -> Enable_m_en6
+         8   -> Enable_spi_en
+         8   -> Enable_usart_rx
+         8   -> Enable_vo_en6
+         8   -> Enable_vo_en7
+         8   -> Enable_wp_eep
+         8   -> GPIO_Configuration
+         8   -> I2C_1_Configuration
+         8   -> LTC2620_init
+         8   -> MAX5478_init
+         8   -> Max7312_init
+         8   -> NVIC_Configuration
+         8   -> RCC_Configuration
+         8   -> SPI_2_Configuration
+         8   -> Set_spi_cs_n
+         8   -> USART_1_Configuration
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable7
+       4  ??DataTable7_1
+       4  ??DataTable7_10
+       4  ??DataTable7_2
+       4  ??DataTable7_3
+       4  ??DataTable7_4
+       4  ??DataTable7_5
+       4  ??DataTable7_6
+       4  ??DataTable7_7
+       4  ??DataTable7_8
+       4  ??DataTable7_9
+      48  EXIT_Config
+     252  GPIO_Configuration
+      74  I2C_1_Configuration
+      64  I2C_2_Configuration
+      34  IWDG_Configuration
+      80  NVIC_Configuration
+      38  RCC_Configuration
+      84  SPI_1_Configuration
+      78  SPI_2_Configuration
+      74  TIM_2_Configuration
+      76  USART_1_Configuration
+      76  USART_2_Configuration
+     160  init
+
+ 
+ 1 182 bytes in section .text
+ 
+ 1 182 bytes of CODE memory
+
+Errors: none
+Warnings: none

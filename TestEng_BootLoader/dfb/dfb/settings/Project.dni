@@ -1,0 +1,155 @@
+[Stack]
+FillEnabled=0
+OverflowWarningsEnabled=1
+WarningThreshold=90
+SpWarningsEnabled=1
+WarnLogOnly=1
+UseTrigger=1
+TriggerName=main
+LimitSize=0
+ByteLimit=50
+[DebugChecksum]
+Checksum=1554616063
+[Exceptions]
+StopOnUncaught=_ 0
+StopOnThrow=_ 0
+[CallStack]
+ShowArgs=0
+[Disassembly]
+MixedMode=1
+[SWOTraceHWSettings]
+OverrideDefaultClocks=0
+CpuClock=72000000
+ClockAutoDetect=0
+ClockWanted=2000000
+JtagSpeed=2000000
+Prescaler=36
+TimeStampPrescIndex=0
+TimeStampPrescData=0
+PcSampCYCTAP=1
+PcSampPOSTCNT=15
+PcSampIndex=0
+DataLogMode=0
+ITMportsEnable=0
+ITMportsTermIO=0
+ITMportsLogFile=0
+ITMlogFile=$PROJ_DIR$\ITM.log
+[JLinkDriver]
+CStepIntDis=_ 0
+[CodeCoverage]
+Enabled=_ 0
+[Interrupts]
+Enabled=1
+[MemoryMap]
+Enabled=0
+Base=0
+UseAuto=0
+TypeViolation=1
+UnspecRange=1
+ActionState=1
+[PowerLog]
+LogEnabled=0
+GraphEnabled=0
+ShowTimeLog=1
+ShowTimeSum=0
+Title_0=I0
+Symbol_0=0 4 1
+LiveEnabled=0
+LiveFile=PowerLogLive.log
+[EventLog]
+LogEnabled=0
+SumEnabled=0
+GraphEnabled=0
+ShowTimeLog=1
+ShowTimeSum=1
+SumSortOrder=0
+[PowerProbe]
+Frequency=10000
+Probe0=I0
+ProbeSetup0=2 1 1 2 0 0
+[struct_types]
+Fmt0=GPIO_InitTypeDef-GPIO_Pin	4	0
+[array_types]
+Fmt0=USHORT[104]	4	0
+Fmt1=USHORT[25]	4	0
+Fmt2=USHORT[40]	4	0
+Fmt3=uint16_t[10]	4	0
+Fmt4=uint16_t[14]	4	0
+Fmt5=uint16_t[16]	4	0
+Fmt6=uint16_t[1]	4	0
+Fmt7=uint16_t[2]	4	0
+Fmt8=uint16_t[300]	4	0
+Fmt9=uint16_t[32]	4	0
+Fmt10=uint16_t[8]	4	0
+Fmt11=uint16_t[9]	4	0
+Fmt12=uint8_t[100]	4	0
+Fmt13=uint8_t[128]	4	0
+Fmt14=uint8_t[256]	4	0
+Fmt15=unsigned char[256]	4	0
+Fmt16=unsigned short[8]	4	0
+[watch_formats]
+Fmt0={W}0:gOutboundData	4	0
+Fmt1={W}0:globle_flag_dfb_voltage_status	4	0
+Fmt2={W}0:globle_flag_power_status	4	0
+Fmt3={W}0:ltc2628_all	4	0
+Fmt4={W}0:rxCounter	3	0
+Fmt5={W}1:adc_data0	4	0
+Fmt6={W}1:adc_data1	4	0
+Fmt7={W}1:cmd_cur_dac_upd_ch_st	4	0
+Fmt8={W}1:cmd_eep_operation_st	4	0
+Fmt9={W}1:cmd_eep_rd_wr_st	4	0
+Fmt10={W}1:cmd_pwrdn_current_st	4	0
+Fmt11={W}1:cmd_pwrdn_update_ch_st	4	0
+Fmt12={W}1:head_len	4	0
+Fmt13={W}1:ltc2620_all	4	0
+[SWOTraceWindow]
+PcSampling=0
+InterruptLogs=0
+ForcedTimeStamps=0
+EventCPI=0
+EventEXC=0
+EventFOLD=0
+EventLSU=0
+EventSLEEP=0
+[DataLog]
+LogEnabled=0
+SumEnabled=0
+GraphEnabled=0
+ShowTimeLog=1
+ShowTimeSum=1
+[InterruptLog]
+LogEnabled=0
+SumEnabled=0
+GraphEnabled=0
+ShowTimeLog=1
+ShowTimeSum=1
+SumSortOrder=0
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
+[CallStackLog]
+Enabled=0
+[DriverProfiling]
+Enabled=0
+Mode=3
+Graph=0
+Symbiont=0
+Exclusions=
+[Disassemble mode]
+mode=1
+[Breakpoints2]
+Bp0=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\command.c}.176.10" 0 0 1 "" 0 "" 0
+Bp1=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\command.c}.242.10" 0 0 1 "" 0 "" 0
+Bp2=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\command.c}.252.18" 0 0 1 "" 0 "" 0
+Bp3=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\main.c}.46.18" 0 0 1 "" 0 "" 0
+Count=4
+[Aliases]
+A0=_ "C:\Documents and Settings\he.huang\Desktop\burn_in_2_v350301\dfb\DFB_src\main.c" ""
+A1=_ "C:\Users\he.huang\Desktop\burn_in_2_v350504\dfb\DFB_src\command.c" ""
+A2=_ "C:\Users\he.huang\Desktop\burn_in_2_v350504\dfb\DFB_src\main.c" ""
+Count=3
+SuppressDialog=0

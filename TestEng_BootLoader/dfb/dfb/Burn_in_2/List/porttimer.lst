@@ -1,0 +1,187 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        30/Mar/2019  15:46:36
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\modbus\modbus_port\porttimer.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\modbus\modbus_port\porttimer.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\DFB_inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\porttimer.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\Obj\porttimer.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\modbus\modbus_port\porttimer.c
+      1          
+      2          #include "include.h"
+      3          #include "port.h"
+      4          #include "mb.h"
+      5          #include "mbport.h"
+      6          
+      7          
+      8          
+      9          static void prvvTIMERExpiredISR( void );
+     10          
+     11          BOOL xMBPortTimersInit( USHORT usTim1Timerout50us )
+     12          {
+     13            TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+     14            NVIC_InitTypeDef NVIC_InitStructure;
+     15            //
+     16            uint16_t PrescalerValue = 0;
+     17            
+     18          
+     19            RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
+     20            
+     21          
+     22            PrescalerValue = (uint16_t) (SystemCoreClock / 20000) - 1; 
+     23          
+     24            TIM_TimeBaseStructure.TIM_Period = (uint16_t) usTim1Timerout50us;
+     25            TIM_TimeBaseStructure.TIM_Prescaler = PrescalerValue;
+     26            TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+     27            TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+     28            TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStructure);
+     29          
+     30            TIM_ARRPreloadConfig(TIM4, ENABLE);
+     31            
+     32            NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
+     33          
+     34            NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;
+     35            NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+     36            NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
+     37            NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+     38            NVIC_Init(&NVIC_InitStructure);
+     39            
+     40          
+     41            TIM_ClearITPendingBit(TIM4,TIM_IT_Update);
+     42          
+     43            TIM_ITConfig(TIM4, TIM_IT_Update, DISABLE);
+     44          
+     45            TIM_Cmd(TIM4,  DISABLE);
+     46            return TRUE;
+     47          }
+     48          
+     49          
+     50          void vMBPortTimersEnable( )
+     51          {
+     52              TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
+     53              TIM_ITConfig(TIM4, TIM_IT_Update, ENABLE);
+     54              TIM_SetCounter(TIM4,0x0000); 
+     55              TIM_Cmd(TIM4, ENABLE);
+     56          }
+     57          
+     58          void vMBPortTimersDisable(  )
+     59          {
+     60              TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
+     61              TIM_ITConfig(TIM4, TIM_IT_Update, DISABLE);
+     62              TIM_SetCounter(TIM4,0x0000); 
+     63              TIM_Cmd(TIM4, DISABLE);
+     64          }
+     65          void vMBPortTimersDelay( USHORT usTimeOutMS )
+     66          {
+     67          
+     68          
+     69          }
+     70          
+     71          static void prvvTIMERExpiredISR( void )
+     72          {
+     73              ( void )pxMBPortCBTimerExpired();
+     74          }
+     75          
+     76          void TIM4_IRQHandler(void)
+     77          {
+     78              if (TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET)
+     79              {
+     80                  TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
+     81                  prvvTIMERExpiredISR();
+     82              }
+     83          }
+     84          
+     85          
+     86          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   TIM4_IRQHandler
+         8   -> TIM_ClearITPendingBit
+         8   -> TIM_GetITStatus
+         8   -> prvvTIMERExpiredISR
+       8   prvvTIMERExpiredISR
+         8   -- Indirect call
+       0   vMBPortTimersDelay
+       8   vMBPortTimersDisable
+         8   -> TIM_ClearITPendingBit
+         8   -> TIM_Cmd
+         8   -> TIM_ITConfig
+         8   -> TIM_SetCounter
+       8   vMBPortTimersEnable
+         8   -> TIM_ClearITPendingBit
+         8   -> TIM_Cmd
+         8   -> TIM_ITConfig
+         8   -> TIM_SetCounter
+      32   xMBPortTimersInit
+        32   -> NVIC_Init
+        32   -> NVIC_PriorityGroupConfig
+        32   -> RCC_APB1PeriphClockCmd
+        32   -> TIM_ARRPreloadConfig
+        32   -> TIM_ClearITPendingBit
+        32   -> TIM_Cmd
+        32   -> TIM_ITConfig
+        32   -> TIM_TimeBaseInit
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable4
+       4  ??DataTable4_1
+       4  ??DataTable4_2
+      28  TIM4_IRQHandler
+      10  prvvTIMERExpiredISR
+       2  vMBPortTimersDelay
+      38  vMBPortTimersDisable
+      38  vMBPortTimersEnable
+     138  xMBPortTimersInit
+
+ 
+ 266 bytes in section .text
+ 
+ 266 bytes of CODE memory
+
+Errors: none
+Warnings: none

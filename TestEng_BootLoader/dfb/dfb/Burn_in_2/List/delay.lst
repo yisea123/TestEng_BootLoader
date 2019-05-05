@@ -1,0 +1,124 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        30/Mar/2019  15:46:31
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\DFB_src\delay.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\DFB_src\delay.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\DFB_inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\List\delay.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\dfb\Burn_in_2\Obj\delay.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_FL0001A00\TestEng_FL0001A00\dfb\DFB_src\delay.c
+      1          
+      2          #include "include.h"
+      3          
+      4          static uint8_t  fac_us=0;
+      5          static uint16_t fac_ms=0;
+      6          
+      7          void Delay_Init(uint8_t SYSCLK)
+      8          {
+      9              SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8); 
+     10              fac_us=SYSCLK/8;            
+     11              fac_ms=(uint16_t)fac_us*1000;
+     12          }                                    
+     13          
+     14          void Delay_ms(uint16_t nms)
+     15          {                     
+     16              uint32_t temp;           
+     17              SysTick->LOAD=(uint32_t)nms*fac_ms;
+     18              SysTick->VAL =0x00;     
+     19              SysTick->CTRL=0x01 ;         
+     20              do
+     21              {
+     22                  temp=SysTick->CTRL;
+     23              }
+     24              while(temp&0x01&&!(temp&(1<<16)));
+     25              SysTick->CTRL=0x00;
+     26              SysTick->VAL =0X00;            
+     27          }   
+     28                                                  
+     29          void Delay_us(uint32_t nus)
+     30          {        
+     31              uint32_t temp;             
+     32              SysTick->LOAD=nus*fac_us;     
+     33              SysTick->VAL=0x00;
+     34              SysTick->CTRL=0x01 ;   
+     35              do
+     36              {
+     37                  temp=SysTick->CTRL;
+     38              }
+     39              while(temp&0x01&&!(temp&(1<<16)));
+     40              SysTick->CTRL=0x00;
+     41              SysTick->VAL =0X00; 
+     42          }
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   Delay_Init
+         8   -> SysTick_CLKSourceConfig
+       0   Delay_ms
+       0   Delay_us
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable2
+       4  ??DataTable2_1
+       4  ??DataTable2_2
+       4  ??DataTable2_3
+       4  ??DataTable2_4
+      40  Delay_Init
+      54  Delay_ms
+      52  Delay_us
+       2  fac_ms
+       1  fac_us
+
+ 
+   3 bytes in section .bss
+ 166 bytes in section .text
+ 
+ 166 bytes of CODE memory
+   3 bytes of DATA memory
+
+Errors: none
+Warnings: none

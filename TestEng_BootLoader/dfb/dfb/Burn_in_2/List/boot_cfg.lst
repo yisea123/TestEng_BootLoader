@@ -1,0 +1,177 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        06/Apr/2019  13:17:55
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\DFB_src\boot_cfg.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\DFB_src\boot_cfg.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\dfb\Burn_in_2\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\dfb\Burn_in_2\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\dfb\Burn_in_2\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\dfb\..\DFB_inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\dfb\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\dfb\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\dfb\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\dfb\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\dfb\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\dfb\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\dfb\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\dfb\Burn_in_2\List\boot_cfg.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\dfb\Burn_in_2\Obj\boot_cfg.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\dfb\DFB_src\boot_cfg.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    boot_cfg.c  burn in system
+      4            * @author  h&h
+      5            * @version 
+      6            * @date    
+      7          * @brief  
+      8            ******************************************************************************
+      9          **/ 
+     10          
+     11          #include "include.h"
+     12          
+     13          
+     14          #define APP_CFG_GPIO_NUM 10
+     15          const App_Cfg_GpioPin_st App_Cfg_GpioPin_cast[APP_CFG_GPIO_NUM] =
+     16          {
+     17              {
+     18                  GPIOA, 
+     19                  {
+     20                      GPIO_Pin_1, GPIO_Speed_50MHz,GPIO_Mode_Out_PP
+     21                  },
+     22              },
+     23              {
+     24                  GPIOA, 
+     25                  {
+     26                      GPIO_Pin_1, GPIO_Speed_50MHz,GPIO_Mode_Out_PP
+     27                  },
+     28              },
+     29              {
+     30                  GPIOA, 
+     31                  {
+     32                      GPIO_Pin_1, GPIO_Speed_50MHz,GPIO_Mode_Out_PP
+     33                  },
+     34              },
+     35              {
+     36                  GPIOA, 
+     37                  {
+     38                      GPIO_Pin_1, GPIO_Speed_50MHz,GPIO_Mode_Out_PP
+     39                  },
+     40              },
+     41              {
+     42                  GPIOA, 
+     43                  {
+     44                      GPIO_Pin_1, GPIO_Speed_50MHz,GPIO_Mode_Out_PP
+     45                  },
+     46              },
+     47              {
+     48                  GPIOA, 
+     49                  {
+     50                      GPIO_Pin_1, GPIO_Speed_50MHz,GPIO_Mode_Out_PP
+     51                  },
+     52              },
+     53              {
+     54                  GPIOA, 
+     55                  {
+     56                      GPIO_Pin_1, GPIO_Speed_50MHz,GPIO_Mode_Out_PP
+     57                  },
+     58              },
+     59              {
+     60                  GPIOA, 
+     61                  {
+     62                      GPIO_Pin_1, GPIO_Speed_50MHz,GPIO_Mode_Out_PP
+     63                  },
+     64              },
+     65          
+     66          };
+     67          
+     68          App_Cfg_Gpio_st const App_Cfg_Gpio_cst = 
+     69          {
+     70              APP_CFG_GPIO_NUM,
+     71              &App_Cfg_GpioPin_cast[0],
+     72          };
+     73          
+     74          
+     75          
+     76          #define APP_CFG_UART_NUM 1
+     77          const App_Cfg_UartPort_st App_Cfg_UartPort_Cast[APP_CFG_UART_NUM] = 
+     78          {
+     79              {
+     80                  USART1,
+     81                  {
+     82                      19200,
+     83                      USART_WordLength_9b,
+     84                      USART_StopBits_1,
+     85                      USART_Parity_Even,
+     86                      USART_Mode_Rx | USART_Mode_Tx,
+     87                      USART_HardwareFlowControl_None
+     88                  }
+     89              },
+     90          };
+     91          
+     92          
+     93          const App_Cfg_Uart_st App_Cfg_Uart_cst = 
+     94          {
+     95              APP_CFG_UART_NUM,
+     96              &App_Cfg_UartPort_Cast[0],
+     97          };
+     98          
+     99          const App_Cfg_st App_Cfg_cst =
+    100          {
+    101              "FL0001A00",
+    102              "20181013",
+    103              &App_Cfg_Gpio_cst,
+    104              &App_Cfg_Uart_cst,
+    105          };
+    106          
+    107          
+    108          /******************* (C) COPYRIGHT 2018 *****END OF FILE****/
+    109           
+    110          
+    111          
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      80  App_Cfg_GpioPin_cast
+       8  App_Cfg_Gpio_cst
+      20  App_Cfg_UartPort_Cast
+       8  App_Cfg_Uart_cst
+      40  App_Cfg_cst
+
+ 
+ 156 bytes in section .rodata
+ 
+ 156 bytes of CONST memory
+
+Errors: none
+Warnings: none
