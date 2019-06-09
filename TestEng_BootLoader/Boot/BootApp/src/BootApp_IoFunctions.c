@@ -46,7 +46,7 @@ static uint8_t BootApp_IoFunction(BootApp_GPIO_Function_ten gpio_func_en,
                     BootApp_GPIO_WriteBit( gpio_pin_cpast[i].app_cfg_gpio,
                                    0,
                                    BitVal );
-                    #elif
+                    #else
                     BootApp_GPIO_WriteBit( gpio_pin_cpast[i].app_cfg_gpio,
                                    gpio_pin_cpast[i].app_cfg_gpio_pin_st.GPIO_Pin,
                                    BitVal );
@@ -57,9 +57,9 @@ static uint8_t BootApp_IoFunction(BootApp_GPIO_Function_ten gpio_func_en,
                     #if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
                     pin_st_u8 = BootApp_GPIO_ReadInputDataBit( gpio_pin_cpast[i].app_cfg_gpio,
                                                        0);
-                    #elif
+                    #else
                     pin_st_u8 = BootApp_GPIO_ReadInputDataBit( gpio_pin_cpast[i].app_cfg_gpio,
-                                                       gpio_pin_cpast[i]->app_cfg_gpio_pin_st.GPIO_Pin);
+                                                       gpio_pin_cpast[i].app_cfg_gpio_pin_st.GPIO_Pin);
                     #endif
 
                 }
@@ -111,9 +111,9 @@ uint8_t BootApp_Get_board_address(void)
                 #if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
                 pin_st_u8 = BootApp_GPIO_ReadInputDataBit( gpio_pin_cpast[i].app_cfg_gpio,
                                                        0);
-                #elif
+                #else
                 pin_st_u8 = BootApp_GPIO_ReadInputDataBit( gpio_pin_cpast[i].app_cfg_gpio,
-                                                       gpio_pin_cpast[i]->app_cfg_gpio_pin_st.GPIO_Pin);
+                                                       gpio_pin_cpast[i].app_cfg_gpio_pin_st.GPIO_Pin);
                 #endif
                 addr |= (pin_st_u8<<i);
             }

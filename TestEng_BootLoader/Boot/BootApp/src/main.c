@@ -4,6 +4,7 @@
 #include "BootApp_Priv.h"
 #include "BootApp.h"
 
+#if 0
 int main_debug(void)
 {
     uint16_t i;
@@ -19,3 +20,4 @@ int main_debug(void)
     return 0;
 
 }
+#endif

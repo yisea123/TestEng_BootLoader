@@ -29,22 +29,8 @@ uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uin
 {
     return 1;
 }
+
 #else
-void BootDrv_Reset(void)
-{
-
-}
-
-uint8_t BootDrv_EreaseFlash(uint32_t str_addr, uint32_t sect_siz)
-{
-    return 1;
-}
-
-uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uint32_t length_u32)
-{
-    return 1;
-}
-#elif
 
 void BootDrv_Reset(void)
 {
@@ -61,21 +47,8 @@ uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uin
 {
     return 1;
 }
-#else
-void BootDrv_Reset(void)
-{
 
-}
 
-uint8_t BootDrv_EreaseFlash(uint32_t str_addr, uint32_t sect_siz)
-{
-    return 1;
-}
-
-uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uint32_t length_u32)
-{
-    return 1;
-}
 #endif
 
 

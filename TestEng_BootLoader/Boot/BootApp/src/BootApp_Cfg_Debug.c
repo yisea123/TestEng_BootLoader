@@ -9,14 +9,12 @@
  **********************************************************************************************************************
 </BASDKey>*/
 
-#if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
-
 #include "BootApp_Cfg.h"
 #include "BootApp_Cfg_Board.h"
 #include "BootApp_Type.h"
 #include "BootApp_Priv.h"
 
-
+#if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
 
 uint8_t BootApp_Debug_u8 = 0;
 

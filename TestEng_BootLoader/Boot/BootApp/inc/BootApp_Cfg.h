@@ -24,7 +24,8 @@ typedef unsigned long   uint32_t;
 #define BootApp_Enter_Schm()
 #define BootApp_Exit_Schm()
 
-#elif
+#else
+
 #include "include.h"
 #define BootApp_Enter_Schm() __disable_irq()
 #define BootApp_Exit_Schm()  __enable_irq()

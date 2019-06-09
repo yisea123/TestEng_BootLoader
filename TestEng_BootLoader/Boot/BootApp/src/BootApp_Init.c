@@ -37,9 +37,11 @@ void BootApp_Prog_init(void)
     BootApp_Enable_usart_rx();
     BootApp_Disable_usart_tx();
     BootApp_Enter_Schm();
+#if (BOOTAPP_BOARD_SUPPORT != TestEng_Debug)
     slave_addr = BootApp_Get_board_address();
     eMBInit(MB_RTU, slave_addr, 0x1, 19200, MB_PAR_EVEN);
     eMBEnable(); 
+#endif
     BootApp_Exit_Schm();
 
 }
