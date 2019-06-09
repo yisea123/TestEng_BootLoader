@@ -20,7 +20,7 @@ void BootDrv_Reset(void)
 
 }
 
-uint8_t BootDrv_EreaseFlash(uint32_t str_addr, uint32_t sect_siz)
+uint8_t BootDrv_EreaseFlash(uint32_t str_addr_u32, uint32_t sect_siz_u32)
 {
     return 1;
 }
@@ -38,18 +38,18 @@ void BootDrv_Reset(void)
     NVIC_SystemReset();
 }
 
-uint8_t BootDrv_EreaseFlash(uint32_t str_addr, uint32_t sect_siz)
+uint8_t BootDrv_EreaseFlash(uint32_t str_addr_u32, uint32_t sect_siz_u32)
 {
     uint8_t ret;
     
     FLASH_Status sts;
-    if( (str_addr >= BOOTAPP_APP_START_ADDR) &&
-        (str_addr < BOOTAPP_APP_END_ADDR) )
+    if( (str_addr_u32 >= BOOTAPP_APP_START_ADDR) &&
+        (str_addr_u32 < BOOTAPP_APP_END_ADDR) )
     {
         BootApp_Enter_Schm();
         FLASH_Unlock();
-        str_addr &= BOOTAPP_APP_SECTOR_SIZE;
-        sts = FLASH_ErasePage(str_addr);
+        str_addr_u32 &= BOOTAPP_APP_SECTOR_SIZE;
+        sts = FLASH_ErasePage(str_addr_u32);
         FLASH_Lock();
         BootApp_Exit_Schm();
 
@@ -71,7 +71,49 @@ uint8_t BootDrv_EreaseFlash(uint32_t str_addr, uint32_t sect_siz)
 
 uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uint32_t length_u32)
 {
-    return 1;
+    uint8_t ret;
+    uint16_t i;
+    uint32_t data;
+    FLASH_Status sts = FLASH_BUSY;
+
+    (void)length_u32;
+    if( (start_addr_u32 >= BOOTAPP_APP_START_ADDR) &&
+        (start_addr_u32 < BOOTAPP_APP_END_ADDR) )
+    {
+        BootApp_Enter_Schm();
+        FLASH_Unlock();
+
+        for(i=0; i<BOOTAPP_APP_SECTOR_SIZE/4; i++)
+        {
+            
+            ret = BootApp_SectBuffer_Read(i, 1, &data);
+            if(ret)
+            {
+                sts = FLASH_ProgramWord(start_addr_u32, data);
+            }
+            else
+            {
+                break;
+            }
+        }
+        FLASH_Lock();
+        BootApp_Exit_Schm();
+
+        if(FLASH_COMPLETE == sts)
+        {
+            ret = 1;
+        }
+        else
+        {
+            ret = 0;
+        }
+    }
+    else
+    {
+        ret = 0;
+    }
+    return ret;
+
 }
 
 

@@ -68,7 +68,7 @@ extern uint8_t BootApp_Program_Flash_Finish(void);
 extern BootApp_Status_ten BootApp_Validate_App(void);
 
 extern void BootDrv_Reset(void);
-extern uint8_t BootDrv_EreaseFlash(uint32_t str_addr, uint32_t sect_siz);
+extern uint8_t BootDrv_EreaseFlash(uint32_t str_addr_u32, uint32_t sect_siz_u32);
 extern uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uint32_t length_u32);
 
 

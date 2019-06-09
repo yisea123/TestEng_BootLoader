@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       09/Jun/2019  21:46:05
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       09/Jun/2019  22:15:06
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -48,8 +48,10 @@
 
         #define SHT_PROGBITS 0x1
 
+        EXTERN BootApp_SectBuffer_Read
         EXTERN FLASH_ErasePage
         EXTERN FLASH_Lock
+        EXTERN FLASH_ProgramWord
         EXTERN FLASH_Unlock
 
         PUBLIC BootDrv_EreaseFlash
@@ -62,12 +64,12 @@
 // static __interwork __softfp void NVIC_SystemReset(void)
 NVIC_SystemReset:
         DSB      
-        LDR.N    R0,??DataTable1  ;; 0xe000ed0c
+        LDR.N    R0,??DataTable2  ;; 0xe000ed0c
         LDR      R0,[R0, #+0]
         ANDS     R0,R0,#0x700
-        LDR.N    R1,??DataTable1_1  ;; 0x5fa0004
+        LDR.N    R1,??DataTable2_1  ;; 0x5fa0004
         ORRS     R0,R1,R0
-        LDR.N    R1,??DataTable1  ;; 0xe000ed0c
+        LDR.N    R1,??DataTable2  ;; 0xe000ed0c
         STR      R0,[R1, #+0]
         DSB      
 ??NVIC_SystemReset_0:
@@ -88,10 +90,10 @@ BootDrv_EreaseFlash:
         PUSH     {R3-R7,LR}
         MOVS     R7,R0
         MOVS     R4,R1
-        LDR.N    R0,??DataTable1_2  ;; 0x800c000
+        LDR.N    R0,??DataTable2_2  ;; 0x800c000
         CMP      R7,R0
         BCC.N    ??BootDrv_EreaseFlash_0
-        LDR.N    R0,??DataTable1_3  ;; 0x801ffff
+        LDR.N    R0,??DataTable2_3  ;; 0x801ffff
         CMP      R7,R0
         BCS.N    ??BootDrv_EreaseFlash_0
         CPSID    I
@@ -120,36 +122,88 @@ BootDrv_EreaseFlash:
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         POP      {R1,R4-R7,PC}    ;; return
 
+        SECTION `.text`:CODE:NOROOT(1)
+        THUMB
+BootDrv_ProgramFlash:
+        PUSH     {R3-R9,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
+        MOVS     R6,R2
+        MOVS     R9,#+1
+        LDR.N    R0,??DataTable2_2  ;; 0x800c000
+        CMP      R4,R0
+        BCC.N    ??BootDrv_ProgramFlash_0
+        LDR.N    R0,??DataTable2_3  ;; 0x801ffff
+        CMP      R4,R0
+        BCS.N    ??BootDrv_ProgramFlash_0
+        CPSID    I
+        BL       FLASH_Unlock
+        MOVS     R0,#+0
+        MOV      R8,R0
+??BootDrv_ProgramFlash_1:
+        UXTH     R8,R8            ;; ZeroExt  R8,R8,#+16,#+16
+        CMP      R8,#+255
+        BGT.N    ??BootDrv_ProgramFlash_2
+        ADD      R2,SP,#+0
+        MOVS     R1,#+1
+        MOV      R0,R8
+        UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
+        BL       BootApp_SectBuffer_Read
+        MOVS     R7,R0
+        UXTB     R7,R7            ;; ZeroExt  R7,R7,#+24,#+24
+        CMP      R7,#+0
+        BEQ.N    ??BootDrv_ProgramFlash_3
+        LDR      R1,[SP, #+0]
+        MOVS     R0,R4
+        BL       FLASH_ProgramWord
+        MOV      R9,R0
+        ADDS     R8,R8,#+1
+        B.N      ??BootDrv_ProgramFlash_1
+??BootDrv_ProgramFlash_3:
+??BootDrv_ProgramFlash_2:
+        BL       FLASH_Lock
+        CPSIE    I
+        UXTB     R9,R9            ;; ZeroExt  R9,R9,#+24,#+24
+        CMP      R9,#+4
+        BNE.N    ??BootDrv_ProgramFlash_4
+        MOVS     R0,#+1
+        MOVS     R7,R0
+        B.N      ??BootDrv_ProgramFlash_5
+??BootDrv_ProgramFlash_4:
+        MOVS     R0,#+0
+        MOVS     R7,R0
+        B.N      ??BootDrv_ProgramFlash_5
+??BootDrv_ProgramFlash_0:
+        MOVS     R0,#+0
+        MOVS     R7,R0
+??BootDrv_ProgramFlash_5:
+        MOVS     R0,R7
+        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        POP      {R1,R4-R9,PC}    ;; return
+
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
-??DataTable1:
+??DataTable2:
         DC32     0xe000ed0c
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
-??DataTable1_1:
+??DataTable2_1:
         DC32     0x5fa0004
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
-??DataTable1_2:
+??DataTable2_2:
         DC32     0x800c000
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
-??DataTable1_3:
+??DataTable2_3:
         DC32     0x801ffff
-
-        SECTION `.text`:CODE:NOROOT(1)
-        THUMB
-BootDrv_ProgramFlash:
-        MOVS     R3,R0
-        MOVS     R0,#+1
-        BX       LR               ;; return
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -164,9 +218,9 @@ BootDrv_ProgramFlash:
 
         END
 // 
-// 132 bytes in section .text
+// 248 bytes in section .text
 // 
-// 132 bytes of CODE memory
+// 248 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none
