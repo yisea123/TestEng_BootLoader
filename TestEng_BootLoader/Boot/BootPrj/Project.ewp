@@ -3,7 +3,7 @@
 <project>
   <fileVersion>2</fileVersion>
   <configuration>
-    <name>Burn_in_2</name>
+    <name>Boot</name>
     <toolchain>
       <name>ARM</name>
     </toolchain>
@@ -301,7 +301,9 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state>$PROJ_DIR$\..\DFB_inc</state>
+          <state>$PROJ_DIR$\..\BootApp\inc</state>
+          <state>$PROJ_DIR$\..\BootDrv\inc</state>
+          <state>$PROJ_DIR$\..\BootOth\inc</state>
           <state>$PROJ_DIR$\..\..\Libraries\CMSIS</state>
           <state>$PROJ_DIR$\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc</state>
           <state>$PROJ_DIR$\..\modbus\ascii\</state>
@@ -1046,6 +1048,24 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\BootDrv\src\spi.c</name>
+    </file>
+  </group>
+  <group>
+    <name>BootOth</name>
+    <file>
+      <name>$PROJ_DIR$\..\BootOth\src\Boot_GetApp_Data.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\BootOth\src\check_error.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\BootOth\src\command.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\BootOth\src\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\BootOth\src\power_manage.c</name>
     </file>
   </group>
   <group>

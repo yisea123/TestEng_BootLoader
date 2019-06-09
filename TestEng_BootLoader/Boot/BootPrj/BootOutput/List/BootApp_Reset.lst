@@ -1,0 +1,135 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:04:59
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Reset.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Reset.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\BootApp_Reset.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Reset.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Reset.c
+      1          /*<BASDKey>
+      2           **********************************************************************************************************************
+      3           *
+      4           * COPYRIGHT RESERVED, FeedLiTech, 2019. All rights reserved.
+      5           * The reproduction, distribution and utilization of this document as well as the communication of its contents to
+      6           * others without explicit authorization is prohibited. Offenders will be held liable for the payment of damages.
+      7           * All rights reserved in the event of the grant of a patent, utility model or design.
+      8           *
+      9           **********************************************************************************************************************
+     10          </BASDKey>*/
+     11          
+     12          #include "BootApp_Cfg.h"
+     13          #include "BootApp_Cfg_Board.h"
+     14          #include "BootApp_Type.h"
+     15          #include "BootApp_Priv.h"
+     16          
+     17          BootApp_Reset_ten BootApp_Reset_en = BOOTAPP_RESET_POWERON;
+     18          
+     19          BootApp_Reset_ten BootApp_GetReset_Reason(void)
+     20          {
+     21          #if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
+     22              return BOOTAPP_RESET_POWERON;
+     23          #else
+     24              uint16_t magic_word;
+     25              magic_word = BootApp_Get_MagicWord();
+     26              if(BOOTAPP_MAGIC_WORD == magic_word)
+     27              {
+     28                  BootApp_Reset_en = BOOTAPP_RESET_PROG;
+     29              }
+     30              else
+     31              {
+     32                  BootApp_Reset_en = BOOTAPP_RESET_POWERON;
+     33              }
+     34              return BootApp_Reset_en;
+     35          
+     36          #endif
+     37          }
+     38          
+     39          
+     40          void BootApp_Reset_Sys(void)
+     41          {
+     42              BootApp_Set_MagicWord(BOOTAPP_MAGIC_WORD_DEFAULT);
+     43              BootDrv_Reset();
+     44          }
+     45          
+     46          
+     47          
+     48          /*<BASDKey>
+     49           ***********************************************************************************************************************
+     50           * $History___:
+     51           *
+     52           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+     53           *
+     54           * $
+     55           ***********************************************************************************************************************
+     56          </BASDKey>*/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   BootApp_GetReset_Reason
+       8   BootApp_Reset_Sys
+         8   -> BootDrv_Reset
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable0
+      38  BootApp_GetReset_Reason
+      16  BootApp_Reset_Sys
+       1  BootApp_Reset_en
+
+ 
+  1 byte  in section .bss
+ 58 bytes in section .text
+ 
+ 58 bytes of CODE memory
+  1 byte  of DATA memory
+
+Errors: none
+Warnings: none

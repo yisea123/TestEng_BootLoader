@@ -1,0 +1,503 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:04:59
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ReceiveData.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ReceiveData.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\BootApp_ReceiveData.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_ReceiveData.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ReceiveData.c
+      1          /*<BASDKey>
+      2           **********************************************************************************************************************
+      3           *
+      4           * COPYRIGHT RESERVED, FeedLiTech, 2019. All rights reserved.
+      5           * The reproduction, distribution and utilization of this document as well as the communication of its contents to
+      6           * others without explicit authorization is prohibited. Offenders will be held liable for the payment of damages.
+      7           * All rights reserved in the event of the grant of a patent, utility model or design.
+      8           *
+      9           **********************************************************************************************************************
+     10          </BASDKey>*/
+     11          
+     12          #include "BootApp_Cfg.h"
+     13          #include "BootApp_Cfg_Board.h"
+     14          #include "BootApp_Type.h"
+     15          #include "BootApp_Priv.h"
+     16          
+     17          BootApp_SectBuffer_ten BootApp_SectBuffer_en = {{0},};
+     18          BootApp_CommunicationBuffer_ten BootApp_CommunicationBuffer_en = {{0},};
+     19          BootApp_ReceiveData_tst BootApp_ReceiveData_st = {0};
+     20          
+     21          const uint16_t BootApp_Sect_Dirty_Msk_au16[16 + 1] =
+     22          {
+     23              0x0000,
+     24              0x0001, 0x0003, 0x0007, 0x000F, 0x001F, 0x003F, 0x007F, 0x00FF,
+     25              0x01FF, 0x03FF, 0x07FF, 0x0FFF, 0x1FFF, 0x3FFF, 0x7FFF, 0xFFFF,
+     26          };
+     27          
+     28          
+     29          uint8_t BootApp_NewCmd_Received(const BootApp_CmdBuffer_tst *CmdBuffer_pst)
+     30          {
+     31              uint8_t ret;
+     32              static uint32_t magic_num = 0;
+     33              if(CmdBuffer_pst->cmd32_07 != magic_num)
+     34              {
+     35                  ret = 1;
+     36              }
+     37              else
+     38              {
+     39                  ret = 0;
+     40              }
+     41              magic_num = CmdBuffer_pst->cmd32_07;
+     42          
+     43              return ret;
+     44          }
+     45          
+     46          
+     47          
+     48          BootApp_State_ten BootApp_Get_Command(const BootApp_CmdBuffer_tst * CmdBuffer_pst)
+     49          {
+     50              BootApp_State_ten state_en;
+     51              state_en = (BootApp_State_ten)CmdBuffer_pst->cmd16_00;
+     52              if(state_en < BOOTAPP_STATE_NUMB)
+     53              {
+     54          
+     55              }
+     56              else
+     57              {
+     58                  state_en = BOOTAPP_STATE_RCMD;
+     59              }
+     60              return state_en;
+     61          }
+     62          
+     63          uint8_t BootApp_SectBuffer_Write(uint16_t start_addr, uint16_t length, const uint32_t *src)
+     64          {
+     65              uint8_t ret;
+     66              uint32_t * des;
+     67          
+     68              if( (start_addr > BOOTAPP_APP_SECTOR_SIZE>>2 ) ||
+     69                  (start_addr + length > BOOTAPP_APP_SECTOR_SIZE>>2) ||
+     70                  (0 == length) ||
+     71                  ((void*)0 == src) )
+     72              {
+     73                  ret = 0;
+     74              }
+     75              else
+     76              {
+     77                  des = &BootApp_SectBuffer_en.buf_au32[start_addr];
+     78                  while(length--)
+     79                  {
+     80                      *des++ = *src++;
+     81                  }
+     82                  ret = 1;
+     83              }
+     84              return ret;
+     85          }
+     86          
+     87          uint8_t BootApp_SectBuffer_Read(uint16_t start_addr, uint16_t length, uint32_t *des)
+     88          {
+     89              uint8_t ret;
+     90              uint32_t * src;
+     91          
+     92              if( (start_addr > BOOTAPP_APP_SECTOR_SIZE/2 - 1) ||
+     93                  (start_addr + length > BOOTAPP_APP_SECTOR_SIZE/2 -1) ||
+     94                  (0 == length) ||
+     95                  ((void*)0 == des) )
+     96              {
+     97                  ret = 0;
+     98              }
+     99              else
+    100              {
+    101                  src = &BootApp_SectBuffer_en.buf_au32[start_addr];
+    102                  while(length--)
+    103                  {
+    104                      *des++ = *src++;
+    105                  }
+    106                  ret = 1;
+    107              }
+    108              return ret;
+    109          }
+    110          
+    111          
+    112          uint8_t BootApp_PageBuffer_Read(BootApp_PageBuffer_ten * page_buffer,
+    113                                          uint16_t start_addr, uint16_t length, uint32_t *des)
+    114          {
+    115              uint8_t ret;
+    116              uint32_t * src;
+    117          
+    118              if( (start_addr > BOOTAPP_APP_PAGE_SIZE/2) ||
+    119                  (start_addr + length > BOOTAPP_APP_PAGE_SIZE/2) ||
+    120                  (0 == length) ||
+    121                  ((void*)0 == des) )
+    122              {
+    123                  ret = 0;
+    124              }
+    125              else
+    126              {
+    127                  src = &page_buffer->buf_au32[start_addr];
+    128                  while(length--)
+    129                  {
+    130                      *des++ = *src++;
+    131                  }
+    132                  ret = 1;
+    133              }
+    134              return ret;
+    135          }
+    136          
+    137          BootApp_Status_ten BootApp_Receive_Data(const BootApp_CommunicationBuffer_tst *ComBuffer_pst)
+    138          {
+    139              uint8_t validate_res = 0;
+    140              uint8_t w_buffer_st = 0;
+    141          
+    142              BootApp_Status_ten status_en = BOOTAPP_RDATA_ONGOING;
+    143              BootApp_ReceiveData_tst receivedata_st = {0};
+    144              BootApp_ReceiveData_tst *receivedata_pst = &BootApp_ReceiveData_st;
+    145          
+    146              const BootApp_CmdBuffer_tst * CmdBuffer_pst = &(ComBuffer_pst->cmdbuffer_st);
+    147              const BootApp_PageBuffer_ten * PageBuffer_pen = &(ComBuffer_pst->pagebuffer_en);
+    148          
+    149              BootApp_Enter_Schm();
+    150              receivedata_st.sect_num_u16 = CmdBuffer_pst->cmd16_01;
+    151              receivedata_st.page_num_u16 = CmdBuffer_pst->cmd16_02;
+    152              receivedata_st.page_len_u16 = CmdBuffer_pst->cmd16_03;
+    153              receivedata_st.page_str_addr_u16 = CmdBuffer_pst->cmd16_04;
+    154              receivedata_st.page_end_addr_u16 = CmdBuffer_pst->cmd16_05;
+    155              receivedata_st.start_addr_u32 = CmdBuffer_pst->cmd32_00;
+    156              receivedata_st.end_addr_u32 = CmdBuffer_pst->cmd32_01;
+    157              BootApp_Exit_Schm();
+    158          
+    159              receivedata_st.sect_dirty_u16 = receivedata_pst->sect_dirty_u16;
+    160              receivedata_st.sect_ready_u16 = receivedata_pst->sect_ready_u16;
+    161              /*sector buffer not empty*/
+    162              if(receivedata_st.sect_ready_u16)
+    163              {
+    164                  status_en = BOOTAPP_RDATA_BUF_FUL_ERR;
+    165                  return status_en;
+    166              }
+    167              /*validate sector number sector number starts from 1 to N, N...4*/
+    168              if( (receivedata_st.sect_num_u16 <= BOOTAPP_APP_SECTOR_NUM) &&
+    169                  (receivedata_st.sect_num_u16 >= 1) )
+    170              {
+    171                  /*sector not finished*/
+    172                  if(receivedata_st.sect_dirty_u16 != 0)
+    173                  {
+    174                      /*continue write current sector*/
+    175                      if(receivedata_pst->sect_num_u16 == receivedata_st.sect_num_u16)
+    176                      {
+    177                          validate_res = 1;
+    178                      }
+    179                      else
+    180                      {
+    181                          status_en = BOOTAPP_RDATA_SEC_N_COMPLETE_ERR;
+    182                          validate_res = 0;
+    183                      }
+    184                  }
+    185                  else
+    186                  {
+    187                      /*previous sector write finished, latest sector shall be the next one*/
+    188                      if(receivedata_st.sect_num_u16 == receivedata_pst->sect_num_u16 + 1)
+    189                      {
+    190                          validate_res = 1;
+    191                      }
+    192                      else
+    193                      {
+    194                          status_en = BOOTAPP_RDATA_SEC_N_CONTIOUS_ERR;
+    195                          validate_res = 0;
+    196                      }
+    197                  }
+    198              }
+    199              else
+    200              {
+    201                  status_en = BOOTAPP_RDATA_INVALID_SEC_ERR;
+    202                  validate_res = 0;
+    203              }
+    204          
+    205              /*validate page info*/
+    206              if(validate_res)
+    207              {
+    208                  if( (receivedata_st.page_num_u16 <= BOOTAPP_APP_PAGE_NUM) &&
+    209                      (receivedata_st.page_num_u16 >= 1) )
+    210                  {
+    211                      validate_res = 1;
+    212                  }
+    213                  else
+    214                  {
+    215                      status_en = BOOTAPP_RDATA_INVALID_PAGE_ERR;
+    216                      validate_res = 0;
+    217                  }
+    218              }
+    219              else
+    220              {
+    221          
+    222              }
+    223          
+    224              if(validate_res)
+    225              {
+    226                  if( (receivedata_st.page_len_u16 == BOOTAPP_APP_PAGE_SIZE) &&
+    227                      (receivedata_st.page_len_u16 == receivedata_st.page_end_addr_u16 - receivedata_st.page_str_addr_u16 + 1) )
+    228                  {
+    229                      validate_res = 1;
+    230                  }
+    231                  else
+    232                  {
+    233                      status_en = BOOTAPP_RDATA_INVALID_PAGE_LEN_ERR;
+    234                      validate_res = 0;
+    235                  }
+    236              }
+    237          
+    238              if(validate_res)
+    239              {
+    240                  if( ((receivedata_st.page_str_addr_u16 & (BOOTAPP_APP_PAGE_SIZE - 1) ) == 0) &&
+    241                      (receivedata_st.page_str_addr_u16 == BOOTAPP_APP_PAGE_SIZE * (receivedata_st.page_num_u16 - 1)) )
+    242                  {
+    243                      validate_res = 1;
+    244                  }
+    245                  else
+    246                  {
+    247                      status_en = BOOTAPP_RDATA_INVALID_STR_ADDR_ERR;
+    248                      validate_res = 0;
+    249                  }
+    250              }
+    251              if(validate_res)
+    252              {
+    253                  if(receivedata_st.sect_dirty_u16 == BootApp_Sect_Dirty_Msk_au16[receivedata_st.page_num_u16 -1])
+    254                  {
+    255                      validate_res = 1;
+    256                  }
+    257                  else
+    258                  {
+    259                      status_en = BOOTAPP_RDATA_PAGE_N_CONTIOUS_ERR;
+    260                      validate_res = 0;
+    261                  }
+    262              }
+    263          
+    264              /*validate hex addr info*/
+    265              if(validate_res)
+    266              {
+    267                  if(BOOTAPP_APP_SECTOR_SIZE == receivedata_st.end_addr_u32 - receivedata_st.start_addr_u32 + 1)
+    268                  {
+    269                      validate_res = 1;
+    270                  }
+    271                  else
+    272                  {
+    273                      status_en = BOOTAPP_RDATA_INVALID_SEC_BOUND_ERR;
+    274                      validate_res = 0;
+    275                  }
+    276              }
+    277              if(validate_res)
+    278              {
+    279                  if( (receivedata_st.start_addr_u32 >= BOOTAPP_APP_START_ADDR) &&
+    280                      (receivedata_st.end_addr_u32 <= BOOTAPP_APP_END_ADDR) )
+    281                  {
+    282                      validate_res = 1;
+    283                  }
+    284                  else
+    285                  {
+    286                      status_en = BOOTAPP_RDATA_HEX_ADDR_ERR;
+    287                      validate_res = 0;
+    288                  }
+    289              }
+    290              if(validate_res)
+    291              {
+    292                  if(receivedata_pst->sect_num_u16 == 0)
+    293                  {
+    294                      if(receivedata_st.start_addr_u32 == BOOTAPP_APP_START_ADDR)
+    295                      {
+    296                          validate_res = 1;
+    297                      }
+    298                      else
+    299                      {
+    300                          status_en = BOOTAPP_RDATA_SEC0_ADDR_ALIGN_ERR;
+    301                          validate_res = 0;
+    302                      }
+    303                  }
+    304                  else
+    305                  {
+    306                      if(receivedata_st.start_addr_u32 == BOOTAPP_APP_START_ADDR +  BOOTAPP_APP_SECTOR_SIZE * \
+    307                          (receivedata_st.sect_num_u16 - 1) )
+    308                      {
+    309                          validate_res = 1;
+    310                      }
+    311                      else
+    312                      {
+    313                          status_en = BOOTAPP_RDATA_SECN_ADDR_ALIGN_ERR;
+    314                          validate_res = 0;
+    315                      }
+    316                  }
+    317          
+    318              }
+    319              /*validate buf crc*/
+    320              /*to be done*/
+    321          
+    322              /*page data ok, write to sector buffer*/
+    323              if(validate_res)
+    324              {
+    325                  w_buffer_st = BootApp_SectBuffer_Write(receivedata_st.page_str_addr_u16>>2,
+    326                                                      receivedata_st.page_len_u16>>2,
+    327                                                      &PageBuffer_pen->buf_au32[0]);
+    328                  if(w_buffer_st)
+    329                  {
+    330                      receivedata_pst->page_num_u16 = receivedata_st.page_num_u16;
+    331                      receivedata_pst->page_len_u16 = receivedata_st.page_len_u16;
+    332                      receivedata_pst->page_str_addr_u16 = receivedata_st.page_str_addr_u16;
+    333                      receivedata_pst->page_end_addr_u16 = receivedata_st.page_end_addr_u16;
+    334                      receivedata_pst->sect_num_u16 = receivedata_st.sect_num_u16;
+    335                      receivedata_pst->start_addr_u32 = receivedata_st.start_addr_u32;
+    336                      receivedata_pst->end_addr_u32 = receivedata_st.end_addr_u32;
+    337          
+    338                      receivedata_pst->sect_dirty_u16 |= 1 << (receivedata_st.page_num_u16 - 1);
+    339          
+    340                      if(receivedata_pst->sect_dirty_u16 == BootApp_Sect_Dirty_Msk_au16[BOOTAPP_APP_PAGE_NUM])
+    341                      {
+    342                          receivedata_pst->sect_ready_u16 = 1;
+    343                          receivedata_pst->sect_dirty_u16 = 0;
+    344                          receivedata_pst->page_num_u16 = 0;
+    345                          receivedata_pst->page_len_u16 = 0;
+    346                          receivedata_pst->page_str_addr_u16 = 0;
+    347                          receivedata_pst->page_end_addr_u16 = 0;
+    348          
+    349                          status_en = BOOTAPP_RDATA_FINISH;
+    350                      }
+    351                      else
+    352                      {
+    353                          receivedata_pst->sect_ready_u16 = 0;
+    354                          status_en = BOOTAPP_RDATA_PAGEOK;
+    355                      }
+    356                  }
+    357                  else
+    358                  {
+    359                      status_en = BOOTAPP_RDATA_SEC_WBUF_ERR;
+    360                      receivedata_pst->sect_ready_u16 = 0;
+    361                  }
+    362          
+    363              }
+    364              else
+    365              {
+    366          
+    367              }
+    368          
+    369              return status_en;
+    370          
+    371          }
+    372          
+    373          uint8_t BootApp_Receive_Data_Finish(void)
+    374          {
+    375              return (uint8_t)BootApp_ReceiveData_st.sect_ready_u16;
+    376          }
+    377          
+    378          void BootApp_Get_ReceiveData_Info(const BootApp_ReceiveData_tst ** receivedata_ppst)
+    379          {
+    380              *receivedata_ppst = &BootApp_ReceiveData_st;
+    381          }
+    382          
+    383          void BootApp_Enable_ReceiveData(void)
+    384          {
+    385              BootApp_ReceiveData_st.sect_ready_u16 = 0;
+    386          }
+    387          
+    388          /*<BASDKey>
+    389           ***********************************************************************************************************************
+    390           * $History___:
+    391           *
+    392           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+    393           *
+    394           * $
+    395           ***********************************************************************************************************************
+    396          </BASDKey>*/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   BootApp_Enable_ReceiveData
+       0   BootApp_Get_Command
+       0   BootApp_Get_ReceiveData_Info
+       0   BootApp_NewCmd_Received
+      12   BootApp_PageBuffer_Read
+      56   BootApp_Receive_Data
+        56   -> BootApp_SectBuffer_Write
+        56   -> __aeabi_memclr4
+       0   BootApp_Receive_Data_Finish
+       8   BootApp_SectBuffer_Read
+       8   BootApp_SectBuffer_Write
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable6
+       4  ??DataTable6_1
+       4  ??DataTable6_2
+       4  ??DataTable6_3
+       4  ??DataTable6_4
+       4  ??DataTable6_5
+       4  ??DataTable6_6
+      24  ?_0
+     768  BootApp_CommunicationBuffer_en
+       8  BootApp_Enable_ReceiveData
+      20  BootApp_Get_Command
+       6  BootApp_Get_ReceiveData_Info
+      36  BootApp_NewCmd_Received
+      78  BootApp_PageBuffer_Read
+      24  BootApp_ReceiveData_st
+     756  BootApp_Receive_Data
+       8  BootApp_Receive_Data_Finish
+      82  BootApp_SectBuffer_Read
+      82  BootApp_SectBuffer_Write
+    1024  BootApp_SectBuffer_en
+      36  BootApp_Sect_Dirty_Msk_au16
+       4  magic_num
+
+ 
+ 1 820 bytes in section .bss
+    60 bytes in section .rodata
+ 1 104 bytes in section .text
+ 
+ 1 104 bytes of CODE  memory
+    60 bytes of CONST memory
+ 1 820 bytes of DATA  memory
+
+Errors: none
+Warnings: none

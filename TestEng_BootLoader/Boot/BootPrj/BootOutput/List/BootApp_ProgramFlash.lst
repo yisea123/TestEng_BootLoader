@@ -1,0 +1,279 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:04:58
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ProgramFlash.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ProgramFlash.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\BootApp_ProgramFlash.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_ProgramFlash.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ProgramFlash.c
+      1          /*<BASDKey>
+      2           **********************************************************************************************************************
+      3           *
+      4           * COPYRIGHT RESERVED, FeedLiTech, 2019. All rights reserved.
+      5           * The reproduction, distribution and utilization of this document as well as the communication of its contents to
+      6           * others without explicit authorization is prohibited. Offenders will be held liable for the payment of damages.
+      7           * All rights reserved in the event of the grant of a patent, utility model or design.
+      8           *
+      9           **********************************************************************************************************************
+     10          </BASDKey>*/
+     11          
+     12          #include "BootApp_Cfg.h"
+     13          #include "BootApp_Cfg_Board.h"
+     14          #include "BootApp_Type.h"
+     15          #include "BootApp_Priv.h"
+     16          
+     17          BootApp_WriteData_tst BootApp_WriteData_ast[BOOTAPP_APP_SECTOR_NUM] = {{0},};
+     18          
+     19          BootApp_Status_ten BootApp_Program_Flash(const BootApp_CommunicationBuffer_tst *ComBuffer_pst)
+     20          {
+     21              uint16_t sec_ready_u16;
+     22              uint16_t sec_num_u16;
+     23              uint32_t start_addr_u32;
+     24              uint32_t end_addr_u32;
+     25              uint32_t length_u32;
+     26              uint8_t validate_res = 0;
+     27              uint8_t w_flash_st = 0;
+     28          
+     29              BootApp_Status_ten status_en = BOOTAPP_WDAT_ONGOING;
+     30          
+     31              const BootApp_ReceiveData_tst * receivedata_pcst;
+     32              const BootApp_CmdBuffer_tst * CmdBuffer_pst = &(ComBuffer_pst->cmdbuffer_st);
+     33              BootApp_WriteData_tst * BootApp_WriteData_Pst;
+     34          
+     35              BootApp_Get_ReceiveData_Info(&receivedata_pcst);
+     36              if((void *)0 != receivedata_pcst)
+     37              {
+     38                  sec_ready_u16 = receivedata_pcst->sect_ready_u16;
+     39                  sec_num_u16 = receivedata_pcst->sect_num_u16;
+     40                  start_addr_u32 = receivedata_pcst->start_addr_u32;
+     41                  end_addr_u32 = receivedata_pcst->end_addr_u32;
+     42                  length_u32 = end_addr_u32 - start_addr_u32 + 1;
+     43                  validate_res = 1;
+     44              }
+     45              else
+     46              {
+     47                  validate_res = 0;
+     48                  status_en = BOOTAPP_WDAT_GET_DATAINFO_ERR;
+     49              }
+     50          
+     51              if(1 == validate_res)
+     52              {
+     53                  if(sec_ready_u16)
+     54                  {
+     55                      validate_res = 1;
+     56                  }
+     57                  else
+     58                  {
+     59                      status_en = BOOTAPP_WDAT_DATA_NOT_READY_ERR;
+     60                      validate_res = 0;
+     61                  }
+     62              }
+     63          
+     64              if(1 == validate_res)
+     65              {
+     66                  if( start_addr_u32 == BOOTAPP_APP_START_ADDR + (sec_num_u16 - 1u)*BOOTAPP_APP_SECTOR_SIZE )
+     67                  {
+     68                      validate_res = 1;
+     69                  }
+     70                  else
+     71                  {
+     72                      status_en = BOOTAPP_WDAT_SEC_ADDR_ALIGN_ERR;
+     73                      validate_res = 0;
+     74                  }
+     75              }
+     76          
+     77              if(1 == validate_res)
+     78              {
+     79                  if(BOOTAPP_APP_SECTOR_SIZE == length_u32)
+     80                  {
+     81                      validate_res = 1;
+     82                  }
+     83                  else
+     84                  {
+     85                      status_en = BOOTAPP_WDAT_SEC_LEN_ERR;
+     86                      validate_res = 0;
+     87                  }
+     88              }
+     89              if(1 == validate_res)
+     90              {
+     91                  if( (sec_num_u16 >= 1) && (sec_num_u16 <= BOOTAPP_APP_SECTOR_NUM) )
+     92                  {
+     93                      validate_res = 1;
+     94                  }
+     95                  else
+     96                  {
+     97                      status_en = BOOTAPP_WDAT_SEC_NUM_ERR;
+     98                      validate_res = 0;
+     99                  }
+    100              }
+    101              if(1 == validate_res)
+    102              {
+    103                  if(CmdBuffer_pst->cmd16_01 == sec_num_u16)
+    104                  {
+    105                      validate_res = 1;
+    106                  }
+    107                  else
+    108                  {
+    109                      status_en = BOOTAPP_WDAT_SEC_NOT_MATCH_ERR;
+    110                      validate_res = 0;
+    111                  }
+    112              }
+    113          
+    114              if(1 == validate_res)
+    115              {
+    116                  if( (CmdBuffer_pst->cmd32_00 == start_addr_u32)&&
+    117                      (CmdBuffer_pst->cmd32_01 == end_addr_u32) )
+    118                  {
+    119                      validate_res = 1;
+    120                  }
+    121                  else
+    122                  {
+    123                      status_en = BOOTAPP_WDAT_ADDR_NOT_MATCH_ERR;
+    124                      validate_res = 0;
+    125                  }
+    126              }
+    127          
+    128              if(1 == validate_res)
+    129              {
+    130                  BootApp_WriteData_Pst = &BootApp_WriteData_ast[sec_num_u16 - 1];
+    131                  /*sector empty*/
+    132                  if(! BootApp_WriteData_Pst->sect_prog_u16)
+    133                  {
+    134                      w_flash_st = BootDrv_ProgramFlash(start_addr_u32, end_addr_u32, length_u32);
+    135                  }
+    136          
+    137                  BootApp_WriteData_Pst->sect_num_u16 = sec_num_u16;
+    138                  BootApp_WriteData_Pst->start_addr_u32 = start_addr_u32;
+    139                  BootApp_WriteData_Pst->end_addr_u32 = end_addr_u32;
+    140                  BootApp_WriteData_Pst->sect_prog_u16 = w_flash_st;
+    141          
+    142                  if(w_flash_st)
+    143                  {
+    144                      if(BootApp_Program_Flash_Finish())
+    145                      {
+    146                          status_en = BOOTAPP_WDAT_FINISH;
+    147                      }
+    148                      else
+    149                      {
+    150                          status_en = BOOTAPP_WDAT_SEC_FINISH;
+    151                      }
+    152                  }
+    153                  else
+    154                  {
+    155                      status_en = BOOTAPP_WDAT_PROG_FLASH_ERR;
+    156                  }
+    157          
+    158              }
+    159          
+    160              return status_en;
+    161          }
+    162          
+    163          uint8_t BootApp_Program_Flash_Finish(void)
+    164          {
+    165              uint8_t ret = 0;
+    166              uint16_t i;
+    167              BootApp_WriteData_tst * BootApp_WriteData_past;
+    168              BootApp_WriteData_past = &BootApp_WriteData_ast[0];
+    169              for(i=0; i<BOOTAPP_APP_SECTOR_NUM; i++)
+    170              {
+    171                  if( (BootApp_WriteData_past + i)->sect_prog_u16 )
+    172                      continue;
+    173              }
+    174          
+    175              if(BOOTAPP_APP_SECTOR_NUM == i)
+    176              {
+    177                  ret = 1;
+    178              }
+    179              else
+    180              {
+    181                  ret = 0;
+    182              }
+    183          
+    184              return ret;
+    185          
+    186          }
+    187          
+    188          
+    189          /*<BASDKey>
+    190           ***********************************************************************************************************************
+    191           * $History___:
+    192           *
+    193           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+    194           *
+    195           * $
+    196           ***********************************************************************************************************************
+    197          </BASDKey>*/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      56   BootApp_Program_Flash
+        56   -> BootApp_Get_ReceiveData_Info
+        56   -> BootApp_Program_Flash_Finish
+        56   -> BootDrv_ProgramFlash
+       0   BootApp_Program_Flash_Finish
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable1
+       4  ??DataTable1_1
+     422  BootApp_Program_Flash
+      52  BootApp_Program_Flash_Finish
+     960  BootApp_WriteData_ast
+
+ 
+ 960 bytes in section .bss
+ 482 bytes in section .text
+ 
+ 482 bytes of CODE memory
+ 960 bytes of DATA memory
+
+Errors: none
+Warnings: none

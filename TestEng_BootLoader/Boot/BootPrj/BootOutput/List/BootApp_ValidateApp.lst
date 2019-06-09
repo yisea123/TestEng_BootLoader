@@ -1,0 +1,204 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:05:00
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ValidateApp.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ValidateApp.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\BootApp_ValidateApp.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_ValidateApp.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ValidateApp.c
+      1          /*<BASDKey>
+      2           **********************************************************************************************************************
+      3           *
+      4           * COPYRIGHT RESERVED, FeedLiTech, 2019. All rights reserved.
+      5           * The reproduction, distribution and utilization of this document as well as the communication of its contents to
+      6           * others without explicit authorization is prohibited. Offenders will be held liable for the payment of damages.
+      7           * All rights reserved in the event of the grant of a patent, utility model or design.
+      8           *
+      9           **********************************************************************************************************************
+     10          </BASDKey>*/
+     11          
+     12          #include "BootApp_Cfg.h"
+     13          #include "BootApp_Cfg_Board.h"
+     14          #include "BootApp_Type.h"
+     15          #include "BootApp_Priv.h"
+     16          
+     17          BootApp_Status_ten BootApp_App_Valid_en = BOOTAAPP_VALI_NOT_COMPLETE;
+     18          static uint8_t BootApp_Validate_Info(const BootApp_App_Cfg_tst * App_Cfg_cpcst);
+     19          
+     20          BootApp_Status_ten BootApp_Validate_App(void)
+     21          {
+     22              uint8_t ret;
+     23              if( (void *)0 != BootApp_App_Cfg_cpcst )
+     24              {
+     25                  ret = BootApp_Validate_Info(BootApp_App_Cfg_cpcst);
+     26                  if(ret)
+     27                  {
+     28                      BootApp_App_Valid_en = BOOTAAPP_VALI_COMPLETE;
+     29                  }
+     30                  else
+     31                  {
+     32                      BootApp_App_Valid_en = BOOTAAPP_VALI_NOT_COMPLETE;
+     33                  }
+     34              }
+     35              else
+     36              {
+     37                  BootApp_App_Valid_en = BOOTAAPP_VALI_APPCFG_INVALID;
+     38              }
+     39          
+     40              return BootApp_App_Valid_en;
+     41          }
+     42          
+     43          uint8_t BootApp_Validate_Info(const BootApp_App_Cfg_tst * App_Cfg_cpcst)
+     44          {
+     45              uint8_t i;
+     46              uint8_t ret = 0;
+     47          
+     48              const BootApp_Prolog_tst * app_cfg_prolog_cpcst = App_Cfg_cpcst->app_cfg_prolog_cpcst;
+     49              const BootApp_Epilog_tst * app_cfg_epilog_cpcst = App_Cfg_cpcst->app_cfg_epilog_cpcst;
+     50          
+     51              if( BootApp_Addr_Prolog_Validate(app_cfg_prolog_cpcst) &&
+     52                  BootApp_Addr_Epilog_Validate(app_cfg_epilog_cpcst) )
+     53              {
+     54                  for(i=0; i<16; i++)
+     55                  {
+     56                      if(app_cfg_prolog_cpcst->app_cfg_hardversion[i] !=
+     57                              app_cfg_epilog_cpcst->app_cfg_hardversion[i])
+     58                      {
+     59                          ret = 0;
+     60                          break;
+     61                      }
+     62                      else
+     63                      {
+     64                          ret = 1;
+     65                      }
+     66                  }
+     67          
+     68                  if(ret)
+     69                  {
+     70                      for(i=0; i<16; i++)
+     71                      {
+     72                          if(app_cfg_prolog_cpcst->app_cfg_signature[i] !=
+     73                                      app_cfg_epilog_cpcst->app_cfg_signature[i])
+     74                          {
+     75                              ret = 0;
+     76                              break;
+     77                          }
+     78                          else
+     79                          {
+     80                              ret = 1;
+     81                          }
+     82                      }
+     83                  }
+     84          
+     85                  if(ret)
+     86                  {
+     87                      for(i=0; i<16; i++)
+     88                      {
+     89                          if(app_cfg_prolog_cpcst->app_cfg_fwversion[i] !=
+     90                                      app_cfg_epilog_cpcst->app_cfg_fwversion[i])
+     91                          {
+     92                              ret = 0;
+     93                              break;
+     94                          }
+     95                          else
+     96                          {
+     97                              ret = 1;
+     98                          }
+     99                      }
+    100                  }
+    101          
+    102              }
+    103              else
+    104              {
+    105                  ret = 0;
+    106              }
+    107          
+    108              return ret;
+    109          }
+    110          
+    111          
+    112          /*<BASDKey>
+    113           ***********************************************************************************************************************
+    114           * $History___:
+    115           *
+    116           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+    117           *
+    118           * $
+    119           ***********************************************************************************************************************
+    120          </BASDKey>*/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   BootApp_Validate_App
+         8   -> BootApp_Validate_Info
+      12   BootApp_Validate_Info
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable1
+       4  ??DataTable1_1
+       4  ??DataTable1_2
+       4  ??DataTable1_3
+       4  ??DataTable1_4
+       4  ??DataTable1_5
+       2  BootApp_App_Valid_en
+      62  BootApp_Validate_App
+     176  BootApp_Validate_Info
+
+ 
+   2 bytes in section .data
+ 262 bytes in section .text
+ 
+ 262 bytes of CODE memory
+   2 bytes of DATA memory
+
+Errors: none
+Warnings: none

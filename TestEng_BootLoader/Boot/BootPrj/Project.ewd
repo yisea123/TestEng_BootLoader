@@ -3,7 +3,7 @@
 <project>
   <fileVersion>2</fileVersion>
   <configuration>
-    <name>Burn_in_2</name>
+    <name>Boot</name>
     <toolchain>
       <name>ARM</name>
     </toolchain>

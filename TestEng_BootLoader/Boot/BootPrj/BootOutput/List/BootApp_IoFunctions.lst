@@ -1,0 +1,287 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:06:53
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_IoFunctions.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_IoFunctions.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\BootApp_IoFunctions.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_IoFunctions.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_IoFunctions.c
+      1          /*<BASDKey>
+      2           **********************************************************************************************************************
+      3           *
+      4           * COPYRIGHT RESERVED, FeedLiTech, 2019. All rights reserved.
+      5           * The reproduction, distribution and utilization of this document as well as the communication of its contents to
+      6           * others without explicit authorization is prohibited. Offenders will be held liable for the payment of damages.
+      7           * All rights reserved in the event of the grant of a patent, utility model or design.
+      8           *
+      9           **********************************************************************************************************************
+     10          </BASDKey>*/
+     11          
+     12          
+     13          #include "BootApp_Cfg.h"
+     14          #include "BootApp_Cfg_Board.h"
+     15          #include "BootApp_Type.h"
+     16          #include "BootApp_Priv.h"
+     17          
+     18          
+     19          static uint8_t BootApp_IoFunction(BootApp_GPIO_Function_ten gpio_func_en,
+     20                                                 BootApp_GPIO_Operation_ten gpio_operation_en,
+     21                                                 uint8_t BitVal)
+     22          {
+     23              uint8_t ret;
+     24              uint8_t i;
+     25              uint8_t pin_st_u8 = 0;
+     26              uint8_t gpio_pin_num_u8;
+     27          
+     28              const BootApp_Gpio_tst * gpio_cfg = (void *) 0;
+     29              const BootApp_GpioPin_tst * gpio_pin_cpast = (void *) 0;
+     30              ret = BootApp_Get_Cfg_Gpio(&gpio_cfg);
+     31              if(ret)
+     32              {
+     33                  gpio_pin_num_u8 = gpio_cfg->app_cfg_gpio_num;
+     34                  gpio_pin_cpast = gpio_cfg->app_cfg_gpio_init_past;
+     35          
+     36                  if( (gpio_pin_num_u8 == 0) || (gpio_pin_cpast == (void *)0) )
+     37                      return 0;
+     38          
+     39                  for(i=0; i<gpio_pin_num_u8; i++)
+     40                  {
+     41                      if( gpio_pin_cpast[i].app_cfg_gpio_func_en == gpio_func_en)
+     42                      {
+     43                          if(gpio_operation_en == GPIO_WRITE)
+     44                          {
+     45                              #if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
+     46                              BootApp_GPIO_WriteBit( gpio_pin_cpast[i].app_cfg_gpio,
+     47                                             0,
+     48                                             BitVal );
+     49                              #else
+     50                              BootApp_GPIO_WriteBit( gpio_pin_cpast[i].app_cfg_gpio,
+     51                                             gpio_pin_cpast[i].app_cfg_gpio_pin_st.GPIO_Pin,
+     52                                             BitVal);
+     53                              #endif
+     54                          }
+     55                          else if(gpio_operation_en == GPIO_READ)
+     56                          {
+     57                              #if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
+     58                              pin_st_u8 = BootApp_GPIO_ReadInputDataBit( gpio_pin_cpast[i].app_cfg_gpio,
+     59                                                                 0);
+     60                              #else
+     61                              pin_st_u8 = BootApp_GPIO_ReadInputDataBit( gpio_pin_cpast[i].app_cfg_gpio,
+     62                                                                 gpio_pin_cpast[i].app_cfg_gpio_pin_st.GPIO_Pin);
+     63                              #endif
+     64          
+     65                          }
+     66                          else
+     67                          {
+     68          
+     69                          }
+     70                      }
+     71                      else
+     72                      {
+     73          
+     74                      }
+     75          
+     76                  }
+     77              }
+     78              else
+     79              {
+     80              }
+     81          
+     82              return pin_st_u8;
+     83          }
+     84          
+     85          
+     86          
+     87          
+     88          uint8_t BootApp_Get_board_address(void)
+     89          {
+     90              uint8_t ret;
+     91              uint8_t i;
+     92              uint8_t addr = 0;
+     93              uint8_t pin_st_u8;
+     94              uint8_t addr_pin_num_u8;
+     95          
+     96              const BootApp_Gpio_tst * gpio_cfg = (void *) 0;
+     97              const BootApp_GpioPin_tst * gpio_pin_cpast = (void *) 0;
+     98              ret = BootApp_Get_Cfg_Gpio(&gpio_cfg);
+     99              if(ret)
+    100              {
+    101                  addr_pin_num_u8 = gpio_cfg->app_cfg_addr_num;
+    102                  gpio_pin_cpast = gpio_cfg->app_cfg_gpio_init_past;
+    103          
+    104                  if( (addr_pin_num_u8 == 0) || (gpio_pin_cpast == (void *)0) )
+    105                      return 0;
+    106          
+    107                  for(i=0; i<addr_pin_num_u8; i++)
+    108                  {
+    109                      if(gpio_pin_cpast[i].app_cfg_gpio_func_en == GPIO_BOARD_ADDR)
+    110                      {
+    111                          #if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
+    112                          pin_st_u8 = BootApp_GPIO_ReadInputDataBit( gpio_pin_cpast[i].app_cfg_gpio,
+    113                                                                 0);
+    114                          #else
+    115                          pin_st_u8 = BootApp_GPIO_ReadInputDataBit( gpio_pin_cpast[i].app_cfg_gpio,
+    116                                                                 gpio_pin_cpast[i].app_cfg_gpio_pin_st.GPIO_Pin);
+    117                          #endif
+    118                          addr |= (pin_st_u8<<i);
+    119                      }
+    120                      else
+    121                      {
+    122          
+    123                      }
+    124          
+    125                  }
+    126          
+    127              }
+    128              return addr;
+    129          }
+    130          
+    131          void BootApp_Disable_usart_rx(void)
+    132          {
+    133              BootApp_IoFunction(GPIO_UART_RX_EN, GPIO_WRITE, 1);
+    134          }
+    135          
+    136          void BootApp_Enable_usart_rx(void)
+    137          {
+    138              BootApp_IoFunction(GPIO_UART_RX_EN, GPIO_WRITE, 0);
+    139          }
+    140          
+    141          void BootApp_Disable_usart_tx(void)
+    142          {
+    143              BootApp_IoFunction(GPIO_UART_RX_EN, GPIO_WRITE, 1);
+    144          }
+    145          
+    146          void BootApp_Enable_usart_tx(void)
+    147          {
+    148              BootApp_IoFunction(GPIO_UART_RX_EN, GPIO_WRITE, 0);
+    149          }
+    150          
+    151          void BootApp_Disable_run_led(void)
+    152          {
+    153             BootApp_IoFunction(GPIO_RUN_LED, GPIO_WRITE, 0);
+    154          }
+    155          
+    156          void BootApp_Enable_run_led(void)
+    157          {
+    158             BootApp_IoFunction(GPIO_RUN_LED, GPIO_WRITE, 0);
+    159          }
+    160          
+    161          void BootApp_Disable_err_led(void)
+    162          {
+    163             BootApp_IoFunction(GPIO_ERR_LED, GPIO_WRITE, 0);
+    164          }
+    165          
+    166          void BootApp_Enable_err_led(void)
+    167          {
+    168             BootApp_IoFunction(GPIO_ERR_LED, GPIO_WRITE, 0);
+    169          }
+    170          
+    171          
+    172          
+    173          /*<BASDKey>
+    174           ***********************************************************************************************************************
+    175           * $History___:
+    176           *
+    177           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+    178           *
+    179           * $
+    180           ***********************************************************************************************************************
+    181          </BASDKey>*/
+    182          
+    183          
+    184          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   BootApp_Disable_err_led
+         8   -> BootApp_IoFunction
+       8   BootApp_Disable_run_led
+         8   -> BootApp_IoFunction
+       8   BootApp_Disable_usart_rx
+         8   -> BootApp_IoFunction
+       8   BootApp_Disable_usart_tx
+         8   -> BootApp_IoFunction
+       8   BootApp_Enable_err_led
+         8   -> BootApp_IoFunction
+       8   BootApp_Enable_run_led
+         8   -> BootApp_IoFunction
+       8   BootApp_Enable_usart_rx
+         8   -> BootApp_IoFunction
+       8   BootApp_Enable_usart_tx
+         8   -> BootApp_IoFunction
+      32   BootApp_Get_board_address
+        32   -> BootApp_Get_Cfg_Gpio
+        32   -> GPIO_ReadInputDataBit
+      40   BootApp_IoFunction
+        40   -> BootApp_Get_Cfg_Gpio
+        40   -> GPIO_ReadInputDataBit
+        40   -> GPIO_WriteBit
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      14  BootApp_Disable_err_led
+      14  BootApp_Disable_run_led
+      14  BootApp_Disable_usart_rx
+      14  BootApp_Disable_usart_tx
+      14  BootApp_Enable_err_led
+      14  BootApp_Enable_run_led
+      14  BootApp_Enable_usart_rx
+      14  BootApp_Enable_usart_tx
+     134  BootApp_Get_board_address
+     192  BootApp_IoFunction
+
+ 
+ 438 bytes in section .text
+ 
+ 438 bytes of CODE memory
+
+Errors: none
+Warnings: 1

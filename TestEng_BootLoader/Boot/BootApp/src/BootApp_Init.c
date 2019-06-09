@@ -92,19 +92,27 @@ uint8_t BootApp_Get_Cfg_Uart(const BootApp_Uart_tst ** uart_cfg)
     return ret;
 }
 
+
+
 void BootApp_Gpio_Init(void)
 {
     uint8_t ret;
     uint8_t i;
     const BootApp_Gpio_tst * gpio_cfg = (void *) 0;
+    BootApp_GPIO_TypeDef GPIO_TypeDef;
+    BootApp_GPIO_InitTypeDef GPIO_InitTypeDef;
+
 
     ret = BootApp_Get_Cfg_Gpio(&gpio_cfg);
     if(ret)
     {
         for(i=0; i<gpio_cfg->app_cfg_gpio_num; i++)
         {
-            BootApp_GPIO_Init( gpio_cfg->app_cfg_gpio_init_past[i].app_cfg_gpio,
-                               &gpio_cfg->app_cfg_gpio_init_past[i].app_cfg_gpio_pin_st);
+            /*copy from flash*/
+            GPIO_TypeDef = *gpio_cfg->app_cfg_gpio_init_past[i].app_cfg_gpio;
+            GPIO_InitTypeDef = gpio_cfg->app_cfg_gpio_init_past[i].app_cfg_gpio_pin_st;
+            
+            BootApp_GPIO_Init( &GPIO_TypeDef,&GPIO_InitTypeDef);
         }
     }
     else
@@ -117,14 +125,20 @@ void BootApp_Uart_Init(void)
     uint8_t ret;
     uint8_t i;
     const BootApp_Uart_tst * uart_cfg = (void *) 0;
+    BootApp_USART_TypeDef USART_TypeDef;
+    BootApp_USART_InitTypeDef USART_InitTypeDef;
 
     ret = BootApp_Get_Cfg_Uart(&uart_cfg);
     if(ret)
     {
         for(i=0; i<uart_cfg->app_cfg_uart_num; i++)
         {
-            BootApp_UART_Init( uart_cfg->app_cfg_uart_init_past[i].app_cfg_uart,
-                               &uart_cfg->app_cfg_uart_init_past[i].app_cfg_uart_port_st);
+            /*copy from flash*/
+            USART_TypeDef = *uart_cfg->app_cfg_uart_init_past[i].app_cfg_uart;
+            USART_InitTypeDef = uart_cfg->app_cfg_uart_init_past[i].app_cfg_uart_port_st;
+            
+            BootApp_UART_Init( &USART_TypeDef,
+                               &USART_InitTypeDef);
         }
     }
     else

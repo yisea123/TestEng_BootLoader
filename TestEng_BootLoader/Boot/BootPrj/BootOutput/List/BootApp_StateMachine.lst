@@ -1,0 +1,288 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:04:59
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_StateMachine.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_StateMachine.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\BootApp_StateMachine.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_StateMachine.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_StateMachine.c
+      1          /*<BASDKey>
+      2           **********************************************************************************************************************
+      3           *
+      4           * COPYRIGHT RESERVED, FeedLiTech, 2019. All rights reserved.
+      5           * The reproduction, distribution and utilization of this document as well as the communication of its contents to
+      6           * others without explicit authorization is prohibited. Offenders will be held liable for the payment of damages.
+      7           * All rights reserved in the event of the grant of a patent, utility model or design.
+      8           *
+      9           **********************************************************************************************************************
+     10          </BASDKey>*/
+     11          
+     12          #include "BootApp_Cfg.h"
+     13          #include "BootApp_Cfg_Board.h"
+     14          #include "BootApp_Type.h"
+     15          #include "BootApp_Priv.h"
+     16          
+     17          BootApp_State_ten BootApp_State_en = BOOTAPP_STATE_INIT;
+     18          
+     19          
+     20          void BootApp_Set_State(BootApp_State_ten state_en)
+     21          {
+     22              BootApp_State_en = state_en;
+     23          }
+     24          
+     25          BootApp_State_ten BootApp_Get_State(void)
+     26          {
+     27              return BootApp_State_en;
+     28          }
+     29          
+     30          void BootApp_StateMachine(void)
+     31          {
+     32              uint8_t newcmd;
+     33              BootApp_State_ten state_en;
+     34              BootApp_State_ten new_state_en;
+     35          
+     36              state_en = BootApp_Get_State();
+     37              BootApp_Status_ten status_en = BOOTAPP_STATUS_INI;
+     38          
+     39              BootApp_CommunicationBuffer_tst * ComBuffer_pst = &BootApp_CommunicationBuffer_en.com_st;
+     40              BootApp_CmdBuffer_tst * CmdBuffer_pst = &(ComBuffer_pst->cmdbuffer_st);
+     41              BootApp_PageBuffer_ten * PageBuffer_pen = &(ComBuffer_pst->pagebuffer_en);
+     42              PageBuffer_pen = PageBuffer_pen;
+     43          
+     44              switch(state_en)
+     45              {
+     46              case BOOTAPP_STATE_INIT:
+     47              {
+     48                  BootApp_State_Init_Act();
+     49                  BootApp_Set_State(BOOTAPP_STATE_RCMD);
+     50                  break;
+     51              }
+     52              case BOOTAPP_STATE_RCMD:
+     53              {
+     54                  newcmd = BootApp_NewCmd_Received(CmdBuffer_pst);
+     55                  if(newcmd)
+     56                  {
+     57                      new_state_en = BootApp_Get_Command(CmdBuffer_pst);
+     58                      BootApp_Set_State(new_state_en);
+     59                  }
+     60                  else
+     61                  {
+     62          
+     63                  }
+     64                  break;
+     65              }
+     66              case BOOTAPP_STATE_STRP:
+     67              {
+     68                  BootApp_Log_Exe_Status(BOOTAPP_STATE_STRP, BOOTAPP_EREASE_ONGOING);
+     69                  status_en = BootApp_Erease_App();
+     70                  BootApp_Log_Exe_Status(BOOTAPP_STATE_STRP, status_en);
+     71                  if(status_en != BOOTAPP_EREASE_OK)
+     72                  {
+     73                      BootApp_Reset_Sys();
+     74                  }
+     75                  else
+     76                  {
+     77                      BootApp_Set_State(BOOTAPP_STATE_RCMD);
+     78                  }
+     79                  break;
+     80              }
+     81              case BOOTAPP_STATE_RDAT:
+     82              {
+     83                  BootApp_Log_Exe_Status(BOOTAPP_STATE_RDAT, BOOTAPP_RDATA_ONGOING);
+     84                  status_en = BootApp_Receive_Data(ComBuffer_pst);
+     85                  BootApp_Log_Exe_Status(BOOTAPP_STATE_RDAT, status_en);
+     86                  if(BootApp_Receive_Data_Finish())
+     87                  {
+     88                      BootApp_Set_State(BOOTAPP_STATE_RCMD);
+     89                  }
+     90                  else
+     91                  {
+     92          
+     93                  }
+     94                  break;
+     95              }
+     96              case BOOTAPP_STATE_WDAT:
+     97              {
+     98                  BootApp_Log_Exe_Status(BOOTAPP_STATE_WDAT, BOOTAPP_WDAT_ONGOING);
+     99                  status_en = BootApp_Program_Flash(ComBuffer_pst);
+    100                  BootApp_Log_Exe_Status(BOOTAPP_STATE_WDAT, status_en);
+    101                  if(BOOTAPP_WDAT_SEC_FINISH == status_en)
+    102                  {
+    103                      BootApp_Enable_ReceiveData();
+    104                      BootApp_Set_State(BOOTAPP_STATE_RCMD);
+    105                  }
+    106                  else if(BOOTAPP_WDAT_FINISH == status_en)
+    107                  {
+    108                      BootApp_Set_State(BOOTAPP_STATE_VALI);
+    109                  }
+    110                  else if(BOOTAPP_WDAT_PROG_FLASH_ERR == status_en)
+    111                  {
+    112                      BootApp_Reset_Sys();
+    113                  }
+    114                  else
+    115                  {
+    116                      BootApp_Set_State(BOOTAPP_STATE_RCMD);
+    117                  }
+    118                  break;
+    119              }
+    120              case BOOTAPP_STATE_VALI:
+    121              {
+    122                  BootApp_Log_Exe_Status(BOOTAPP_STATE_VALI, BOOTAAPP_VALI_ONGOING);
+    123                  status_en = BootApp_Validate_App();
+    124                  BootApp_Log_Exe_Status(BOOTAPP_STATE_VALI, status_en);
+    125                  if(BOOTAAPP_VALI_COMPLETE == status_en)
+    126                  {
+    127                      BootApp_Set_State(BOOTAPP_STATE_JUMP);
+    128                  }
+    129                  else if(BOOTAAPP_VALI_NOT_COMPLETE == status_en)
+    130                  {
+    131                      BootApp_Reset_Sys();
+    132                  }
+    133                  break;
+    134              }
+    135              case BOOTAPP_STATE_JUMP:
+    136              {
+    137                  BootApp_Log_Exe_Status(BOOTAPP_STATE_JUMP, BOOTAPP_JUMP_TO_APP);
+    138                  BootApp_Run_App();
+    139                  break;
+    140              }
+    141              default :
+    142                  break;
+    143              }
+    144          }
+    145          
+    146          void BootApp_State_Init_Act(void)
+    147          {
+    148              /*callout for state machine*/
+    149              BootApp_Reset_ten reset_en;
+    150              BootApp_Status_ten  status_en;
+    151          
+    152              #if 1
+    153              reset_en = BootApp_GetReset_Reason();
+    154          
+    155              if(BOOTAPP_RESET_POWERON == reset_en)
+    156              {
+    157                  status_en = BootApp_Validate_App();
+    158                  if(BOOTAAPP_VALI_COMPLETE == status_en)
+    159                  {
+    160                      BootApp_Run_App();
+    161                  }
+    162                  else
+    163                  {
+    164                      BootApp_Prog_init();
+    165                  }
+    166              }
+    167              else if(BOOTAPP_RESET_PROG == reset_en)
+    168              {
+    169                  BootApp_Prog_init();
+    170              }
+    171              else
+    172              {
+    173                  BootApp_Reset_Sys();
+    174              }
+    175              #endif
+    176          }
+    177          
+    178          /*<BASDKey>
+    179           ***********************************************************************************************************************
+    180           * $History___:
+    181           *
+    182           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+    183           *
+    184           * $
+    185           ***********************************************************************************************************************
+    186          </BASDKey>*/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   BootApp_Get_State
+       0   BootApp_Set_State
+      32   BootApp_StateMachine
+        32   -> BootApp_Enable_ReceiveData
+        32   -> BootApp_Erease_App
+        32   -> BootApp_Get_Command
+        32   -> BootApp_Get_State
+        32   -> BootApp_Log_Exe_Status
+        32   -> BootApp_NewCmd_Received
+        32   -> BootApp_Program_Flash
+        32   -> BootApp_Receive_Data
+        32   -> BootApp_Receive_Data_Finish
+        32   -> BootApp_Reset_Sys
+        32   -> BootApp_Run_App
+        32   -> BootApp_Set_State
+        32   -> BootApp_State_Init_Act
+        32   -> BootApp_Validate_App
+      16   BootApp_State_Init_Act
+        16   -> BootApp_GetReset_Reason
+        16   -> BootApp_Prog_init
+        16   -> BootApp_Reset_Sys
+        16   -> BootApp_Run_App
+        16   -> BootApp_Validate_App
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable2
+       4  ??DataTable2_1
+       6  BootApp_Get_State
+       6  BootApp_Set_State
+     360  BootApp_StateMachine
+      60  BootApp_State_Init_Act
+       1  BootApp_State_en
+
+ 
+   1 byte  in section .bss
+ 440 bytes in section .text
+ 
+ 440 bytes of CODE memory
+   1 byte  of DATA memory
+
+Errors: none
+Warnings: none

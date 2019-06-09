@@ -1,0 +1,216 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:04:57
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Cfg_FL0001A00.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Cfg_FL0001A00.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\BootApp_Cfg_FL0001A00.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Cfg_FL0001A00.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Cfg_FL0001A00.c
+      1          /*<BASDKey>
+      2           **********************************************************************************************************************
+      3           *
+      4           * COPYRIGHT RESERVED, FeedLiTech, 2019. All rights reserved.
+      5           * The reproduction, distribution and utilization of this document as well as the communication of its contents to
+      6           * others without explicit authorization is prohibited. Offenders will be held liable for the payment of damages.
+      7           * All rights reserved in the event of the grant of a patent, utility model or design.
+      8           *
+      9           **********************************************************************************************************************
+     10          </BASDKey>*/
+     11          #include "BootApp_Cfg.h"
+     12          #include "BootApp_Cfg_Board.h"
+     13          #include "BootApp_Type.h"
+     14          #include "BootApp_Priv.h"
+     15          
+     16          #if (BOOTAPP_BOARD_SUPPORT == TestEng_FL0001A00)
+     17          
+     18          const BootApp_GpioPin_tst BootApp_App_GpioPin_cast[BOOTAPP_APP_GPIO_NUM] =
+     19          {
+     20              {
+     21                  GPIOB,
+     22                  GPIO_BOARD_ADDR,
+     23                  {
+     24                      GPIO_Pin_0, GPIO_Speed_50MHz,GPIO_Mode_IPD
+     25                  },
+     26              },
+     27              {
+     28                  GPIOB,
+     29                  GPIO_BOARD_ADDR,
+     30                  {
+     31                      GPIO_Pin_1, GPIO_Speed_50MHz,GPIO_Mode_IPD
+     32                  },
+     33              },
+     34              {
+     35                  GPIOB,
+     36                  GPIO_BOARD_ADDR,
+     37                  {
+     38                      GPIO_Pin_5, GPIO_Speed_50MHz,GPIO_Mode_IPD
+     39                  },
+     40              },
+     41              {
+     42                  GPIOB,
+     43                  GPIO_BOARD_ADDR,
+     44                  {
+     45                      GPIO_Pin_8, GPIO_Speed_50MHz,GPIO_Mode_IPD
+     46                  },
+     47              },
+     48              {
+     49                  GPIOB,
+     50                  GPIO_BOARD_ADDR,
+     51                  {
+     52                      GPIO_Pin_9, GPIO_Speed_50MHz,GPIO_Mode_IPD
+     53                  },
+     54              },
+     55              {
+     56                  GPIOB,
+     57                  GPIO_BOARD_ADDR,
+     58                  {
+     59                      GPIO_Pin_10, GPIO_Speed_50MHz,GPIO_Mode_IPD
+     60                  },
+     61              },
+     62              {
+     63                  GPIOA,
+     64                  GPIO_UART_RX,
+     65                  {
+     66                      GPIO_Pin_10, GPIO_Speed_50MHz,GPIO_Mode_IN_FLOATING
+     67                  },
+     68              },
+     69              {
+     70                  GPIOA,
+     71                  GPIO_UART_TX,
+     72                  {
+     73                      GPIO_Pin_9, GPIO_Speed_50MHz,GPIO_Mode_AF_PP
+     74                  },
+     75              },
+     76              {
+     77                  GPIOA,
+     78                  GPIO_UART_RX_EN,
+     79                  {
+     80                      GPIO_Pin_11, GPIO_Speed_50MHz,GPIO_Mode_Out_PP
+     81                  },
+     82              },
+     83              {
+     84                  GPIOA,
+     85                  GPIO_UART_TX_EN,
+     86                  {
+     87                      GPIO_Pin_12, GPIO_Speed_50MHz,GPIO_Mode_Out_PP
+     88                  },
+     89              },
+     90              {
+     91                  GPIOB,
+     92                  GPIO_ERR_LED,
+     93                  {
+     94                      GPIO_Pin_11, GPIO_Speed_50MHz,GPIO_Mode_Out_PP
+     95                  },
+     96              },
+     97              {
+     98                  GPIOC,
+     99                  GPIO_RUN_LED,
+    100                  {
+    101                      GPIO_Pin_15, GPIO_Speed_50MHz,GPIO_Mode_Out_PP
+    102                  },
+    103              },
+    104          
+    105          };
+    106          
+    107          const BootApp_UartPort_tst BootApp_UartPort_cast[BOOTAPP_APP_UART_NUM] =
+    108          {
+    109              {
+    110                  USART1,
+    111                  {
+    112                      19200,
+    113                      USART_WordLength_9b,
+    114                      USART_StopBits_1,
+    115                      USART_Parity_Even,
+    116                      USART_Mode_Rx | USART_Mode_Tx,
+    117                      USART_HardwareFlowControl_None
+    118                  }
+    119              },
+    120          };
+    121          
+    122          const BootApp_Prolog_tst BootApp_App_Prolog_st =
+    123          {
+    124              "FL0001A00",
+    125              "20181013",
+    126              "HuangHeFeedLi",
+    127          };
+    128          
+    129          const BootApp_Epilog_tst BootApp_Epilog_st =
+    130          {
+    131              "FL0001A00",
+    132              "20181013",
+    133              "HuangHeFeedLi"
+    134          };
+    135          
+    136          #endif
+    137          /*<BASDKey>
+    138           ***********************************************************************************************************************
+    139           * $History___:
+    140           *
+    141           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+    142           *
+    143           * $
+    144           ***********************************************************************************************************************
+    145          </BASDKey>*/
+    146          
+    147          
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+     144  BootApp_App_GpioPin_cast
+      48  BootApp_App_Prolog_st
+      48  BootApp_Epilog_st
+      20  BootApp_UartPort_cast
+
+ 
+ 260 bytes in section .rodata
+ 
+ 260 bytes of CONST memory
+
+Errors: none
+Warnings: none

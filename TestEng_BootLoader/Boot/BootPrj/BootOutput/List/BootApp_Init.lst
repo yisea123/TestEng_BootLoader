@@ -1,0 +1,260 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:04:58
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Init.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Init.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\BootApp_Init.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Init.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Init.c
+      1          /*<BASDKey>
+      2           **********************************************************************************************************************
+      3           *
+      4           * COPYRIGHT RESERVED, FeedLiTech, 2019. All rights reserved.
+      5           * The reproduction, distribution and utilization of this document as well as the communication of its contents to
+      6           * others without explicit authorization is prohibited. Offenders will be held liable for the payment of damages.
+      7           * All rights reserved in the event of the grant of a patent, utility model or design.
+      8           *
+      9           **********************************************************************************************************************
+     10          </BASDKey>*/
+     11          
+     12          #include "BootApp_Cfg.h"
+     13          #include "BootApp_Cfg_Board.h"
+     14          #include "BootApp_Type.h"
+     15          #include "BootApp_Priv.h"
+     16          
+     17          static BootApp_GetApp_init_ten BootApp_GetApp_init_en = BOOTAPP_GETAPP_NOT_INI;
+     18          static void BootApp_Gpio_Init(void);
+     19          static void BootApp_Uart_Init(void);
+     20          
+     21          uint8_t slave_addr = 0;
+     22          
+     23          void BootApp_Prog_init(void)
+     24          {
+     25              /*init external devices and communication*/
+     26              if( (void *)0 != BootApp_App_Cfg_cpcst )
+     27              {
+     28                  BootApp_GetApp_init_en = BOOTAPP_GETAPP_INI;
+     29              }
+     30              else
+     31              {
+     32                  BootApp_GetApp_init_en = BOOTAPP_GETAPP_NOT_INI;
+     33              }
+     34          
+     35              BootApp_Gpio_Init();
+     36              BootApp_Uart_Init();
+     37              BootApp_Enable_usart_rx();
+     38              BootApp_Disable_usart_tx();
+     39              BootApp_Enter_Schm();
+     40          #if (BOOTAPP_BOARD_SUPPORT != TestEng_Debug)
+     41              slave_addr = BootApp_Get_board_address();
+     42              eMBInit(MB_RTU, slave_addr, 0x1, 19200, MB_PAR_EVEN);
+     43              eMBEnable(); 
+     44          #endif
+     45              BootApp_Exit_Schm();
+     46          
+     47          }
+     48          
+     49          
+     50          uint8_t BootApp_Get_Cfg_Gpio(const BootApp_Gpio_tst ** gpio_cfg)
+     51          {
+     52              uint8_t ret;
+     53              if(BOOTAPP_GETAPP_INI == BootApp_GetApp_init_en)
+     54              {
+     55                  *gpio_cfg = BootApp_App_Cfg_cpcst->app_cfg_gpio_cpcst;
+     56                  if((void *)0 != gpio_cfg)
+     57                  {
+     58                      ret = 1;
+     59                  }
+     60                  else
+     61                  {
+     62                      ret = 0;
+     63                  }
+     64              }
+     65              else
+     66              {
+     67                  ret = 0;
+     68              }
+     69              return ret;
+     70          }
+     71          
+     72          uint8_t BootApp_Get_Cfg_Uart(const BootApp_Uart_tst ** uart_cfg)
+     73          {
+     74              uint8_t ret;
+     75              if(BOOTAPP_GETAPP_INI == BootApp_GetApp_init_en)
+     76              {
+     77                  *uart_cfg = BootApp_App_Cfg_cpcst->app_cfg_uart_cpcst;
+     78                  if((void *)0 != uart_cfg)
+     79                  {
+     80                      ret = 1;
+     81                  }
+     82                  else
+     83                  {
+     84                      ret = 0;
+     85                  }
+     86          
+     87              }
+     88              else
+     89              {
+     90                  ret = 0;
+     91              }
+     92              return ret;
+     93          }
+     94          
+     95          
+     96          
+     97          void BootApp_Gpio_Init(void)
+     98          {
+     99              uint8_t ret;
+    100              uint8_t i;
+    101              const BootApp_Gpio_tst * gpio_cfg = (void *) 0;
+    102              BootApp_GPIO_TypeDef GPIO_TypeDef;
+    103              BootApp_GPIO_InitTypeDef GPIO_InitTypeDef;
+    104          
+    105          
+    106              ret = BootApp_Get_Cfg_Gpio(&gpio_cfg);
+    107              if(ret)
+    108              {
+    109                  for(i=0; i<gpio_cfg->app_cfg_gpio_num; i++)
+    110                  {
+    111                      /*copy from flash*/
+    112                      GPIO_TypeDef = *gpio_cfg->app_cfg_gpio_init_past[i].app_cfg_gpio;
+    113                      GPIO_InitTypeDef = gpio_cfg->app_cfg_gpio_init_past[i].app_cfg_gpio_pin_st;
+    114                      
+    115                      BootApp_GPIO_Init( &GPIO_TypeDef,&GPIO_InitTypeDef);
+    116                  }
+    117              }
+    118              else
+    119              {
+    120              }
+    121          }
+    122          
+    123          void BootApp_Uart_Init(void)
+    124          {
+    125              uint8_t ret;
+    126              uint8_t i;
+    127              const BootApp_Uart_tst * uart_cfg = (void *) 0;
+    128              BootApp_USART_TypeDef USART_TypeDef;
+    129              BootApp_USART_InitTypeDef USART_InitTypeDef;
+    130          
+    131              ret = BootApp_Get_Cfg_Uart(&uart_cfg);
+    132              if(ret)
+    133              {
+    134                  for(i=0; i<uart_cfg->app_cfg_uart_num; i++)
+    135                  {
+    136                      /*copy from flash*/
+    137                      USART_TypeDef = *uart_cfg->app_cfg_uart_init_past[i].app_cfg_uart;
+    138                      USART_InitTypeDef = uart_cfg->app_cfg_uart_init_past[i].app_cfg_uart_port_st;
+    139                      
+    140                      BootApp_UART_Init( &USART_TypeDef,
+    141                                         &USART_InitTypeDef);
+    142                  }
+    143              }
+    144              else
+    145              {
+    146              }
+    147          }
+    148          
+    149          
+    150          
+    151          /*<BASDKey>
+    152           ***********************************************************************************************************************
+    153           * $History___:
+    154           *
+    155           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+    156           *
+    157           * $
+    158           ***********************************************************************************************************************
+    159          </BASDKey>*/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   BootApp_Get_Cfg_Gpio
+       0   BootApp_Get_Cfg_Uart
+      48   BootApp_Gpio_Init
+        48   -> BootApp_Get_Cfg_Gpio
+        48   -> GPIO_Init
+        48   -> __aeabi_memcpy4
+       8   BootApp_Prog_init
+         8   -> BootApp_Disable_usart_tx
+         8   -> BootApp_Enable_usart_rx
+         8   -> BootApp_Get_board_address
+         8   -> BootApp_Gpio_Init
+         8   -> BootApp_Uart_Init
+         8   -> eMBEnable
+         8   -> eMBInit
+      64   BootApp_Uart_Init
+        64   -> BootApp_Get_Cfg_Uart
+        64   -> USART_Init
+        64   -> __aeabi_memcpy
+        64   -> __aeabi_memcpy4
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable2
+       4  ??DataTable2_1
+       4  ??DataTable2_2
+       1  BootApp_GetApp_init_en
+      42  BootApp_Get_Cfg_Gpio
+      42  BootApp_Get_Cfg_Uart
+      96  BootApp_Gpio_Init
+      78  BootApp_Prog_init
+     100  BootApp_Uart_Init
+       1  slave_addr
+
+ 
+   2 bytes in section .bss
+ 370 bytes in section .text
+ 
+ 370 bytes of CODE memory
+   2 bytes of DATA memory
+
+Errors: none
+Warnings: none

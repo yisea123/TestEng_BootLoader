@@ -1,0 +1,142 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:04:56
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Cfg.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Cfg.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\BootApp_Cfg.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Cfg.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Cfg.c
+      1          /*<BASDKey>
+      2           **********************************************************************************************************************
+      3           *
+      4           * COPYRIGHT RESERVED, FeedLiTech, 2019. All rights reserved.
+      5           * The reproduction, distribution and utilization of this document as well as the communication of its contents to
+      6           * others without explicit authorization is prohibited. Offenders will be held liable for the payment of damages.
+      7           * All rights reserved in the event of the grant of a patent, utility model or design.
+      8           *
+      9           **********************************************************************************************************************
+     10          </BASDKey>*/
+     11          
+     12          #include "BootApp_Cfg.h"
+     13          #include "BootApp_Cfg_Board.h"
+     14          #include "BootApp_Type.h"
+     15          #include "BootApp_Priv.h"
+     16          
+     17          
+     18          const BootApp_Flash_Info_tst BootApp_Flash_Info_cst =
+     19          {
+     20              BOOTAPP_APP_START_ADDR,
+     21              BOOTAPP_APP_END_ADDR,
+     22              BOOTAPP_APP_LENGTH,
+     23              BOOTAPP_APP_SECTOR_NUM,
+     24              BOOTAPP_APP_SECTOR_SIZE,
+     25              BOOTAPP_APP_PAGE_NUM,
+     26              BOOTAPP_APP_PAGE_SIZE,
+     27          };
+     28          
+     29          
+     30          
+     31          const BootApp_Gpio_tst BootApp_Gpio_cst =
+     32          {
+     33              BOOTAPP_APP_GPIO_NUM,
+     34              BOOTAPP_APP_ADDR_NUM,
+     35              &BootApp_App_GpioPin_cast[0],
+     36          };
+     37          
+     38          
+     39          const BootApp_Uart_tst BootApp_Uart_cst =
+     40          {
+     41              BOOTAPP_APP_UART_NUM,
+     42              &BootApp_UartPort_cast[0],
+     43          };
+     44          
+     45          
+     46          const BootApp_App_Cfg_tst BootApp_App_Cfg_cst =
+     47          {
+     48              &BootApp_Gpio_cst,
+     49              &BootApp_Uart_cst,
+     50          #if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
+     51              &BootApp_App_Prolog_st,
+     52              &BootApp_Epilog_st,
+     53          #else
+     54              (const BootApp_Prolog_tst *)BOOTAPP_PROLOG_BASE_ADDR,
+     55              (const BootApp_Epilog_tst *)BOOTAPP_EPILOG_BASE_ADDR,
+     56          #endif
+     57          };
+     58          
+     59          const BootApp_App_Cfg_tst * const BootApp_App_Cfg_cpcst = &BootApp_App_Cfg_cst;
+     60          
+     61          
+     62          
+     63          /*<BASDKey>
+     64           ***********************************************************************************************************************
+     65           * $History___:
+     66           *
+     67           * U1.0.0;      20.05.2019 new created for BootLoader  he.huang@feedlitech.com
+     68           *
+     69           * $
+     70           ***********************************************************************************************************************
+     71          </BASDKey>*/
+     72          
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  BootApp_App_Cfg_cpcst
+      16  BootApp_App_Cfg_cst
+      28  BootApp_Flash_Info_cst
+       8  BootApp_Gpio_cst
+       8  BootApp_Uart_cst
+
+ 
+ 64 bytes in section .rodata
+ 
+ 64 bytes of CONST memory
+
+Errors: none
+Warnings: none
