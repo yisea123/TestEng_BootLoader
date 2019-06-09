@@ -49,7 +49,7 @@ static uint8_t BootApp_IoFunction(BootApp_GPIO_Function_ten gpio_func_en,
                     #else
                     BootApp_GPIO_WriteBit( gpio_pin_cpast[i].app_cfg_gpio,
                                    gpio_pin_cpast[i].app_cfg_gpio_pin_st.GPIO_Pin,
-                                   BitVal);
+                                   BitVal );
                     #endif
                 }
                 else if(gpio_operation_en == GPIO_READ)

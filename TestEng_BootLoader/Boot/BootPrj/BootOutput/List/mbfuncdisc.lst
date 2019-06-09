@@ -1,0 +1,199 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  20:02:52
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\functions\mbfuncdisc.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\functions\mbfuncdisc.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\mbfuncdisc.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbfuncdisc.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\functions\mbfuncdisc.c
+      1           /*
+      2            * FreeRTOS Modbus Libary: A Modbus serial implementation for FreeRTOS
+      3            * Copyright (C) 2006 Christian Walter <wolti@sil.at>
+      4            *
+      5            * This library is free software; you can redistribute it and/or
+      6            * modify it under the terms of the GNU Lesser General Public
+      7            * License as published by the Free Software Foundation; either
+      8            * version 2.1 of the License, or (at your option) any later version.
+      9            *
+     10            * This library is distributed in the hope that it will be useful,
+     11            * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     12            * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     13            * Lesser General Public License for more details.
+     14            *
+     15            * You should have received a copy of the GNU Lesser General Public
+     16            * License along with this library; if not, write to the Free Software
+     17            * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+     18            */
+     19          
+     20          
+     21          
+     22          /* ----------------------- System includes ----------------------------------*/
+     23          #include "stdlib.h"
+     24          #include "string.h"
+     25          
+     26          /* ----------------------- Platform includes --------------------------------*/
+     27          #include "port.h"
+     28          
+     29          /* ----------------------- Modbus includes ----------------------------------*/
+     30          #include "mb.h"
+     31          #include "mbframe.h"
+     32          #include "mbproto.h"
+     33          #include "mbconfig.h"
+     34          
+     35          /* ----------------------- Defines ------------------------------------------*/
+     36          #define MB_PDU_FUNC_READ_ADDR_OFF           ( MB_PDU_DATA_OFF )
+     37          #define MB_PDU_FUNC_READ_DISCCNT_OFF        ( MB_PDU_DATA_OFF + 2 )
+     38          #define MB_PDU_FUNC_READ_SIZE               ( 4 )
+     39          #define MB_PDU_FUNC_READ_DISCCNT_MAX        ( 0x07D0 )
+     40          
+     41          /* ----------------------- Static functions ---------------------------------*/
+     42          eMBException    prveMBError2Exception( eMBErrorCode eErrorCode );
+     43          
+     44          /* ----------------------- Start implementation -----------------------------*/
+     45          
+     46          #if MB_FUNC_READ_COILS_ENABLED > 0
+     47          
+     48          eMBException
+     49          eMBFuncReadDiscreteInputs( UCHAR * pucFrame, USHORT * usLen )
+     50          {
+     51              USHORT          usRegAddress;
+     52              USHORT          usDiscreteCnt;
+     53              UCHAR           ucNBytes;
+     54              UCHAR          *pucFrameCur;
+     55          
+     56              eMBException    eStatus = MB_EX_NONE;
+     57              eMBErrorCode    eRegStatus;
+     58          
+     59              if( *usLen == ( MB_PDU_FUNC_READ_SIZE + MB_PDU_SIZE_MIN ) )
+     60              {
+     61                  usRegAddress = ( USHORT )( pucFrame[MB_PDU_FUNC_READ_ADDR_OFF] << 8 );
+     62                  usRegAddress |= ( USHORT )( pucFrame[MB_PDU_FUNC_READ_ADDR_OFF + 1] );
+     63                  usRegAddress++;
+     64          
+     65                  usDiscreteCnt = ( USHORT )( pucFrame[MB_PDU_FUNC_READ_DISCCNT_OFF] << 8 );
+     66                  usDiscreteCnt |= ( USHORT )( pucFrame[MB_PDU_FUNC_READ_DISCCNT_OFF + 1] );
+     67          
+     68                  /* Check if the number of registers to read is valid. If not
+     69                   * return Modbus illegal data value exception. 
+     70                   */
+     71                  if( ( usDiscreteCnt >= 1 ) &&
+     72                      ( usDiscreteCnt < MB_PDU_FUNC_READ_DISCCNT_MAX ) )
+     73                  {
+     74                      /* Set the current PDU data pointer to the beginning. */
+     75                      pucFrameCur = &pucFrame[MB_PDU_FUNC_OFF];
+     76                      *usLen = MB_PDU_FUNC_OFF;
+     77          
+     78                      /* First byte contains the function code. */
+     79                      *pucFrameCur++ = MB_FUNC_READ_DISCRETE_INPUTS;
+     80                      *usLen += 1;
+     81          
+     82                      /* Test if the quantity of coils is a multiple of 8. If not last
+     83                       * byte is only partially field with unused coils set to zero. */
+     84                      if( ( usDiscreteCnt & 0x0007 ) != 0 )
+     85                      {
+     86                          ucNBytes = ( UCHAR ) ( usDiscreteCnt / 8 + 1 );
+     87                      }
+     88                      else
+     89                      {
+     90                          ucNBytes = ( UCHAR ) ( usDiscreteCnt / 8 );
+     91                      }
+     92                      *pucFrameCur++ = ucNBytes;
+     93                      *usLen += 1;
+     94          
+     95                      eRegStatus =
+     96                          eMBRegDiscreteCB( pucFrameCur, usRegAddress, usDiscreteCnt );
+     97          
+     98                      /* If an error occured convert it into a Modbus exception. */
+     99                      if( eRegStatus != MB_ENOERR )
+    100                      {
+    101                          eStatus = prveMBError2Exception( eRegStatus );
+    102                      }
+    103                      else
+    104                      {
+    105                          /* The response contains the function code, the starting address
+    106                           * and the quantity of registers. We reuse the old values in the 
+    107                           * buffer because they are still valid. */
+    108                          *usLen += ucNBytes;;
+    109                      }
+    110                  }
+    111                  else
+    112                  {
+    113                      eStatus = MB_EX_ILLEGAL_DATA_VALUE;
+    114                  }
+    115              }
+    116              else
+    117              {
+    118                  /* Can't be a valid read coil register request because the length
+    119                   * is incorrect. */
+    120                  eStatus = MB_EX_ILLEGAL_DATA_VALUE;
+    121              }
+    122              return eStatus;
+    123          }
+    124          
+    125          #endif
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      40   eMBFuncReadDiscreteInputs
+        40   -> eMBRegDiscreteCB
+        40   -> prveMBError2Exception
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+     190  eMBFuncReadDiscreteInputs
+
+ 
+ 190 bytes in section .text
+ 
+ 190 bytes of CODE memory
+
+Errors: none
+Warnings: none

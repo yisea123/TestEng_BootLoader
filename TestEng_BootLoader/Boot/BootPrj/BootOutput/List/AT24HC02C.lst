@@ -1,0 +1,429 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:13:06
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootDrv\src\AT24HC02C.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootDrv\src\AT24HC02C.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\AT24HC02C.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\AT24HC02C.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootDrv\src\AT24HC02C.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    AT24HC02C.c  burn in system
+      4            * @author  h&h
+      5            * @version 
+      6            * @date    2018
+      7            * @brief   AT24HC02C driver
+      8            ******************************************************************************
+      9          **/ 
+     10          
+     11          
+     12          #include "include.h"
+     13          
+     14          typedef void (*AT24HC02C_wp_func)(uint8_t wp);
+     15          typedef struct
+     16          {
+     17              uint8_t AT24HC02C_dev_addr;
+     18              AT24HC02C_size_t AT24HC02C_mem_size;
+     19              AT24HC02C_size_t AT24HC02C_page_size;
+     20              AT24HC02C_size_t AT24HC02C_page_mask;
+     21              I2C_TypeDef* AT24HC02C_i2c_port;
+     22          #if (AT24HC02C_WP_CONF == AT24HC02C_WP_ENABLE)
+     23              AT24HC02C_wp_func AT24HC02C_wp_p2f;
+     24          #endif
+     25          }AT24HC02C_dev_info_tst;
+     26          
+     27          #if (AT24HC02C_WP_CONF == AT24HC02C_WP_ENABLE)
+     28          static void AT24HC02C_drv_wp(uint8_t wp)
+     29          {
+     30          
+     31          
+     32          }
+     33          #endif
+     34          
+     35          const AT24HC02C_dev_info_tst AT24HC02C_dev_info_cast[AT24HC02C_DEVICE_NUM] = 
+     36          {
+     37              { 
+     38                  AT24HC02C_DEVICE_0_ADDR,
+     39                  AT24HC02C_MEM_SIZE,
+     40                  AT24HC02C_PAGE_SIZE,
+     41                  AT24HC02C_PAGE_MASK,
+     42                  AT24HC02C_I2C_PORT, 
+     43          #if (AT24HC02C_WP_CONF == AT24HC02C_WP_ENABLE)
+     44                  AT24HC02C_WP_FUNC
+     45          #endif
+     46              },
+     47          };
+     48          
+     49          
+     50          
+     51          
+     52          static uint8_t AT24HC02C_drv_wr_n_bytes(uint8_t dev_id, AT24HC02C_size_t addr, AT24HC02C_size_t length, uint8_t * data)
+     53          {
+     54              uint8_t i;
+     55              uint8_t ret = SUCCESS;
+     56              uint8_t dev_addr;
+     57              I2C_TypeDef* i2c_port;
+     58              
+     59          #if (AT24HC02C_WP_CONF == AT24HC02C_WP_ENABLE)
+     60                  AT24HC02C_wp_func wp_func;
+     61          #endif
+     62          
+     63              AT24HC02C_size_t mem_size;
+     64              AT24HC02C_size_t page_size;
+     65              AT24HC02C_size_t page_mask;
+     66          
+     67              AT24HC02C_size_t page_cntr;
+     68              AT24HC02C_size_t residual_bytes;
+     69          
+     70              AT24HC02C_size_t head_len;
+     71              AT24HC02C_size_t data_ptr = 0;
+     72              
+     73              mem_size = AT24HC02C_dev_info_cast[dev_id].AT24HC02C_mem_size;
+     74              if( (dev_id >= AT24HC02C_DEVICE_NUM) || 
+     75                  (addr > mem_size) || 
+     76                  (addr+length > mem_size) || 
+     77                  ((void*)0 == data) )
+     78              {
+     79                  ret = ERROR;
+     80              }
+     81              else
+     82              {
+     83          
+     84                  page_size = AT24HC02C_dev_info_cast[dev_id].AT24HC02C_page_size;
+     85                  page_mask = AT24HC02C_dev_info_cast[dev_id].AT24HC02C_page_mask;
+     86                  dev_addr = AT24HC02C_dev_info_cast[dev_id].AT24HC02C_dev_addr;
+     87                  i2c_port = AT24HC02C_dev_info_cast[dev_id].AT24HC02C_i2c_port;
+     88                  
+     89          #if (AT24HC02C_WP_CONF == AT24HC02C_WP_ENABLE)
+     90                  wp_func  = AT24HC02C_dev_info_cast[dev_id].AT24HC02C_wp_p2f;
+     91                  wp_func(0);
+     92          #endif
+     93          
+     94                  head_len = addr & page_mask;
+     95                  if(head_len)
+     96                  {
+     97                      head_len = page_size - head_len;
+     98                      ret = I2c_command_write(i2c_port, addr, head_len, dev_addr, &data[data_ptr]);
+     99                      Delay_ms(4);
+    100                      addr += head_len;
+    101                      data_ptr += head_len;
+    102                  }
+    103                  length -= head_len;
+    104                  page_cntr = length / page_size;
+    105                  residual_bytes = length % page_size;
+    106          
+    107                  for(i=0; i<page_cntr; i++)
+    108                  {
+    109                      ret &= I2c_command_write(i2c_port, addr, page_mask, dev_addr, &data[data_ptr]);
+    110                      Delay_ms(4);
+    111                      addr += page_mask;
+    112                      data_ptr += page_mask;
+    113                      ret &= I2c_command_write(i2c_port, addr, 1, dev_addr, &data[data_ptr]);
+    114                      Delay_ms(4);
+    115                      data_ptr++;
+    116                      addr ++;
+    117                  }
+    118                  
+    119                  if(residual_bytes)
+    120                  {
+    121                      ret &= I2c_command_write(i2c_port, addr, residual_bytes, dev_addr, &data[data_ptr]);
+    122                      Delay_ms(4);
+    123                  }
+    124          #if (AT24HC02C_WP_CONF == AT24HC02C_WP_ENABLE)
+    125                  wp_func(1);
+    126          #endif
+    127              }
+    128          
+    129              return ret;
+    130          }
+    131          
+    132          static uint8_t AT24HC02C_drv_rd_n_bytes(uint8_t dev_id, AT24HC02C_size_t addr, AT24HC02C_size_t length, uint8_t * data)
+    133          {
+    134              uint8_t ret = SUCCESS;
+    135              uint8_t dev_addr;
+    136              I2C_TypeDef* i2c_port;
+    137              AT24HC02C_size_t mem_size;
+    138          
+    139              mem_size = AT24HC02C_dev_info_cast[dev_id].AT24HC02C_mem_size;
+    140          
+    141              if( (dev_id >= AT24HC02C_DEVICE_NUM) || 
+    142                  (addr > mem_size) || 
+    143                  (addr+length > mem_size) || 
+    144                  ((void*)0 == data) )
+    145              {
+    146                  ret = ERROR;
+    147              }
+    148              if(ERROR != ret)
+    149              {
+    150                  dev_addr = AT24HC02C_dev_info_cast[dev_id].AT24HC02C_dev_addr;
+    151                  mem_size = AT24HC02C_dev_info_cast[dev_id].AT24HC02C_mem_size;
+    152                  i2c_port = AT24HC02C_dev_info_cast[dev_id].AT24HC02C_i2c_port;
+    153          
+    154                  I2c_command_read(i2c_port, addr, length, dev_addr, data);
+    155                  ret = SUCCESS;
+    156              }
+    157              return ret;
+    158          }
+    159          
+    160          uint8_t AT24HC02C_wr_n_bytes(uint8_t dev_id, AT24HC02C_size_t addr, AT24HC02C_size_t length, uint8_t * data)
+    161          {
+    162              uint8_t ret;
+    163          
+    164              ret = AT24HC02C_drv_wr_n_bytes(dev_id, addr, length, data);
+    165          
+    166              return ret;
+    167          }
+    168          
+    169          uint8_t AT24HC02C_rd_n_bytes(uint8_t dev_id, AT24HC02C_size_t addr, AT24HC02C_size_t length, uint8_t * data)
+    170          {
+    171              uint8_t ret;
+    172          
+    173              ret = AT24HC02C_drv_rd_n_bytes(dev_id, addr, length, data);
+    174          
+    175              return ret;
+    176          
+    177          }
+    178          
+    179          #ifdef DEBUG_AT24HC02C
+    180          uint8_t eep_rd_data[256];
+    181          uint8_t eep_wr_data[256] = {0x12,0x23, 0x34, 0x45,0x56,0xcc,0xdd,0xee};
+    182          
+    183          void test_eep()
+    184          {
+    185          #if 0
+    186                  AT24HC02C_wr_n_bytes(0, 0, 1, &eep_wr_data[0]);
+    187                  AT24HC02C_wr_n_bytes(0, 1, 1, &eep_wr_data[1]);
+    188                  AT24HC02C_wr_n_bytes(0, 2, 1, &eep_wr_data[2]);
+    189                  AT24HC02C_wr_n_bytes(0, 3, 1, &eep_wr_data[3]);
+    190                  AT24HC02C_wr_n_bytes(0, 4, 1, &eep_wr_data[4]);
+    191                  AT24HC02C_wr_n_bytes(0, 5, 1, &eep_wr_data[5]);
+    192                  AT24HC02C_wr_n_bytes(0, 6, 1, &eep_wr_data[6]);
+    193                  AT24HC02C_wr_n_bytes(0, 7, 1, &eep_wr_data[7]);
+    194                  AT24HC02C_wr_n_bytes(0, 8, 1, &eep_wr_data[8]);
+    195                  AT24HC02C_wr_n_bytes(0, 9, 1, &eep_wr_data[9]);
+    196                  AT24HC02C_wr_n_bytes(0, 10, 1, &eep_wr_data[10]);
+    197                  AT24HC02C_wr_n_bytes(0, 11, 1, &eep_wr_data[11]);
+    198                  AT24HC02C_wr_n_bytes(0, 12, 1, &eep_wr_data[12]);
+    199          
+    200          
+    201                  
+    202                  AT24HC02C_rd_n_bytes(0, 0, 1, &eep_rd_data[0]);
+    203                  AT24HC02C_rd_n_bytes(0, 1, 1, &eep_rd_data[1]);
+    204                  AT24HC02C_rd_n_bytes(0, 2, 1, &eep_rd_data[2]);
+    205                  AT24HC02C_rd_n_bytes(0, 3, 1, &eep_rd_data[3]);
+    206                  AT24HC02C_rd_n_bytes(0, 4, 1, &eep_rd_data[4]);
+    207                  AT24HC02C_rd_n_bytes(0, 5, 1, &eep_rd_data[5]);
+    208                  AT24HC02C_rd_n_bytes(0, 6, 1, &eep_rd_data[6]);
+    209                  AT24HC02C_rd_n_bytes(0, 7, 1, &eep_rd_data[7]);
+    210                  AT24HC02C_rd_n_bytes(0, 8, 1, &eep_rd_data[8]);
+    211                  AT24HC02C_rd_n_bytes(0, 9, 1, &eep_rd_data[9]);
+    212                  AT24HC02C_rd_n_bytes(0, 10, 1, &eep_rd_data[10]);
+    213                  AT24HC02C_rd_n_bytes(0, 11, 1, &eep_rd_data[11]);
+    214                  AT24HC02C_rd_n_bytes(0, 12, 1, &eep_rd_data[12]);
+    215          #endif
+    216          #if 0
+    217                  AT24HC02C_wr_n_bytes(0, 0, 2, &eep_wr_data[0]);
+    218                  Delay_ms(1);
+    219                  AT24HC02C_wr_n_bytes(0, 2, 2, &eep_wr_data[2]);
+    220                  Delay_ms(1);
+    221                  AT24HC02C_wr_n_bytes(0, 4, 2, &eep_wr_data[4]);
+    222                  Delay_ms(1);
+    223                  AT24HC02C_wr_n_bytes(0, 6, 2, &eep_wr_data[6]);
+    224                  Delay_ms(1);
+    225                  AT24HC02C_wr_n_bytes(0, 8, 2, &eep_wr_data[8]);
+    226                  Delay_ms(1);
+    227                  AT24HC02C_wr_n_bytes(0, 10, 2, &eep_wr_data[10]);
+    228                  Delay_ms(1);
+    229                  
+    230                  AT24HC02C_rd_n_bytes(0, 0, 1, &eep_rd_data[0]);
+    231                  AT24HC02C_rd_n_bytes(0, 1, 1, &eep_rd_data[1]);
+    232                  AT24HC02C_rd_n_bytes(0, 2, 1, &eep_rd_data[2]);
+    233                  AT24HC02C_rd_n_bytes(0, 3, 1, &eep_rd_data[3]);
+    234                  AT24HC02C_rd_n_bytes(0, 4, 1, &eep_rd_data[4]);
+    235                  AT24HC02C_rd_n_bytes(0, 5, 1, &eep_rd_data[5]);
+    236                  AT24HC02C_rd_n_bytes(0, 6, 1, &eep_rd_data[6]);
+    237                  AT24HC02C_rd_n_bytes(0, 7, 1, &eep_rd_data[7]);
+    238                  AT24HC02C_rd_n_bytes(0, 8, 1, &eep_rd_data[8]);
+    239                  AT24HC02C_rd_n_bytes(0, 9, 1, &eep_rd_data[9]);
+    240                  AT24HC02C_rd_n_bytes(0, 10, 1, &eep_rd_data[10]);
+    241                  AT24HC02C_rd_n_bytes(0, 11, 1, &eep_rd_data[11]);
+    242                  AT24HC02C_rd_n_bytes(0, 12, 1, &eep_rd_data[12]);
+    243                  
+    244                  AT24HC02C_rd_n_bytes(0, 0, 2, &eep_rd_data[0]);
+    245                  Delay_ms(1);
+    246                  AT24HC02C_rd_n_bytes(0, 2, 2, &eep_rd_data[2]);
+    247                  Delay_ms(1);
+    248                  AT24HC02C_rd_n_bytes(0, 4, 2, &eep_rd_data[4]);
+    249                  Delay_ms(1);
+    250                  AT24HC02C_rd_n_bytes(0, 6, 2, &eep_rd_data[6]);
+    251                  Delay_ms(1);
+    252                  AT24HC02C_rd_n_bytes(0, 8, 2, &eep_rd_data[8]);
+    253                  Delay_ms(1);
+    254                  AT24HC02C_rd_n_bytes(0, 10, 2, &eep_rd_data[10]);
+    255                  Delay_ms(1);
+    256          #endif
+    257                  AT24HC02C_rd_n_bytes(0, 0, 256, &eep_rd_data[0]);
+    258                  Delay_ms(4);
+    259          #if 0
+    260          
+    261                  uint16_t i=0;
+    262                  
+    263                  for(i=0; i<256;i++)
+    264                  {
+    265                      eep_wr_data[i] = 0xbb;
+    266                  }
+    267                  AT24HC02C_wr_n_bytes(0, 6, 11, &eep_wr_data[0]);
+    268                  AT24HC02C_rd_n_bytes(0, 0, 256, &eep_rd_data[0]);
+    269                  
+    270                  Delay_ms(1000);
+    271                  for(i=0; i<256;i++)
+    272                  {
+    273                      eep_wr_data[i] = 0;
+    274                  }
+    275                  AT24HC02C_wr_n_bytes(0, 0, 256, &eep_wr_data[0]);
+    276                  AT24HC02C_rd_n_bytes(0, 0, 256, &eep_rd_data[0]); 
+    277                  
+    278                  for(i=0; i<256;i++)
+    279                  {
+    280                      eep_wr_data[i] = 0xdd;
+    281                  }
+    282                  AT24HC02C_wr_n_bytes(0, 8, 8, &eep_wr_data[0]);
+    283                  AT24HC02C_rd_n_bytes(0, 0, 256, &eep_rd_data[0]);
+    284          
+    285                  Delay_ms(1000);
+    286                  for(i=0; i<256;i++)
+    287                  {
+    288                      eep_wr_data[i] = 0;
+    289                  }
+    290                  AT24HC02C_wr_n_bytes(0, 0, 256, &eep_wr_data[0]);
+    291                  AT24HC02C_rd_n_bytes(0, 0, 256, &eep_rd_data[0]); 
+    292                  
+    293                  for(i=0; i<256;i++)
+    294                  {
+    295                      eep_wr_data[i] = 0x33;
+    296                  }
+    297                  AT24HC02C_wr_n_bytes(0, 8, 56, &eep_wr_data[0]);
+    298                  AT24HC02C_rd_n_bytes(0, 0, 256, &eep_rd_data[0]);
+    299          
+    300                  Delay_ms(1000);
+    301                  for(i=0; i<256;i++)
+    302                  {
+    303                      eep_wr_data[i] = 0;
+    304                  }
+    305                  AT24HC02C_wr_n_bytes(0, 0, 256, &eep_wr_data[0]);
+    306                  AT24HC02C_rd_n_bytes(0, 0, 256, &eep_rd_data[0]); 
+    307                  
+    308          
+    309                  for(i=0; i<256;i++)
+    310                  {
+    311                      eep_wr_data[i] = 0x44;
+    312                  }
+    313                  AT24HC02C_wr_n_bytes(0, 16, 23, &eep_wr_data[0]);
+    314                  AT24HC02C_rd_n_bytes(0, 0, 256, &eep_rd_data[0]);
+    315          
+    316                  Delay_ms(1000);
+    317                  for(i=0; i<256;i++)
+    318                  {
+    319                      eep_wr_data[i] = 0;
+    320                  }
+    321                  AT24HC02C_wr_n_bytes(0, 0, 256, &eep_wr_data[0]);
+    322                  AT24HC02C_rd_n_bytes(0, 0, 256, &eep_rd_data[0]); 
+    323                  
+    324          
+    325                  for(i=0; i<256;i++)
+    326                  {
+    327                      eep_wr_data[i] = 0xaa;
+    328                  }
+    329                  AT24HC02C_wr_n_bytes(0, 129, 23, &eep_wr_data[0]);
+    330                  AT24HC02C_rd_n_bytes(0, 0, 256, &eep_rd_data[0]);
+    331                  
+    332                  Delay_ms(1000);
+    333                  for(i=0; i<256;i++)
+    334                  {
+    335                      eep_wr_data[i] = 0;
+    336                  }
+    337                  AT24HC02C_wr_n_bytes(0, 0, 256, &eep_wr_data[0]);
+    338                  AT24HC02C_rd_n_bytes(0, 0, 256, &eep_rd_data[0]); 
+    339          
+    340                  for(i=0; i<256;i++)
+    341                  {
+    342                      eep_wr_data[i] = 0x55;
+    343                  }
+    344                  AT24HC02C_wr_n_bytes(0, 168, 24, &eep_wr_data[0]);
+    345                  AT24HC02C_rd_n_bytes(0, 0, 256, &eep_rd_data[0]);
+    346                  
+    347                  Delay_ms(1000);
+    348                  for(i=0; i<256;i++)
+    349                  {
+    350                      eep_wr_data[i] = 0;
+    351                  }
+    352                  AT24HC02C_wr_n_bytes(0, 0, 256, &eep_wr_data[0]);
+    353                  AT24HC02C_rd_n_bytes(0, 0, 256, &eep_rd_data[0]); 
+    354          
+    355                   for(i=0; i<256;i++)
+    356                  {
+    357                      eep_wr_data[i] = 0x66;
+    358                  }
+    359                  AT24HC02C_wr_n_bytes(0, 192, 24, &eep_wr_data[0]);
+    360                  AT24HC02C_rd_n_bytes(0, 0, 256, &eep_rd_data[0]);       
+    361                  
+    362                  Delay_ms(1000);
+    363                  for(i=0; i<256;i++)
+    364                  {
+    365                      eep_wr_data[i] = 0;
+    366                  }
+    367                  AT24HC02C_wr_n_bytes(0, 0, 256, &eep_wr_data[0]);
+    368                  AT24HC02C_rd_n_bytes(0, 0, 256, &eep_rd_data[0]); 
+    369          
+    370          #endif
+    371          }
+    372          #endif
+    373          /******************* (C) COPYRIGHT 2018 *****END OF FILE****/
+    374          
+    375          
+
+Errors: 26
+Warnings: 8

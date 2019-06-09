@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       09/Jun/2019  18:04:59
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       09/Jun/2019  20:02:47
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -48,11 +48,13 @@
 
         #define SHT_PROGBITS 0x1
 
-        EXTERN BootApp_CommunicationBuffer_en
         EXTERN BootApp_Enable_ReceiveData
         EXTERN BootApp_Erease_App
         EXTERN BootApp_GetReset_Reason
         EXTERN BootApp_Get_Command
+        EXTERN BootApp_Get_CommunicationBuf
+        EXTERN BootApp_HandleCmd_Receive
+        EXTERN BootApp_HandleCmd_Send
         EXTERN BootApp_Log_Exe_Status
         EXTERN BootApp_NewCmd_Received
         EXTERN BootApp_Prog_init
@@ -77,27 +79,36 @@ BootApp_State_en:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 BootApp_Set_State:
-        LDR.N    R1,??DataTable2
+        LDR.N    R1,??DataTable1
         STRB     R0,[R1, #+0]
         BX       LR               ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 BootApp_Get_State:
-        LDR.N    R0,??DataTable2
+        LDR.N    R0,??DataTable1
         LDRB     R0,[R0, #+0]
         BX       LR               ;; return
+
+        SECTION `.text`:CODE:NOROOT(2)
+        SECTION_TYPE SHT_PROGBITS, 0
+        DATA
+??DataTable1:
+        DC32     BootApp_State_en
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 BootApp_StateMachine:
-        PUSH     {R4-R10,LR}
+        PUSH     {R3-R9,LR}
         BL       BootApp_Get_State
         MOVS     R5,R0
         MOVS     R7,#+0
-        LDR.W    R8,??DataTable2_1
-        MOV      R9,R8
-        ADDS     R10,R8,#+256
+        ADD      R0,SP,#+0
+        BL       BootApp_Get_CommunicationBuf
+        LDR      R8,[SP, #+0]
+        LDR      R0,[SP, #+0]
+        ADDS     R9,R0,#+256
+        BL       BootApp_HandleCmd_Receive
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         CMP      R5,#+0
         BEQ.N    ??BootApp_StateMachine_0
@@ -117,13 +128,13 @@ BootApp_StateMachine:
         BL       BootApp_Set_State
         B.N      ??BootApp_StateMachine_8
 ??BootApp_StateMachine_2:
-        MOV      R0,R9
+        MOV      R0,R8
         BL       BootApp_NewCmd_Received
         MOVS     R4,R0
         UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
         CMP      R4,#+0
         BEQ.N    ??BootApp_StateMachine_9
-        MOV      R0,R9
+        MOV      R0,R8
         BL       BootApp_Get_Command
         MOVS     R6,R0
         MOVS     R0,R6
@@ -156,7 +167,7 @@ BootApp_StateMachine:
         MOVW     R1,#+12289
         MOVS     R0,#+3
         BL       BootApp_Log_Exe_Status
-        MOV      R0,R8
+        LDR      R0,[SP, #+0]
         BL       BootApp_Receive_Data
         MOVS     R7,R0
         MOVS     R1,R7
@@ -174,7 +185,7 @@ BootApp_StateMachine:
         MOVW     R1,#+16385
         MOVS     R0,#+4
         BL       BootApp_Log_Exe_Status
-        MOV      R0,R8
+        LDR      R0,[SP, #+0]
         BL       BootApp_Program_Flash
         MOVS     R7,R0
         MOVS     R1,R7
@@ -242,19 +253,8 @@ BootApp_StateMachine:
         B.N      ??BootApp_StateMachine_8
 ??BootApp_StateMachine_7:
 ??BootApp_StateMachine_8:
-        POP      {R4-R10,PC}      ;; return
-
-        SECTION `.text`:CODE:NOROOT(2)
-        SECTION_TYPE SHT_PROGBITS, 0
-        DATA
-??DataTable2:
-        DC32     BootApp_State_en
-
-        SECTION `.text`:CODE:NOROOT(2)
-        SECTION_TYPE SHT_PROGBITS, 0
-        DATA
-??DataTable2_1:
-        DC32     BootApp_CommunicationBuffer_en
+        BL       BootApp_HandleCmd_Send
+        POP      {R0,R4-R9,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -301,9 +301,9 @@ BootApp_State_Init_Act:
         END
 // 
 //   1 byte  in section .bss
-// 440 bytes in section .text
+// 450 bytes in section .text
 // 
-// 440 bytes of CODE memory
+// 450 bytes of CODE memory
 //   1 byte  of DATA memory
 //
 //Errors: none

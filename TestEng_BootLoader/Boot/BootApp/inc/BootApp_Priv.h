@@ -15,7 +15,6 @@
 #define BootApp_Get_MagicWord()     (*((uint16_t *)BOOTAPP_MAGIC_WORD_ADDR))
 #define BootApp_Set_MagicWord(val)  ( (*((uint16_t *)BOOTAPP_MAGIC_WORD_ADDR)) = (val) )
 
-extern BootApp_CommunicationBuffer_ten BootApp_CommunicationBuffer_en;
 
 extern const BootApp_Flash_Info_tst * const BootApp_Flash_Info_cpcst;
 extern const BootApp_App_Cfg_tst * const BootApp_App_Cfg_cpcst;
@@ -30,10 +29,6 @@ extern void BootApp_Prog_init(void);
 extern uint8_t BootApp_Get_Cfg_Gpio(const BootApp_Gpio_tst ** gpio_cfg);
 extern uint8_t BootApp_Get_Cfg_Uart(const BootApp_Uart_tst ** uart_cfg);
 extern uint8_t BootApp_Get_board_address(void);
-extern void BootApp_Disable_usart_rx(void);
-extern void BootApp_Enable_usart_rx(void);
-extern void BootApp_Disable_usart_tx(void);
-extern void BootApp_Enable_usart_tx(void);
 extern void BootApp_Disable_run_led(void);
 extern void BootApp_Enable_run_led(void);
 extern void BootApp_Disable_err_led(void);
@@ -46,6 +41,10 @@ extern void BootApp_Set_State(BootApp_State_ten state_en);
 extern BootApp_State_ten BootApp_Get_State(void);
 
 extern void BootApp_Log_Exe_Status(BootApp_State_ten state_en,  BootApp_Status_ten status_en);
+
+extern void BootApp_HandleCmd_Receive(void);
+extern void BootApp_HandleCmd_Send(void);
+extern void BootApp_Get_CommunicationBuf(BootApp_CommunicationBuffer_tst ** ComBuffer_pst);
 
 extern uint8_t BootApp_SectBuffer_Write(uint16_t start_addr, uint16_t length, const uint32_t *src);
 extern uint8_t BootApp_SectBuffer_Read(uint16_t start_addr, uint16_t length, uint32_t *des);

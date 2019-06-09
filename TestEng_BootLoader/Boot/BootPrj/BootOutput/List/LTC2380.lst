@@ -1,0 +1,518 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:13:08
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootDrv\src\LTC2380.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootDrv\src\LTC2380.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\LTC2380.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\LTC2380.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootDrv\src\LTC2380.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    LTC2380.c  burn in system
+      4            * @author  h&h
+      5            * @version 
+      6            * @date    2018
+      7            * @brief   LTC2380 driver
+      8            ******************************************************************************
+      9          **/ 
+     10          
+     11          #include "include.h"
+     12          
+     13          #define LTC2380_SPI_PORT SPI1
+     14          #define LTC2380_MUX_NUM 15u
+     15          #define LTC2380_DEV_ISAMP 0
+     16          #define LTC2380_DEV_VSAMP 1
+     17          
+     18          #define LTC2380_SDI_HIGH 1
+     19          #define LTC2380_SDI_LOW  0
+     20          
+     21          #define LTC2380_READ_CHECK_ENA 1
+     22          #define LTC2380_READ_CHECK_DIS 0
+     23          
+     24          #define LTC2380_READ_CHECK LTC2380_READ_CHECK_ENA
+     25          #define LTC2380_READ_CHECK_MSK  0xFF00
+     26          
+     27          
+     28          static void LTC2380_ISAMP_ena(void);
+     29          static void LTC2380_ISAMP_dis(void);
+     30          static void LTC2380_VSAMP_ena(void);
+     31          static void LTC2380_VSAMP_dis(void);
+     32          static void LTC2380_choose_mux(uint16_t channel);
+     33          
+     34          static void LTC2380_start_CNV(uint8_t dev);
+     35          static void LTC2380_select_SDI(uint8_t dev, uint8_t level);
+     36          static void LTC2380_wait_BUSY(uint8_t dev);
+     37          static uint8_t LTC2380_read_SDO(uint16_t *rdata);
+     38          static uint8_t LTC2380_read_data(uint8_t dev, uint16_t *rdata);
+     39          static uint8_t LTC2380_read_data_chk(uint8_t dev, uint16_t *rdata);
+     40          
+     41          static uint8_t LTC2380_read_ISAMP(uint16_t *rdata);
+     42          static uint8_t LTC2380_read_VSAMP(uint16_t *rdata);
+     43          
+     44          
+     45          void LTC2380_init(void)
+     46          {
+     47              LTC2380_select_SDI(LTC2380_DEV_ISAMP,LTC2380_SDI_HIGH);
+     48              LTC2380_select_SDI(LTC2380_DEV_VSAMP,LTC2380_SDI_HIGH);
+     49              LTC2380_ISAMP_dis();
+     50              LTC2380_VSAMP_dis();
+     51              LTC2380_ISAMP_ena();
+     52              LTC2380_VSAMP_ena();
+     53              LTC2380_choose_mux(0);
+     54          }
+     55          
+     56          uint8_t LTC2380_read_ISAMP_ch(uint16_t channel, uint16_t *rdata)
+     57          {
+     58              uint8_t ret = ERROR;
+     59              if((void *)0 == rdata)
+     60                  return ERROR;
+     61              LTC2380_choose_mux(channel);
+     62              ret = LTC2380_read_ISAMP(rdata);
+     63          
+     64              return ret;  
+     65          }
+     66          uint8_t LTC2380_read_VSAMP_ch(uint16_t channel, uint16_t *rdata)
+     67          {
+     68              uint8_t ret = ERROR;
+     69              if((void *)0 == rdata)
+     70                  return ERROR;
+     71              LTC2380_choose_mux(channel);
+     72              ret = LTC2380_read_VSAMP(rdata);
+     73          
+     74              return ret; 
+     75          
+     76          }
+     77          
+     78          
+     79          static uint8_t LTC2380_read_ISAMP(uint16_t *rdata)
+     80          {
+     81              uint8_t ret = ERROR;
+     82              if((void *)0 == rdata)
+     83                  return ERROR;
+     84              ret = LTC2380_read_data_chk(LTC2380_DEV_ISAMP, rdata);
+     85              return ret;
+     86          }
+     87          
+     88          
+     89          
+     90          static uint8_t LTC2380_read_VSAMP(uint16_t *rdata)
+     91          {
+     92              uint8_t ret = ERROR;
+     93              if((void *)0 == rdata)
+     94                  return ERROR;
+     95              ret = LTC2380_read_data_chk(LTC2380_DEV_VSAMP, rdata);
+     96              return ret;
+     97          }
+     98          
+     99          
+    100          static void LTC2380_ISAMP_ena(void)
+    101          { 
+    102              GPIOC->BSRR |=GPIO_Pin_4;
+    103          }
+    104          static void LTC2380_ISAMP_dis(void) 
+    105          {    
+    106              GPIOC->BRR |= GPIO_Pin_4;
+    107          }
+    108          
+    109          static void LTC2380_VSAMP_ena(void)
+    110          { 
+    111              GPIOC->BSRR |=GPIO_Pin_5;
+    112          }
+    113          static void LTC2380_VSAMP_dis(void) 
+    114          {    
+    115              GPIOC->BRR |= GPIO_Pin_5;
+    116          }
+    117          
+    118          static void LTC2380_choose_mux(uint16_t channel)
+    119          {
+    120              if(channel > LTC2380_MUX_NUM)
+    121                  channel = 0;
+    122              
+    123              GPIOC->BRR |= 0x000F;
+    124              channel &= 0x000F;
+    125              GPIOC->BSRR |= channel;
+    126              Delay_ms(10);
+    127          }
+    128          
+    129          
+    130          
+    131          static void LTC2380_start_CNV(uint8_t dev)
+    132          {
+    133              if(LTC2380_DEV_ISAMP == dev)
+    134              {
+    135                  GPIOA->BRR |= GPIO_Pin_9;
+    136                  Delay_us(1);
+    137                  GPIOA->BSRR |= GPIO_Pin_9;
+    138                  Delay_us(1);
+    139                  GPIOA->BRR |= GPIO_Pin_9;
+    140                  Delay_us(1);
+    141              }
+    142              else if(LTC2380_DEV_VSAMP == dev)
+    143              {
+    144                  GPIOA->BRR |= GPIO_Pin_8;
+    145                  Delay_us(1);
+    146                  GPIOA->BSRR |= GPIO_Pin_8;
+    147                  Delay_us(1);
+    148                  GPIOA->BRR |= GPIO_Pin_8;
+    149                  Delay_us(1);
+    150              }
+    151              else
+    152              {
+    153          
+    154              }
+    155          }
+    156          
+    157          
+    158          static void LTC2380_select_SDI(uint8_t dev, uint8_t level)
+    159          {
+    160              if(LTC2380_DEV_ISAMP == dev)
+    161              {
+    162                  if(LTC2380_SDI_HIGH == level)
+    163                  {
+    164                      GPIOC->BSRR |= GPIO_Pin_6;
+    165                  }
+    166                  else
+    167                  {
+    168                      GPIOC->BRR |= GPIO_Pin_6;
+    169                  }
+    170              }
+    171              else if(LTC2380_DEV_VSAMP == dev)
+    172              {
+    173                  if(LTC2380_SDI_HIGH == level)
+    174                  {
+    175                      GPIOC->BSRR |= GPIO_Pin_7;
+    176                  }
+    177                  else
+    178                  {
+    179                      GPIOC->BRR |= GPIO_Pin_7;
+    180                  }
+    181              }
+    182              else
+    183              {
+    184          
+    185              }
+    186          }
+    187          
+    188          
+    189          
+    190          
+    191          
+    192          static void LTC2380_wait_BUSY(uint8_t dev)
+    193          {
+    194              uint16_t timeout = 1000u;
+    195          
+    196          
+    197              if(LTC2380_DEV_ISAMP == dev)
+    198              {
+    199                  while (((GPIOB->IDR & GPIO_Pin_9) != (uint32_t)Bit_RESET) && timeout > 0)
+    200                  {
+    201                      timeout--;
+    202                  }
+    203              }
+    204              else if(LTC2380_DEV_VSAMP == dev)
+    205              {
+    206                  while (((GPIOB->IDR & GPIO_Pin_8) != (uint32_t)Bit_RESET) && timeout > 0)
+    207                  {
+    208                      timeout--;
+    209                  }
+    210              }
+    211              else
+    212              {
+    213          
+    214              }
+    215          
+    216          }
+    217          
+    218          
+    219          static uint8_t LTC2380_read_SDO(uint16_t *rdata)
+    220          {
+    221              uint8_t ret = ERROR;
+    222          
+    223              if((void *)0 == rdata)
+    224                  return ERROR;
+    225              
+    226              ret = drv_spi_access_short(LTC2380_SPI_PORT, 0x0000, rdata);
+    227              return ret;
+    228          
+    229          }
+    230          
+    231          static uint8_t LTC2380_read_data(uint8_t dev, uint16_t *rdata)
+    232          {
+    233              uint8_t ret = ERROR;
+    234              if((void *)0 == rdata)
+    235                  return ERROR;
+    236          
+    237              LTC2380_start_CNV(dev);
+    238              LTC2380_select_SDI(dev,LTC2380_SDI_LOW);
+    239              LTC2380_wait_BUSY(dev);
+    240              ret = LTC2380_read_SDO(rdata);
+    241              LTC2380_select_SDI(dev,LTC2380_SDI_HIGH);
+    242              return ret;
+    243          }
+    244          
+    245          static uint8_t LTC2380_read_data_chk(uint8_t dev, uint16_t *rdata)
+    246          {
+    247              uint8_t ret = ERROR;
+    248              uint16_t adc_data0 = 0;
+    249              uint16_t adc_data1 = 0;
+    250              
+    251              if((void *)0 == rdata)
+    252                  return ERROR;
+    253          
+    254              ret = LTC2380_read_data(dev, &adc_data0);
+    255          #if(LTC2380_READ_CHECK == LTC2380_READ_CHECK_ENA)
+    256              /*read twice to check ADC results*/
+    257              if(SUCCESS == ret)
+    258              {
+    259                  ret = LTC2380_read_data(dev, &adc_data1);
+    260                  if( (adc_data0 & LTC2380_READ_CHECK_MSK) == (adc_data1 & LTC2380_READ_CHECK_MSK) )
+    261                  {
+    262                      *rdata = (uint16_t)(((uint32_t)adc_data0 + (uint32_t)adc_data1)>>1);
+    263                      ret = SUCCESS;
+    264                  }
+    265                  else
+    266                  {
+    267                      *rdata = 0;
+    268                      ret = ERROR;
+    269                  }
+    270              }
+    271              else
+    272              {
+    273                  *rdata = 0;
+    274                  ret = ERROR;
+    275              }
+    276          #else    
+    277              if(SUCCESS == ret)
+    278              {
+    279                  *rdata = adc_data0;
+    280                  ret = SUCCESS;
+    281              }
+    282              else
+    283              {
+    284                  *rdata = 0;
+    285                  ret = ERROR;
+    286              } 
+    287          #endif
+    288              return ret;
+    289          
+    290          }
+    291          
+    292          
+    293          
+    294          
+    295          
+    296          
+    297          #ifdef DEBUG_LTC2380
+    298          
+    299          
+    300          
+    301          uint16_t LTC2380_ISAMP_buf[16];
+    302          uint16_t LTC2380_VSAMP_buf[16];
+    303          
+    304          
+    305          void test_ltc2380(void)
+    306          {
+    307              uint16_t i,j;
+    308              for(i=0;i<16;i++)
+    309              {
+    310                  LTC2380_choose_mux(i);
+    311                  Delay_ms(2);
+    312                  for(j=0;j<4;j++)
+    313                  {
+    314                      LTC2380_read_ISAMP(&LTC2380_ISAMP_buf[i]);
+    315                      LTC2380_read_VSAMP(&LTC2380_VSAMP_buf[i]);
+    316                  }
+    317              }
+    318          
+    319          }
+    320          
+    321          
+    322          
+    323          void test_LTC2380_init(void)
+    324          {
+    325              RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
+    326              RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOC, ENABLE);
+    327             
+    328              GPIO_InitTypeDef GPIO_InitStructure;
+    329          #if 0 
+    330              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;  
+    331              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
+    332              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;  
+    333              GPIO_Init(GPIOA, &GPIO_InitStructure);
+    334              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;  
+    335              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
+    336              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;  
+    337              GPIO_Init(GPIOB, &GPIO_InitStructure);
+    338              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;  
+    339              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
+    340              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;  
+    341              GPIO_Init(GPIOC, &GPIO_InitStructure);
+    342              
+    343              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7;  
+    344              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
+    345              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;  
+    346              GPIO_Init(GPIOA, &GPIO_InitStructure);  
+    347          #endif
+    348          
+    349          
+    350              GPIO_InitStructure.GPIO_Pin = (GPIO_Pin_0| GPIO_Pin_1| GPIO_Pin_2 | GPIO_Pin_3| GPIO_Pin_4| GPIO_Pin_5 | GPIO_Pin_6| GPIO_Pin_7);  
+    351              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
+    352              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    353              GPIO_Init(GPIOC, &GPIO_InitStructure);
+    354              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8| GPIO_Pin_9;
+    355              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
+    356              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    357              GPIO_Init(GPIOA, &GPIO_InitStructure);
+    358          
+    359          
+    360              SPI_InitTypeDef   SPI_InitStructure;
+    361              SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;  
+    362              SPI_InitStructure.SPI_Mode = SPI_Mode_Master;  
+    363              SPI_InitStructure.SPI_DataSize = SPI_DataSize_16b;  
+    364              SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;  
+    365              SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;  
+    366              //  SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
+    367              //  SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
+    368              SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;  
+    369              SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;  
+    370              SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;  
+    371              SPI_InitStructure.SPI_CRCPolynomial = 7;  
+    372              SPI_Init(SPI1, &SPI_InitStructure);  
+    373              SPI_Cmd(SPI1, ENABLE); 
+    374          
+    375              LTC2380_select_SDI(LTC2380_DEV_ISAMP,LTC2380_SDI_HIGH);
+    376              LTC2380_select_SDI(LTC2380_DEV_VSAMP,LTC2380_SDI_HIGH);
+    377              LTC2380_ISAMP_dis();
+    378              LTC2380_VSAMP_dis();
+    379              LTC2380_ISAMP_ena();
+    380              LTC2380_VSAMP_ena();
+    381          }
+    382          
+    383          
+    384          
+    385          
+    386          
+    387          
+    388          #endif
+    389          
+    390           /******************* (C) COPYRIGHT  *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   LTC2380_ISAMP_dis
+       0   LTC2380_ISAMP_ena
+       0   LTC2380_VSAMP_dis
+       0   LTC2380_VSAMP_ena
+       8   LTC2380_choose_mux
+         8   -> Delay_ms
+       8   LTC2380_init
+         8   -> LTC2380_ISAMP_dis
+         8   -> LTC2380_ISAMP_ena
+         8   -> LTC2380_VSAMP_dis
+         8   -> LTC2380_VSAMP_ena
+         8   -> LTC2380_choose_mux
+         8   -> LTC2380_select_SDI
+      16   LTC2380_read_ISAMP
+        16   -> LTC2380_read_data_chk
+      16   LTC2380_read_ISAMP_ch
+        16   -> LTC2380_choose_mux
+        16   -> LTC2380_read_ISAMP
+      16   LTC2380_read_SDO
+        16   -> drv_spi_access_short
+      16   LTC2380_read_VSAMP
+        16   -> LTC2380_read_data_chk
+      16   LTC2380_read_VSAMP_ch
+        16   -> LTC2380_choose_mux
+        16   -> LTC2380_read_VSAMP
+      16   LTC2380_read_data
+        16   -> LTC2380_read_SDO
+        16   -> LTC2380_select_SDI
+        16   -> LTC2380_start_CNV
+        16   -> LTC2380_wait_BUSY
+      24   LTC2380_read_data_chk
+        24   -> LTC2380_read_data
+       0   LTC2380_select_SDI
+       8   LTC2380_start_CNV
+         8   -> Delay_us
+       0   LTC2380_wait_BUSY
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable8
+       4  ??DataTable8_1
+       4  ??DataTable8_2
+       4  ??DataTable8_3
+       4  ??DataTable8_4
+       4  ??DataTable8_5
+      14  LTC2380_ISAMP_dis
+      14  LTC2380_ISAMP_ena
+      14  LTC2380_VSAMP_dis
+      14  LTC2380_VSAMP_ena
+      50  LTC2380_choose_mux
+      42  LTC2380_init
+      30  LTC2380_read_ISAMP
+      38  LTC2380_read_ISAMP_ch
+      32  LTC2380_read_SDO
+      30  LTC2380_read_VSAMP
+      38  LTC2380_read_VSAMP_ch
+      66  LTC2380_read_data
+     126  LTC2380_read_data_chk
+      80  LTC2380_select_SDI
+     128  LTC2380_start_CNV
+      54  LTC2380_wait_BUSY
+
+ 
+ 794 bytes in section .text
+ 
+ 794 bytes of CODE memory
+
+Errors: none
+Warnings: 4

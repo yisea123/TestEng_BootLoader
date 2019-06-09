@@ -24,17 +24,19 @@
  */
 
 #include "include.h"
-
-
+#include "BootApp.h"
+#include "Delay.h"
 #include "port.h"
 
 /* ----------------------- Modbus includes ----------------------------------*/
 #include "mb.h"
 #include "mbport.h"
 
-#define MB_USART_PORT USART1
+USART_TypeDef MB_USART_PORT[1];
+
 BOOL xMBPortSerialInit( UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits, eMBParity eParity )
 {
+    BootApp_Get_Uart(&MB_USART_PORT[0]);
     return TRUE;
 
 }
@@ -48,27 +50,27 @@ void vMBPortSerialEnable( BOOL xRxEnable, BOOL xTxEnable )
 {
     if(xRxEnable)
     {
-        Enable_usart_rx();
+        BootApp_Enable_usart_rx();
         USART_ITConfig(MB_USART_PORT, USART_IT_RXNE, ENABLE);
         
     }
     else
     {
-        Disable_usart_rx();
+        BootApp_Disable_usart_rx();
         USART_ITConfig(MB_USART_PORT, USART_IT_RXNE, DISABLE); 
         
     }
 
     if(xTxEnable)
     {
-        Enable_usart_tx();
+        BootApp_Enable_usart_tx();
         USART_ITConfig(MB_USART_PORT, USART_IT_TXE, ENABLE);
         
     }
     else
     {
         Delay_ms(5);
-        Disable_usart_tx();
+        BootApp_Disable_usart_tx();
         USART_ITConfig(MB_USART_PORT, USART_IT_TXE, DISABLE);
     }
 

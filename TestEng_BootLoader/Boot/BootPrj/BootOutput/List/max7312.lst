@@ -1,0 +1,462 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:13:09
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootDrv\src\max7312.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootDrv\src\max7312.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\max7312.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\max7312.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootDrv\src\max7312.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    max7312.c  burn in system
+      4            * @author  h&h
+      5            * @version 
+      6            * @date    2018
+      7            * @brief   max7312 driver
+      8            ******************************************************************************
+      9          **/ 
+     10          
+     11          #include "include.h"
+     12          
+     13          #define MAX7312_I2C_PORT I2C1
+     14          
+     15          #define MAX7312_DEVICE_NUM      2U
+     16          #define MAX7312_DEVICE_0_ADDR   0x4E
+     17          #define MAX7312_DEVICE_1_ADDR   0x46
+     18          #define MAX7312_DEVICE_2_ADDR   0x42
+     19          
+     20          #define MAX7312_DEVICE_ALL_OUTPUT 0x00
+     21          #define MAX7312_DEVICE_ALL_INTPUT 0xFF
+     22          #define MAX7312_DEVICE_ALL_HI 0xFF
+     23          #define MAX7312_DEVICE_ALL_LO 0x00
+     24          
+     25          #define MAX7312_COMMAND_00  0x00   /*input port 1*/
+     26          #define MAX7312_COMMAND_01  0x01   /*input port 2*/
+     27          #define MAX7312_COMMAND_02  0x02   /*output port 1*/
+     28          #define MAX7312_COMMAND_03  0x03   /*ouput port 2*/
+     29          #define MAX7312_COMMAND_04  0x04   /*port 1 inversion*/
+     30          #define MAX7312_COMMAND_05  0x05   /*port 2 inversion*/
+     31          #define MAX7312_COMMAND_06  0x06   /*port 1 config*/
+     32          #define MAX7312_COMMAND_07  0x07   /*port 2 config*/
+     33          #define MAX7312_COMMAND_08  0x08   /*timeout*/
+     34          #define MAX7312_COMMAND_FF  0xFF   /*reserve*/
+     35          
+     36          typedef struct
+     37          {
+     38              uint8_t max7312_cmd_00;
+     39              uint8_t max7312_cmd_01;
+     40              uint8_t max7312_cmd_02;
+     41              uint8_t max7312_cmd_03;
+     42              uint8_t max7312_cmd_04;
+     43              uint8_t max7312_cmd_05;
+     44              uint8_t max7312_cmd_06;
+     45              uint8_t max7312_cmd_07;
+     46              uint8_t max7312_cmd_08;
+     47              uint8_t max7312_cmd_FF;
+     48          }max7312_command_tst;
+     49              
+     50           const max7312_command_tst max7312_command_cst =
+     51          {
+     52              MAX7312_COMMAND_00,
+     53              MAX7312_COMMAND_01,
+     54              MAX7312_COMMAND_02,
+     55              MAX7312_COMMAND_03,
+     56              MAX7312_COMMAND_04,
+     57              MAX7312_COMMAND_05,
+     58              MAX7312_COMMAND_06,
+     59              MAX7312_COMMAND_07,
+     60              MAX7312_COMMAND_08,
+     61              MAX7312_COMMAND_FF
+     62          };
+     63          
+     64          typedef struct
+     65          {
+     66              uint8_t input[2];
+     67              uint8_t output[2];
+     68              uint8_t polarity[2];
+     69              uint8_t configuration[2];
+     70          }max7312_reg_tst;
+     71          max7312_reg_tst max7312_reg_st[MAX7312_DEVICE_NUM];
+     72          
+     73          const uint8_t max7312_dev_addr_ca[MAX7312_DEVICE_NUM] = 
+     74          {
+     75              MAX7312_DEVICE_0_ADDR,
+     76              MAX7312_DEVICE_1_ADDR,
+     77          };
+     78          static uint8_t Max7312_Write_Register(uint8_t dev_id, uint8_t reg, uint8_t* w_data);
+     79          static uint8_t Max7312_Read_Register(uint8_t dev_id, uint8_t reg, uint8_t* r_data);
+     80          static uint8_t Max7312_Write_Reg_Check(uint8_t dev_id, uint8_t reg, uint8_t *w_data, uint8_t *r_data);
+     81          
+     82          
+     83          void Max7312_init(void)
+     84          {
+     85              uint8_t res;
+     86              res = Max7312_Set_All_Port_Output(0);
+     87              res &= Max7312_Set_All_Port_Lo(0);
+     88          
+     89              res &= Max7312_Set_All_Port_Output(1);
+     90              res &= Max7312_Set_All_Port_Lo(1);
+     91          
+     92          }
+     93          
+     94          uint8_t Max7312_Set_All_Port_Output(uint8_t dev_id)
+     95          {
+     96              uint8_t ret1, ret2;
+     97              ret1 = Max7312_Set_Port1_IO(dev_id, MAX7312_DEVICE_ALL_OUTPUT);
+     98              ret2 = Max7312_Set_Port2_IO(dev_id, MAX7312_DEVICE_ALL_OUTPUT);
+     99              return (ret1 & ret2);
+    100          }
+    101          uint8_t Max7312_Set_All_Port_Input(uint8_t dev_id)
+    102          {
+    103              uint8_t ret1, ret2;
+    104              ret1 = Max7312_Set_Port1_IO(dev_id, MAX7312_DEVICE_ALL_INTPUT);
+    105              ret2 = Max7312_Set_Port2_IO(dev_id, MAX7312_DEVICE_ALL_INTPUT);
+    106              return (ret1 & ret2);
+    107          }
+    108          uint8_t Max7312_Set_All_Port_Hi(uint8_t dev_id)
+    109          {
+    110              uint8_t ret1, ret2;
+    111              ret1 = Max7312_Set_Port1_HiLo(dev_id, MAX7312_DEVICE_ALL_HI);
+    112              ret2 = Max7312_Set_Port2_HiLo(dev_id, MAX7312_DEVICE_ALL_HI);
+    113              return (ret1 & ret2);
+    114          }
+    115          uint8_t Max7312_Set_All_Port_Lo(uint8_t dev_id)
+    116          {
+    117              uint8_t ret1, ret2;
+    118              ret1 = Max7312_Set_Port1_HiLo(dev_id, MAX7312_DEVICE_ALL_LO);
+    119              ret2 = Max7312_Set_Port2_HiLo(dev_id, MAX7312_DEVICE_ALL_LO);
+    120              return (ret1 & ret2);
+    121          }
+    122            
+    123          uint8_t Max7312_Set_Port1_IO(uint8_t dev_id, uint8_t io)
+    124          {
+    125              
+    126              uint8_t ret = ERROR;
+    127              uint8_t reg;
+    128              uint8_t w_data;
+    129              uint8_t *r_data = max7312_reg_st[dev_id].configuration;
+    130          
+    131              w_data = io;
+    132              reg = max7312_command_cst.max7312_cmd_06;
+    133              ret = Max7312_Write_Reg_Check(dev_id, reg, &w_data, &r_data[0]);
+    134          
+    135              return ret;
+    136          }
+    137          uint8_t Max7312_Set_Port2_IO(uint8_t dev_id, uint8_t io)
+    138          {
+    139              
+    140              uint8_t ret = ERROR;
+    141              uint8_t reg;
+    142              uint8_t w_data;
+    143              uint8_t *r_data = max7312_reg_st[dev_id].configuration;
+    144          
+    145              w_data = io;
+    146              reg = max7312_command_cst.max7312_cmd_07;
+    147              ret = Max7312_Write_Reg_Check(dev_id, reg, &w_data, &r_data[1]);
+    148          
+    149              return ret;
+    150          }
+    151          uint8_t Max7312_Set_Port1_HiLo(uint8_t dev_id, uint8_t io_st)
+    152          {
+    153              uint8_t ret = ERROR;
+    154              uint8_t reg;
+    155              uint8_t w_data;
+    156              uint8_t *r_data = max7312_reg_st[dev_id].output;
+    157          
+    158               w_data = io_st;
+    159              
+    160              reg = max7312_command_cst.max7312_cmd_02;
+    161              ret = Max7312_Write_Reg_Check(dev_id, reg, &w_data, &r_data[0]);
+    162          
+    163              return ret;
+    164          }
+    165          uint8_t Max7312_Set_Port2_HiLo(uint8_t dev_id, uint8_t io_st)
+    166          {
+    167              uint8_t ret = ERROR;
+    168              uint8_t reg;
+    169              uint8_t w_data;
+    170              uint8_t *r_data = max7312_reg_st[dev_id].output;
+    171          
+    172               w_data = io_st;
+    173              
+    174              reg = max7312_command_cst.max7312_cmd_03;
+    175              ret = Max7312_Write_Reg_Check(dev_id, reg, &w_data, &r_data[1]);
+    176          
+    177              return ret;
+    178          }   
+    179          static uint8_t Max7312_Write_Reg_Check(uint8_t dev_id, uint8_t reg, uint8_t *w_data, uint8_t *r_data)
+    180          {
+    181              uint8_t ret;
+    182              uint8_t *wdata = w_data;
+    183              uint8_t *rdata = r_data;
+    184              
+    185              ret = Max7312_Write_Register(dev_id, reg, w_data);
+    186              if(SUCCESS == ret)
+    187              {
+    188                  ret = Max7312_Read_Register(dev_id, reg, r_data );
+    189                  if(SUCCESS == ret)
+    190                  {
+    191                      if( *wdata == *rdata )
+    192                      {
+    193                          ret = SUCCESS;
+    194                      }
+    195                      else
+    196                      {
+    197                          ret = ERROR;
+    198                      }
+    199                  }
+    200                  else
+    201                  {
+    202                      ret = ERROR;
+    203                  }
+    204              }
+    205              else
+    206              {
+    207                  ret = ERROR;
+    208              }
+    209          
+    210              return ret;
+    211          }
+    212            
+    213          static uint8_t Max7312_Write_Register(uint8_t dev_id, uint8_t reg, uint8_t* w_data)
+    214          {
+    215              uint8_t ret;
+    216              uint8_t SlaveAddress;
+    217              if(dev_id > MAX7312_DEVICE_NUM)
+    218                  return ERROR;
+    219              if((void*)0 == w_data)
+    220                  return ERROR;
+    221          
+    222              SlaveAddress = max7312_dev_addr_ca[dev_id];
+    223          
+    224              ret = I2c_command_write(MAX7312_I2C_PORT, reg, 1, SlaveAddress, w_data);
+    225              if(SUCCESS == ret)
+    226              {
+    227                  ret = SUCCESS;
+    228              }
+    229              else
+    230              {
+    231                  ret = ERROR;
+    232              }
+    233          
+    234              return ret;
+    235          }
+    236          
+    237          static uint8_t Max7312_Read_Register(uint8_t dev_id, uint8_t reg, uint8_t* r_data)
+    238          {
+    239              uint8_t ret;
+    240              uint8_t SlaveAddress;
+    241              if(dev_id > MAX7312_DEVICE_NUM)
+    242                  return ERROR;
+    243              if((void*)0 == r_data)
+    244                  return ERROR;
+    245              
+    246              SlaveAddress = max7312_dev_addr_ca[dev_id];
+    247              
+    248              ret = I2c_command_read(MAX7312_I2C_PORT, reg, 1, SlaveAddress, r_data );
+    249              if(SUCCESS == ret)
+    250              {
+    251                  ret = SUCCESS;
+    252              }
+    253              else
+    254              {
+    255                  ret = ERROR;
+    256              }
+    257          
+    258              return ret;
+    259          }
+    260          
+    261          #ifdef DEBUG_MAX7312
+    262          void test_max7312(void)
+    263          {
+    264              /* Enable peripheral clocks --------------------------------------------------*/
+    265              /* GPIOB Periph clock enable */
+    266              RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+    267              /* I2C1 and I2C2 Periph clock enable */
+    268              RCC_APB1PeriphClockCmd(RCC_APB1Periph_I2C2, ENABLE);
+    269          
+    270              GPIO_InitTypeDef GPIO_InitStructure;
+    271              /* Configure I2C2 pins: SCL and SDA ----------------------------------------*/
+    272              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11;
+    273              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    274              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_OD;
+    275              GPIO_Init(GPIOB, &GPIO_InitStructure);
+    276              
+    277              I2C_InitTypeDef I2C_InitStructure;
+    278              I2C_InitStructure.I2C_Mode = I2C_Mode_SMBusHost;
+    279              I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
+    280              I2C_InitStructure.I2C_OwnAddress1 = 0x31;
+    281              I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
+    282              I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
+    283              I2C_InitStructure.I2C_ClockSpeed = 400000;
+    284          
+    285              I2C_Init(I2C2, &I2C_InitStructure);
+    286          
+    287              /* disable I2C1 PEC Transmission */
+    288              I2C_CalculatePEC(I2C2, DISABLE);
+    289          
+    290              I2C_Cmd(I2C2,ENABLE);
+    291          
+    292              Max7312_Set_All_Port_Output(0);
+    293              Max7312_Set_All_Port_Lo(0);
+    294              Max7312_Set_All_Port_Hi(0);
+    295              Max7312_Set_All_Port_Output(1);
+    296              Max7312_Set_All_Port_Lo(1);
+    297              Max7312_Set_All_Port_Hi(1);
+    298              Max7312_Set_All_Port_Output(2);
+    299              Max7312_Set_All_Port_Lo(2);
+    300              Max7312_Set_All_Port_Hi(2);
+    301          #if 0
+    302              while(1)
+    303              {
+    304                  Max7312_Set_All_Port_Output(0);
+    305                  Delay_ms(400);
+    306                  Max7312_Set_All_Port_Hi(0);
+    307                  Delay_ms(400);
+    308                  Max7312_Set_All_Port_Lo(0);
+    309                  Delay_ms(400);
+    310                  Max7312_Set_Port_HiLo(0, 0x1234);
+    311                  Delay_ms(400);
+    312                  Max7312_Set_Port_HiLo(0, 0xa3f9);
+    313                  Delay_ms(400);
+    314                  Max7312_Set_Port_HiLo(0, 0xc580);
+    315                  Delay_ms(400);
+    316                  Max7312_Set_Port_HiLo(0, 0xa3f9);
+    317                  Delay_ms(400);
+    318                  Max7312_Set_Port_HiLo(0, 0x1482);
+    319                  Delay_ms(400);
+    320                  Max7312_Set_Port_HiLo(0, 0x4474);
+    321                  Delay_ms(400);
+    322                  Max7312_Set_Port_HiLo(0, 0x9685);
+    323                  Delay_ms(400);
+    324                  Max7312_Set_Port_HiLo(0, 0xfea0);
+    325                  Delay_ms(400);
+    326                  Max7312_Set_Port_HiLo(0, 0x5583);
+    327                  Delay_ms(400);
+    328                  Max7312_Set_Port_HiLo(0, 0xa3f9);
+    329                  Delay_ms(400);
+    330                  Max7312_Set_Port_IO(0,0xFF00);
+    331                  Delay_ms(400);
+    332                  Max7312_Set_Port_HiLo(0, 0x1234);
+    333                  Delay_ms(400);
+    334                  Max7312_Set_Port_HiLo(0, 0xa3f9);
+    335                  Delay_ms(400);
+    336          
+    337                  Max7312_Set_All_Port_Output(1);
+    338                  Delay_ms(400);
+    339                  Max7312_Set_All_Port_Hi(1);
+    340                  Delay_ms(400);
+    341                  Max7312_Set_All_Port_Lo(1);
+    342                  Max7312_Set_Port_HiLo(1, 0x1234);
+    343                  Delay_ms(400);
+    344                  Max7312_Set_Port_HiLo(1, 0xa3f9);
+    345                  Delay_ms(400);
+    346                  Max7312_Set_Port_HiLo(1, 0xc580);
+    347                  Delay_ms(400);
+    348                  Max7312_Set_Port_HiLo(1, 0xa3f9);
+    349                  Delay_ms(400);
+    350                  Max7312_Set_Port_HiLo(1, 0x1482);
+    351                  Delay_ms(400);
+    352                  Max7312_Set_Port_HiLo(1, 0x4474);
+    353                  Delay_ms(400);
+    354                  Max7312_Set_Port_HiLo(1, 0x9685);
+    355                  Delay_ms(400);
+    356                  Max7312_Set_Port_HiLo(1, 0xfea0);
+    357                  Delay_ms(400);
+    358                  Max7312_Set_Port_HiLo(1, 0x5583);
+    359                  Delay_ms(400);
+    360                  Max7312_Set_Port_HiLo(1, 0xa3f9);
+    361                  Delay_ms(400);        
+    362                  Max7312_Set_Port_IO(1,0xFF00);
+    363                  Delay_ms(400);
+    364                  Max7312_Set_Port_HiLo(1, 0x1234);
+    365                  Delay_ms(400);
+    366                  Max7312_Set_Port_HiLo(1, 0xa3f9);
+    367                  Delay_ms(400);
+    368          
+    369          
+    370                  Max7312_Set_All_Port_Output(2);
+    371                  Delay_ms(400);
+    372                  Max7312_Set_All_Port_Hi(2);
+    373                  Delay_ms(400);
+    374                  Max7312_Set_All_Port_Lo(2);
+    375                  Delay_ms(400);
+    376                  Max7312_Set_Port_HiLo(2, 0x1234);
+    377                  Delay_ms(400);
+    378                  Max7312_Set_Port_HiLo(2, 0xa3f9);
+    379                  Delay_ms(400);
+    380                  Max7312_Set_Port_HiLo(2, 0xc580);
+    381                  Delay_ms(400);
+    382                  Max7312_Set_Port_HiLo(2, 0xa3f9);
+    383                  Delay_ms(400);
+    384                  Max7312_Set_Port_HiLo(2, 0x1482);
+    385                  Delay_ms(400);
+    386                  Max7312_Set_Port_HiLo(2, 0x4474);
+    387                  Delay_ms(400);
+    388                  Max7312_Set_Port_HiLo(2, 0x9685);
+    389                  Delay_ms(400);
+    390                  Max7312_Set_Port_HiLo(2, 0xfea0);
+    391                  Delay_ms(400);
+    392                  Max7312_Set_Port_HiLo(2, 0x5583);
+    393                  Delay_ms(400);
+    394                  Max7312_Set_Port_HiLo(2, 0xa3f9);
+    395                  Delay_ms(400);
+    396                  Max7312_Set_Port_IO(2,0xFF00);
+    397                  Delay_ms(400);
+    398                  Max7312_Set_Port_HiLo(2, 0x1234);
+    399                  Delay_ms(400);
+    400                  Max7312_Set_Port_HiLo(2, 0xa3f9);
+    401                  Delay_ms(400);
+    402          
+    403              }
+    404              #endif
+    405          }
+    406          #endif
+    407          
+    408           /******************* (C) COPYRIGHT  *****END OF FILE****/
+
+Errors: 6
+Warnings: 12

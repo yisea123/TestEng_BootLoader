@@ -978,6 +978,9 @@
       <name>$PROJ_DIR$\..\BootApp\src\BootApp_ErrHdlr.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\BootApp\src\BootApp_HandleCmd.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\BootApp\src\BootApp_Init.c</name>
     </file>
     <file>
@@ -988,9 +991,6 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\BootApp\src\BootApp_ProgramFlash.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\BootApp\src\BootApp_ReceiveCmd.c</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\BootApp\src\BootApp_ReceiveData.c</name>

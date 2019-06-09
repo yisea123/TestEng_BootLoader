@@ -40,5 +40,4 @@ typedef long    LONG;
 
 
 
-
 #endif

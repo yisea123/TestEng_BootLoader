@@ -12,7 +12,20 @@
 #ifndef _BOOTAPP_H_
 #define _BOOTAPP_H_
 
+#include "BootApp_Cfg.h"
+
 extern void BootApp_StateMachine(void);
+
+#if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
+void BootApp_Get_Uart(BootApp_USART_TypeDef * USART_TypeDef);
+#else
+void BootApp_Get_Uart(USART_TypeDef * USART_TypeDef);
+#endif
+
+extern void BootApp_Disable_usart_rx(void);
+extern void BootApp_Enable_usart_rx(void);
+extern void BootApp_Disable_usart_tx(void);
+extern void BootApp_Enable_usart_tx(void);
 
 #endif
 

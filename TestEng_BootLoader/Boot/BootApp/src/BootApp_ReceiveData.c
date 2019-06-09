@@ -15,7 +15,6 @@
 #include "BootApp_Priv.h"
 
 BootApp_SectBuffer_ten BootApp_SectBuffer_en = {{0},};
-BootApp_CommunicationBuffer_ten BootApp_CommunicationBuffer_en = {{0},};
 BootApp_ReceiveData_tst BootApp_ReceiveData_st = {0};
 
 const uint16_t BootApp_Sect_Dirty_Msk_au16[16 + 1] =

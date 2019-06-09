@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:04:58
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  20:02:45
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -64,7 +64,7 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Ini
      13          #include "BootApp_Cfg_Board.h"
      14          #include "BootApp_Type.h"
      15          #include "BootApp_Priv.h"
-     16          
+     16          #include "BootApp.h"
      17          static BootApp_GetApp_init_ten BootApp_GetApp_init_en = BOOTAPP_GETAPP_NOT_INI;
      18          static void BootApp_Gpio_Init(void);
      19          static void BootApp_Uart_Init(void);
@@ -197,17 +197,38 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Ini
     146              }
     147          }
     148          
-    149          
-    150          
-    151          /*<BASDKey>
-    152           ***********************************************************************************************************************
-    153           * $History___:
-    154           *
-    155           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
-    156           *
-    157           * $
-    158           ***********************************************************************************************************************
-    159          </BASDKey>*/
+    149          void BootApp_Get_Uart(BootApp_USART_TypeDef * USART_TypeDef)
+    150          {
+    151              uint8_t ret;
+    152              uint8_t i;
+    153              const BootApp_Uart_tst * uart_cfg = (void *) 0;
+    154          
+    155              ret = BootApp_Get_Cfg_Uart(&uart_cfg);
+    156              if(ret)
+    157              {
+    158          
+    159                  for(i=0; i<uart_cfg->app_cfg_uart_num; i++)
+    160                  {
+    161                      /*copy from flash*/
+    162                      *(USART_TypeDef + i) = *uart_cfg->app_cfg_uart_init_past[i].app_cfg_uart;
+    163                  }
+    164              }
+    165              else
+    166              {
+    167              }
+    168          
+    169          }
+    170          
+    171          
+    172          /*<BASDKey>
+    173           ***********************************************************************************************************************
+    174           * $History___:
+    175           *
+    176           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+    177           *
+    178           * $
+    179           ***********************************************************************************************************************
+    180          </BASDKey>*/
 
    Maximum stack usage in bytes:
 
@@ -215,6 +236,9 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Ini
    ------- --------
        0   BootApp_Get_Cfg_Gpio
        0   BootApp_Get_Cfg_Uart
+      24   BootApp_Get_Uart
+        24   -> BootApp_Get_Cfg_Uart
+        24   -> __aeabi_memcpy
       48   BootApp_Gpio_Init
         48   -> BootApp_Get_Cfg_Gpio
         48   -> GPIO_Init
@@ -244,6 +268,7 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Ini
        1  BootApp_GetApp_init_en
       42  BootApp_Get_Cfg_Gpio
       42  BootApp_Get_Cfg_Uart
+      76  BootApp_Get_Uart
       96  BootApp_Gpio_Init
       78  BootApp_Prog_init
      100  BootApp_Uart_Init
@@ -251,9 +276,9 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Ini
 
  
    2 bytes in section .bss
- 370 bytes in section .text
+ 446 bytes in section .text
  
- 370 bytes of CODE memory
+ 446 bytes of CODE memory
    2 bytes of DATA memory
 
 Errors: none

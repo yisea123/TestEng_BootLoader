@@ -13,7 +13,7 @@
 #include "BootApp_Cfg_Board.h"
 #include "BootApp_Type.h"
 #include "BootApp_Priv.h"
-
+#include "BootApp.h"
 static BootApp_GetApp_init_ten BootApp_GetApp_init_en = BOOTAPP_GETAPP_NOT_INI;
 static void BootApp_Gpio_Init(void);
 static void BootApp_Uart_Init(void);
@@ -146,6 +146,27 @@ void BootApp_Uart_Init(void)
     }
 }
 
+void BootApp_Get_Uart(BootApp_USART_TypeDef * USART_TypeDef)
+{
+    uint8_t ret;
+    uint8_t i;
+    const BootApp_Uart_tst * uart_cfg = (void *) 0;
+
+    ret = BootApp_Get_Cfg_Uart(&uart_cfg);
+    if(ret)
+    {
+
+        for(i=0; i<uart_cfg->app_cfg_uart_num; i++)
+        {
+            /*copy from flash*/
+            *(USART_TypeDef + i) = *uart_cfg->app_cfg_uart_init_past[i].app_cfg_uart;
+        }
+    }
+    else
+    {
+    }
+
+}
 
 
 /*<BASDKey>

@@ -1,0 +1,118 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  20:02:54
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\modbus_port\portevent.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\modbus_port\portevent.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\portevent.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\portevent.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\modbus_port\portevent.c
+      1          
+      2          
+      3          /* ----------------------- Modbus includes ----------------------------------*/
+      4          #include "mb.h"
+      5          #include "mbport.h"
+      6          
+      7          /* ----------------------- Variables ----------------------------------------*/
+      8          static eMBEventType eQueuedEvent;
+      9          static BOOL     xEventInQueue;
+     10          
+     11          /* ----------------------- Start implementation -----------------------------*/
+     12          BOOL xMBPortEventInit( void )
+     13          {
+     14              xEventInQueue = FALSE;
+     15              return TRUE;
+     16          }
+     17          
+     18          BOOL xMBPortEventPost( eMBEventType eEvent )
+     19          {
+     20              xEventInQueue = TRUE;
+     21              eQueuedEvent = eEvent;
+     22              return TRUE;
+     23          }
+     24          
+     25          BOOL xMBPortEventGet( eMBEventType * eEvent )
+     26          {
+     27              BOOL xEventHappened = FALSE;
+     28          
+     29              if( xEventInQueue )
+     30              {
+     31                  *eEvent = eQueuedEvent;
+     32                  xEventInQueue = FALSE;
+     33                  xEventHappened = TRUE;
+     34              }
+     35              return xEventHappened;
+     36          }
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   xMBPortEventGet
+       0   xMBPortEventInit
+       0   xMBPortEventPost
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable2
+       4  ??DataTable2_1
+       1  eQueuedEvent
+       1  xEventInQueue
+      32  xMBPortEventGet
+      10  xMBPortEventInit
+      16  xMBPortEventPost
+
+ 
+  2 bytes in section .bss
+ 66 bytes in section .text
+ 
+ 66 bytes of CODE memory
+  2 bytes of DATA memory
+
+Errors: none
+Warnings: none

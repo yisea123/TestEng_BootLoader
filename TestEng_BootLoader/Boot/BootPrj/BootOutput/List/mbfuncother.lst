@@ -1,0 +1,170 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  20:02:53
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\functions\mbfuncother.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\functions\mbfuncother.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\mbfuncother.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbfuncother.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\functions\mbfuncother.c
+      1          /* 
+      2           * FreeModbus Libary: A portable Modbus implementation for Modbus ASCII/RTU.
+      3           * Copyright (c) 2006 Christian Walter <wolti@sil.at>
+      4           * All rights reserved.
+      5           *
+      6           * Redistribution and use in source and binary forms, with or without
+      7           * modification, are permitted provided that the following conditions
+      8           * are met:
+      9           * 1. Redistributions of source code must retain the above copyright
+     10           *    notice, this list of conditions and the following disclaimer.
+     11           * 2. Redistributions in binary form must reproduce the above copyright
+     12           *    notice, this list of conditions and the following disclaimer in the
+     13           *    documentation and/or other materials provided with the distribution.
+     14           * 3. The name of the author may not be used to endorse or promote products
+     15           *    derived from this software without specific prior written permission.
+     16           *
+     17           * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+     18           * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+     19           * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+     20           * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+     21           * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     22           * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+     23           * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+     24           * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+     25           * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+     26           * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+     27           *
+     28           * File: $Id: mbfuncother.c,v 1.8 2006/12/07 22:10:34 wolti Exp $
+     29           */
+     30          
+     31          /* ----------------------- System includes ----------------------------------*/
+     32          #include "stdlib.h"
+     33          #include "string.h"
+     34          
+     35          /* ----------------------- Platform includes --------------------------------*/
+     36          #include "port.h"
+     37          
+     38          /* ----------------------- Modbus includes ----------------------------------*/
+     39          #include "mb.h"
+     40          #include "mbframe.h"
+     41          #include "mbproto.h"
+     42          #include "mbconfig.h"
+     43          
+     44          #if MB_FUNC_OTHER_REP_SLAVEID_ENABLED > 0
+     45          
+     46          /* ----------------------- Static variables ---------------------------------*/
+     47          static UCHAR    ucMBSlaveID[MB_FUNC_OTHER_REP_SLAVEID_BUF];
+     48          static USHORT   usMBSlaveIDLen;
+     49          
+     50          /* ----------------------- Start implementation -----------------------------*/
+     51          
+     52          eMBErrorCode
+     53          eMBSetSlaveID( UCHAR ucSlaveID, BOOL xIsRunning,
+     54                         UCHAR const *pucAdditional, USHORT usAdditionalLen )
+     55          {
+     56              eMBErrorCode    eStatus = MB_ENOERR;
+     57          
+     58              /* the first byte and second byte in the buffer is reserved for
+     59               * the parameter ucSlaveID and the running flag. The rest of
+     60               * the buffer is available for additional data. */
+     61              if( usAdditionalLen + 2 < MB_FUNC_OTHER_REP_SLAVEID_BUF )
+     62              {
+     63                  usMBSlaveIDLen = 0;
+     64                  ucMBSlaveID[usMBSlaveIDLen++] = ucSlaveID;
+     65                  ucMBSlaveID[usMBSlaveIDLen++] = ( UCHAR )( xIsRunning ? 0xFF : 0x00 );
+     66                  if( usAdditionalLen > 0 )
+     67                  {
+     68                      memcpy( &ucMBSlaveID[usMBSlaveIDLen], pucAdditional,
+     69                              ( size_t )usAdditionalLen );
+     70                      usMBSlaveIDLen += usAdditionalLen;
+     71                  }
+     72              }
+     73              else
+     74              {
+     75                  eStatus = MB_ENORES;
+     76              }
+     77              return eStatus;
+     78          }
+     79          
+     80          eMBException
+     81          eMBFuncReportSlaveID( UCHAR * pucFrame, USHORT * usLen )
+     82          {
+     83              memcpy( &pucFrame[MB_PDU_DATA_OFF], &ucMBSlaveID[0], ( size_t )usMBSlaveIDLen );
+     84              *usLen = ( USHORT )( MB_PDU_DATA_OFF + usMBSlaveIDLen );
+     85              return MB_EX_NONE;
+     86          }
+     87          
+     88          #endif
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      24   eMBFuncReportSlaveID
+        24   -> __aeabi_memcpy
+      32   eMBSetSlaveID
+        32   -> __aeabi_memcpy
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable1
+       4  ??DataTable1_1
+      42  eMBFuncReportSlaveID
+     126  eMBSetSlaveID
+      32  ucMBSlaveID
+       2  usMBSlaveIDLen
+
+ 
+  34 bytes in section .bss
+ 176 bytes in section .text
+ 
+ 176 bytes of CODE memory
+  34 bytes of DATA memory
+
+Errors: none
+Warnings: none

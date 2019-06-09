@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:06:53
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  20:02:46
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -100,7 +100,7 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_IoF
      49                              #else
      50                              BootApp_GPIO_WriteBit( gpio_pin_cpast[i].app_cfg_gpio,
      51                                             gpio_pin_cpast[i].app_cfg_gpio_pin_st.GPIO_Pin,
-     52                                             BitVal);
+     52                                             BitVal );
      53                              #endif
      54                          }
      55                          else if(gpio_operation_en == GPIO_READ)

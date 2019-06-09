@@ -1,0 +1,352 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  20:02:52
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\functions\mbfunccoils.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\functions\mbfunccoils.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\mbfunccoils.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbfunccoils.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\functions\mbfunccoils.c
+      1          /* 
+      2           * FreeModbus Libary: A portable Modbus implementation for Modbus ASCII/RTU.
+      3           * Copyright (c) 2006 Christian Walter <wolti@sil.at>
+      4           * All rights reserved.
+      5           *
+      6           * Redistribution and use in source and binary forms, with or without
+      7           * modification, are permitted provided that the following conditions
+      8           * are met:
+      9           * 1. Redistributions of source code must retain the above copyright
+     10           *    notice, this list of conditions and the following disclaimer.
+     11           * 2. Redistributions in binary form must reproduce the above copyright
+     12           *    notice, this list of conditions and the following disclaimer in the
+     13           *    documentation and/or other materials provided with the distribution.
+     14           * 3. The name of the author may not be used to endorse or promote products
+     15           *    derived from this software without specific prior written permission.
+     16           *
+     17           * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+     18           * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+     19           * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+     20           * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+     21           * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     22           * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+     23           * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+     24           * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+     25           * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+     26           * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+     27           *
+     28           * File: $Id: mbfunccoils.c,v 1.8 2007/02/18 23:47:16 wolti Exp $
+     29           */
+     30          
+     31          /* ----------------------- System includes ----------------------------------*/
+     32          #include "stdlib.h"
+     33          #include "string.h"
+     34          
+     35          /* ----------------------- Platform includes --------------------------------*/
+     36          #include "port.h"
+     37          
+     38          /* ----------------------- Modbus includes ----------------------------------*/
+     39          #include "mb.h"
+     40          #include "mbframe.h"
+     41          #include "mbproto.h"
+     42          #include "mbconfig.h"
+     43          
+     44          /* ----------------------- Defines ------------------------------------------*/
+     45          #define MB_PDU_FUNC_READ_ADDR_OFF           ( MB_PDU_DATA_OFF )
+     46          #define MB_PDU_FUNC_READ_COILCNT_OFF        ( MB_PDU_DATA_OFF + 2 )
+     47          #define MB_PDU_FUNC_READ_SIZE               ( 4 )
+     48          #define MB_PDU_FUNC_READ_COILCNT_MAX        ( 0x07D0 )
+     49          
+     50          #define MB_PDU_FUNC_WRITE_ADDR_OFF          ( MB_PDU_DATA_OFF )
+     51          #define MB_PDU_FUNC_WRITE_VALUE_OFF         ( MB_PDU_DATA_OFF + 2 )
+     52          #define MB_PDU_FUNC_WRITE_SIZE              ( 4 )
+     53          
+     54          #define MB_PDU_FUNC_WRITE_MUL_ADDR_OFF      ( MB_PDU_DATA_OFF )
+     55          #define MB_PDU_FUNC_WRITE_MUL_COILCNT_OFF   ( MB_PDU_DATA_OFF + 2 )
+     56          #define MB_PDU_FUNC_WRITE_MUL_BYTECNT_OFF   ( MB_PDU_DATA_OFF + 4 )
+     57          #define MB_PDU_FUNC_WRITE_MUL_VALUES_OFF    ( MB_PDU_DATA_OFF + 5 )
+     58          #define MB_PDU_FUNC_WRITE_MUL_SIZE_MIN      ( 5 )
+     59          #define MB_PDU_FUNC_WRITE_MUL_COILCNT_MAX   ( 0x07B0 )
+     60          
+     61          /* ----------------------- Static functions ---------------------------------*/
+     62          eMBException    prveMBError2Exception( eMBErrorCode eErrorCode );
+     63          
+     64          /* ----------------------- Start implementation -----------------------------*/
+     65          
+     66          #if MB_FUNC_READ_COILS_ENABLED > 0
+     67          
+     68          eMBException
+     69          eMBFuncReadCoils( UCHAR * pucFrame, USHORT * usLen )
+     70          {
+     71              USHORT          usRegAddress;
+     72              USHORT          usCoilCount;
+     73              UCHAR           ucNBytes;
+     74              UCHAR          *pucFrameCur;
+     75          
+     76              eMBException    eStatus = MB_EX_NONE;
+     77              eMBErrorCode    eRegStatus;
+     78          
+     79              if( *usLen == ( MB_PDU_FUNC_READ_SIZE + MB_PDU_SIZE_MIN ) )
+     80              {
+     81                  usRegAddress = ( USHORT )( pucFrame[MB_PDU_FUNC_READ_ADDR_OFF] << 8 );
+     82                  usRegAddress |= ( USHORT )( pucFrame[MB_PDU_FUNC_READ_ADDR_OFF + 1] );
+     83                  usRegAddress++;
+     84          
+     85                  usCoilCount = ( USHORT )( pucFrame[MB_PDU_FUNC_READ_COILCNT_OFF] << 8 );
+     86                  usCoilCount |= ( USHORT )( pucFrame[MB_PDU_FUNC_READ_COILCNT_OFF + 1] );
+     87          
+     88                  /* Check if the number of registers to read is valid. If not
+     89                   * return Modbus illegal data value exception. 
+     90                   */
+     91                  if( ( usCoilCount >= 1 ) &&
+     92                      ( usCoilCount < MB_PDU_FUNC_READ_COILCNT_MAX ) )
+     93                  {
+     94                      /* Set the current PDU data pointer to the beginning. */
+     95                      pucFrameCur = &pucFrame[MB_PDU_FUNC_OFF];
+     96                      *usLen = MB_PDU_FUNC_OFF;
+     97          
+     98                      /* First byte contains the function code. */
+     99                      *pucFrameCur++ = MB_FUNC_READ_COILS;
+    100                      *usLen += 1;
+    101          
+    102                      /* Test if the quantity of coils is a multiple of 8. If not last
+    103                       * byte is only partially field with unused coils set to zero. */
+    104                      if( ( usCoilCount & 0x0007 ) != 0 )
+    105                      {
+    106                          ucNBytes = ( UCHAR )( usCoilCount / 8 + 1 );
+    107                      }
+    108                      else
+    109                      {
+    110                          ucNBytes = ( UCHAR )( usCoilCount / 8 );
+    111                      }
+    112                      *pucFrameCur++ = ucNBytes;
+    113                      *usLen += 1;
+    114          
+    115                      eRegStatus =
+    116                          eMBRegCoilsCB( pucFrameCur, usRegAddress, usCoilCount,
+    117                                         MB_REG_READ );
+    118          
+    119                      /* If an error occured convert it into a Modbus exception. */
+    120                      if( eRegStatus != MB_ENOERR )
+    121                      {
+    122                          eStatus = prveMBError2Exception( eRegStatus );
+    123                      }
+    124                      else
+    125                      {
+    126                          /* The response contains the function code, the starting address
+    127                           * and the quantity of registers. We reuse the old values in the 
+    128                           * buffer because they are still valid. */
+    129                          *usLen += ucNBytes;;
+    130                      }
+    131                  }
+    132                  else
+    133                  {
+    134                      eStatus = MB_EX_ILLEGAL_DATA_VALUE;
+    135                  }
+    136              }
+    137              else
+    138              {
+    139                  /* Can't be a valid read coil register request because the length
+    140                   * is incorrect. */
+    141                  eStatus = MB_EX_ILLEGAL_DATA_VALUE;
+    142              }
+    143              return eStatus;
+    144          }
+    145          
+    146          #if MB_FUNC_WRITE_COIL_ENABLED > 0
+    147          eMBException
+    148          eMBFuncWriteCoil( UCHAR * pucFrame, USHORT * usLen )
+    149          {
+    150              USHORT          usRegAddress;
+    151              UCHAR           ucBuf[2];
+    152          
+    153              eMBException    eStatus = MB_EX_NONE;
+    154              eMBErrorCode    eRegStatus;
+    155          
+    156              if( *usLen == ( MB_PDU_FUNC_WRITE_SIZE + MB_PDU_SIZE_MIN ) )
+    157              {
+    158                  usRegAddress = ( USHORT )( pucFrame[MB_PDU_FUNC_WRITE_ADDR_OFF] << 8 );
+    159                  usRegAddress |= ( USHORT )( pucFrame[MB_PDU_FUNC_WRITE_ADDR_OFF + 1] );
+    160                  usRegAddress++;
+    161          
+    162                  if( ( pucFrame[MB_PDU_FUNC_WRITE_VALUE_OFF + 1] == 0x00 ) &&
+    163                      ( ( pucFrame[MB_PDU_FUNC_WRITE_VALUE_OFF] == 0xFF ) ||
+    164                        ( pucFrame[MB_PDU_FUNC_WRITE_VALUE_OFF] == 0x00 ) ) )
+    165                  {
+    166                      ucBuf[1] = 0;
+    167                      if( pucFrame[MB_PDU_FUNC_WRITE_VALUE_OFF] == 0xFF )
+    168                      {
+    169                          ucBuf[0] = 1;
+    170                      }
+    171                      else
+    172                      {
+    173                          ucBuf[0] = 0;
+    174                      }
+    175                      eRegStatus =
+    176                          eMBRegCoilsCB( &ucBuf[0], usRegAddress, 1, MB_REG_WRITE );
+    177          
+    178                      /* If an error occured convert it into a Modbus exception. */
+    179                      if( eRegStatus != MB_ENOERR )
+    180                      {
+    181                          eStatus = prveMBError2Exception( eRegStatus );
+    182                      }
+    183                  }
+    184                  else
+    185                  {
+    186                      eStatus = MB_EX_ILLEGAL_DATA_VALUE;
+    187                  }
+    188              }
+    189              else
+    190              {
+    191                  /* Can't be a valid write coil register request because the length
+    192                   * is incorrect. */
+    193                  eStatus = MB_EX_ILLEGAL_DATA_VALUE;
+    194              }
+    195              return eStatus;
+    196          }
+    197          
+    198          #endif
+    199          
+    200          #if MB_FUNC_WRITE_MULTIPLE_COILS_ENABLED > 0
+    201          eMBException
+    202          eMBFuncWriteMultipleCoils( UCHAR * pucFrame, USHORT * usLen )
+    203          {
+    204              USHORT          usRegAddress;
+    205              USHORT          usCoilCnt;
+    206              UCHAR           ucByteCount;
+    207              UCHAR           ucByteCountVerify;
+    208          
+    209              eMBException    eStatus = MB_EX_NONE;
+    210              eMBErrorCode    eRegStatus;
+    211          
+    212              if( *usLen > ( MB_PDU_FUNC_WRITE_SIZE + MB_PDU_SIZE_MIN ) )
+    213              {
+    214                  usRegAddress = ( USHORT )( pucFrame[MB_PDU_FUNC_WRITE_MUL_ADDR_OFF] << 8 );
+    215                  usRegAddress |= ( USHORT )( pucFrame[MB_PDU_FUNC_WRITE_MUL_ADDR_OFF + 1] );
+    216                  usRegAddress++;
+    217          
+    218                  usCoilCnt = ( USHORT )( pucFrame[MB_PDU_FUNC_WRITE_MUL_COILCNT_OFF] << 8 );
+    219                  usCoilCnt |= ( USHORT )( pucFrame[MB_PDU_FUNC_WRITE_MUL_COILCNT_OFF + 1] );
+    220          
+    221                  ucByteCount = pucFrame[MB_PDU_FUNC_WRITE_MUL_BYTECNT_OFF];
+    222          
+    223                  /* Compute the number of expected bytes in the request. */
+    224                  if( ( usCoilCnt & 0x0007 ) != 0 )
+    225                  {
+    226                      ucByteCountVerify = ( UCHAR )( usCoilCnt / 8 + 1 );
+    227                  }
+    228                  else
+    229                  {
+    230                      ucByteCountVerify = ( UCHAR )( usCoilCnt / 8 );
+    231                  }
+    232          
+    233                  if( ( usCoilCnt >= 1 ) &&
+    234                      ( usCoilCnt <= MB_PDU_FUNC_WRITE_MUL_COILCNT_MAX ) &&
+    235                      ( ucByteCountVerify == ucByteCount ) )
+    236                  {
+    237                      eRegStatus =
+    238                          eMBRegCoilsCB( &pucFrame[MB_PDU_FUNC_WRITE_MUL_VALUES_OFF],
+    239                                         usRegAddress, usCoilCnt, MB_REG_WRITE );
+    240          
+    241                      /* If an error occured convert it into a Modbus exception. */
+    242                      if( eRegStatus != MB_ENOERR )
+    243                      {
+    244                          eStatus = prveMBError2Exception( eRegStatus );
+    245                      }
+    246                      else
+    247                      {
+    248                          /* The response contains the function code, the starting address
+    249                           * and the quantity of registers. We reuse the old values in the 
+    250                           * buffer because they are still valid. */
+    251                          *usLen = MB_PDU_FUNC_WRITE_MUL_BYTECNT_OFF;
+    252                      }
+    253                  }
+    254                  else
+    255                  {
+    256                      eStatus = MB_EX_ILLEGAL_DATA_VALUE;
+    257                  }
+    258              }
+    259              else
+    260              {
+    261                  /* Can't be a valid write coil register request because the length
+    262                   * is incorrect. */
+    263                  eStatus = MB_EX_ILLEGAL_DATA_VALUE;
+    264              }
+    265              return eStatus;
+    266          }
+    267          
+    268          #endif
+    269          
+    270          #endif
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      40   eMBFuncReadCoils
+        40   -> eMBRegCoilsCB
+        40   -> prveMBError2Exception
+      32   eMBFuncWriteCoil
+        32   -> eMBRegCoilsCB
+        32   -> prveMBError2Exception
+      40   eMBFuncWriteMultipleCoils
+        40   -> eMBRegCoilsCB
+        40   -> prveMBError2Exception
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+     192  eMBFuncReadCoils
+     130  eMBFuncWriteCoil
+     164  eMBFuncWriteMultipleCoils
+
+ 
+ 486 bytes in section .text
+ 
+ 486 bytes of CODE memory
+
+Errors: none
+Warnings: none

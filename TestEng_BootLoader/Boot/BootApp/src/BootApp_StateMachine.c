@@ -36,10 +36,14 @@ void BootApp_StateMachine(void)
     state_en = BootApp_Get_State();
     BootApp_Status_ten status_en = BOOTAPP_STATUS_INI;
 
-    BootApp_CommunicationBuffer_tst * ComBuffer_pst = &BootApp_CommunicationBuffer_en.com_st;
+    BootApp_CommunicationBuffer_tst * ComBuffer_pst;
+    BootApp_Get_CommunicationBuf(&ComBuffer_pst);
+
     BootApp_CmdBuffer_tst * CmdBuffer_pst = &(ComBuffer_pst->cmdbuffer_st);
     BootApp_PageBuffer_ten * PageBuffer_pen = &(ComBuffer_pst->pagebuffer_en);
     PageBuffer_pen = PageBuffer_pen;
+
+    BootApp_HandleCmd_Receive();
 
     switch(state_en)
     {
@@ -141,6 +145,8 @@ void BootApp_StateMachine(void)
     default :
         break;
     }
+
+    BootApp_HandleCmd_Send();
 }
 
 void BootApp_State_Init_Act(void)

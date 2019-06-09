@@ -1,0 +1,517 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:13:07
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootDrv\src\eep_m95160.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootDrv\src\eep_m95160.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\eep_m95160.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\eep_m95160.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootDrv\src\eep_m95160.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file eep_95160.c
+      4            * @author  h&h
+      5            * @version  
+      6            * @date  
+      7            * @brief  eeprom
+      8            ******************************************************************************
+      9            *
+     10            */
+     11          #include "include.h"
+     12          
+     13          fnsr_eep_m95160_info_t  fnsr_eep_m95160_info;
+     14          
+     15          #define FNSR_MIN(arg0, arg1) (((arg0) <= (arg1)) ? (arg0) : (arg1))
+     16          #define FNSR_MAX(arg0, arg1) (((arg0) >= (arg1)) ? (arg0) : (arg1))
+     17          
+     18          unsigned char drv_spi_access_byte(SPI_TypeDef  *SPIx, uint8_t data, uint8_t * ret_data);
+     19          
+     20          uint8_t arm_drv_spi_update_with_header(
+     21            uint32_t cs_pin, 
+     22            uint16_t header_len, 
+     23            uint8_t *mo_header,
+     24            uint8_t *so_header,
+     25            uint16_t payload_len, 
+     26            uint8_t *mo_payload, 
+     27            uint8_t *so_payload);
+     28          
+     29          /********************************************************************************
+     30           Syntax: void sfp_eeprom_driver_enable
+     31           Function: Enable eeprom driver for external EEPROM access. Normally, the EEPROM
+     32                     write time ranges 5~10ms (byte or page). When more than one byte
+     33                     data are sent through I2C, page-write applies. The address will roll
+     34                    over if page-write applies and the address exceeds page boundary.
+     35                    When EEPROM is in progress of write, START + I2C device + R will
+     36                    get NACK. This is the way to poll if EEPROM is busy.
+     37          
+     38           Arguments: 
+     39                      ptr_eeprom_read = pointer to the driver for EEPROM read.
+     40                      ptr_eeprom_write = pointer to the driver for EEPROM write.
+     41          
+     42          */
+     43          void qsfp_eeprom_driver_enable(short (*ptr_eeprom_read)(unsigned short addr, unsigned char *buf, unsigned short length ),
+     44                                         short (*ptr_eeprom_write)(unsigned short addr, unsigned char *buf, unsigned short length ))
+     45          {
+     46            ptr_drv_eeprom_read = ptr_eeprom_read;
+     47            ptr_drv_eeprom_write = ptr_eeprom_write;
+     48          }
+     49          
+     50          
+     51          
+     52          /******************************************************************************
+     53            * @brief   drv_eep_rd_n(uint16_t src_addr, uint8_t *dst, uint16_t bytes)
+     54            * @param  
+     55            src_addr  : starting address of eeprom to read bytes from
+     56            dst       : pointer to read buffer. bytes read are written to this buffer.
+     57            bytes     : bytes to read
+     58            * @retval  number of bytes read
+     59            * @Description:	read n bytes from eeprom
+     60          
+     61            */
+     62          
+     63          short drv_eep_rd_n(uint16_t src_addr, uint8_t *dst, uint16_t bytes)
+     64          {
+     65            uint8_t status;
+     66            uint32_t loop_cnt;
+     67            
+     68            /* number of bytes to read is 0*/
+     69            if (!bytes) { return 0;}
+     70          
+     71            loop_cnt = 0;
+     72            while (drv_eep_is_idle()!=SUCCESS) 
+     73            {
+     74              /* write could be in progress. wait for twice the tW before declaring timeout*/
+     75              if (loop_cnt <= 2*fnsr_eep_m95160_info.tW_prd) 
+     76              {
+     77                loop_cnt++;
+     78                continue;
+     79              }
+     80              else 
+     81              {
+     82                return 0;
+     83              }
+     84            }
+     85            fnsr_eep_m95160_info.wr_buf[0] = FNSR_M95160_READ; // instruction for READ
+     86            fnsr_eep_m95160_info.wr_buf[1] = src_addr >> 8; // addr bits 15:8
+     87            fnsr_eep_m95160_info.wr_buf[2] = (uint8_t)src_addr; // addr bits 7:0
+     88          
+     89            status = arm_drv_spi_update_with_header(
+     90              fnsr_eep_m95160_info.cs_gpio, // SPI chip select GPIO
+     91              0x3,//FNSR_M95160_RD_HEADER_LEN, // header_len
+     92              &fnsr_eep_m95160_info.wr_buf[0], // mo_header
+     93              &fnsr_eep_m95160_info.rd_buf[0], // so_header
+     94              bytes, // payload_len
+     95              dst, // mo_payload. use dst
+     96              dst); // so_payload
+     97          
+     98            //FNSR_ASSERT(status == SUCCESS);
+     99          
+    100            if (status != SUCCESS) 
+    101            {
+    102              return 0;
+    103            }
+    104          
+    105            return bytes;
+    106          }
+    107          
+    108          
+    109          /******************************************************************************
+    110            * @brief   drv_eep_wr_n(uint16_t src_addr, uint8_t *dst, uint16_t bytes)
+    111            * @param  
+    112            src_addr  : starting address of eeprom to read bytes from
+    113            dst       : pointer to read buffer. bytes read are written to this buffer.
+    114            bytes     : bytes to read
+    115            * @retval  number of bytes read
+    116            * @Description:	number of bytes written
+    117          
+    118            */
+    119          
+    120          short drv_eep_wr_n(uint16_t dst_addr, uint8_t *src, uint16_t bytes)
+    121          {
+    122            uint16_t total_bytes = bytes;
+    123            uint16_t bytes_session;
+    124            uint16_t next_page_addr;
+    125            uint32_t loop_cnt;
+    126          
+    127            if(dst_addr > fnsr_eep_m95160_info.size_total_bytes)
+    128              return 0;
+    129            if(dst_addr + bytes > fnsr_eep_m95160_info.size_total_bytes)
+    130              return 0;
+    131          
+    132            if (!bytes) 
+    133            { 
+    134              return 0;/* number of bytes to write is 0*/
+    135            }
+    136          
+    137            while(bytes) 
+    138            { 
+    139              loop_cnt = 0;
+    140              while (drv_eep_is_idle()!=SUCCESS) /*wait until idle*/
+    141              {
+    142                /* write could be in progress. wait for twice the tW before declaring timeout*/
+    143                if (loop_cnt <= 2*fnsr_eep_m95160_info.tW_prd) 
+    144                {
+    145                	loop_cnt++;
+    146                  continue;
+    147                } 
+    148                else 
+    149                {
+    150                  return (total_bytes - bytes);
+    151                }
+    152              }
+    153          
+    154              loop_cnt = 0;
+    155              while (drv_eep_write_enable()!= SUCCESS) 
+    156              {
+    157          //      if (loop_cnt <= fnsr_eep_m95160_info.ms_prd) {
+    158                  if (loop_cnt <= 6) 
+    159                  { // YYU 03-13-2013, reduce the timeout time to 5*1000*16/CLK_SPI
+    160                  // try for 1 ms before declaring timeout
+    161                	 loop_cnt++;
+    162                   continue;
+    163                  } 
+    164                  else 
+    165                  { return (total_bytes - bytes); }
+    166              }
+    167          
+    168              // limit each write to a singel page
+    169              fnsr_eep_m95160_info.wr_buf[0] = FNSR_M95160_WRITE; // instruction for READ
+    170              fnsr_eep_m95160_info.wr_buf[1] = dst_addr >> 8; // addr bits 15:8
+    171              fnsr_eep_m95160_info.wr_buf[2] = (uint8_t)dst_addr; // addr bits 7:0
+    172          
+    173              next_page_addr =
+    174                (dst_addr + fnsr_eep_m95160_info.size_page_bytes) & FNSR_M95160_PAGE_START_MASK;
+    175              bytes_session = FNSR_MIN((next_page_addr - dst_addr), bytes);
+    176          
+    177              if(
+    178                   arm_drv_spi_update_with_header(
+    179                      fnsr_eep_m95160_info.cs_gpio, // SPI chip select GPIO
+    180                      FNSR_M95160_WR_HEADER_LEN,// header_len
+    181                      &fnsr_eep_m95160_info.wr_buf[0], // mo_header
+    182                      &fnsr_eep_m95160_info.rd_buf[0], // so_header
+    183                      bytes_session, // bytes, // payload_len
+    184                      src, // mo_payload
+    185                      &fnsr_eep_m95160_info.rd_buf[FNSR_M95160_WR_HEADER_LEN]) != SUCCESS
+    186                 )
+    187                  {
+    188                      return (total_bytes - bytes);
+    189                  }
+    190          
+    191              bytes -= bytes_session; // for next session
+    192              dst_addr += bytes_session; // for next session
+    193              src += bytes_session; // for next session
+    194            }
+    195          
+    196            return total_bytes;
+    197          }
+    198          
+    199          
+    200          /******************************************************************************
+    201            * @brief   short drv_eep_status_rd(uint8_t *dst)
+    202            * @param  
+    203            * @retval  
+    204            * @Description:	
+    205          
+    206            */
+    207          
+    208          uint8_t drv_eep_status_rd(uint8_t *dst)
+    209          {
+    210            uint8_t retval = SUCCESS;
+    211          
+    212            fnsr_eep_m95160_info.wr_buf[0] = FNSR_M95160_RDSR; // initialize instruction code only
+    213          
+    214            fnsr_eep_m95160_info.wr_buf[0] = FNSR_M95160_RDSR; // instruction for READ
+    215            retval = arm_drv_spi_update_with_header
+    216              (
+    217                 fnsr_eep_m95160_info.cs_gpio, // SPI chip select GPIO
+    218                 FNSR_M95160_RDSR_HDR_LEN, // header_len
+    219                 &fnsr_eep_m95160_info.wr_buf[0], // mo_header
+    220                 &fnsr_eep_m95160_info.rd_buf[0], // so_header
+    221                 1, // payload_len - read one byte
+    222                 &fnsr_eep_m95160_info.wr_buf[FNSR_M95160_RDSR_HDR_LEN], // mo_payload
+    223                 &fnsr_eep_m95160_info.rd_buf[FNSR_M95160_RDSR_HDR_LEN]
+    224               ); // so_payload
+    225          
+    226          
+    227            *dst = fnsr_eep_m95160_info.rd_buf[FNSR_M95160_RDSR_HDR_LEN]; // the second byte in transaction
+    228             return(retval);
+    229          }
+    230          
+    231          
+    232          /******************************************************************************
+    233            * @brief   short drv_eep_is_idle(void)
+    234            * @param  
+    235            * @retval  
+    236            * @Description:	
+    237          
+    238           **/
+    239           
+    240          uint8_t drv_eep_is_idle(void)
+    241          {
+    242            uint8_t retval;
+    243          
+    244            drv_eep_status_rd(&fnsr_eep_m95160_info.status_reg);
+    245          
+    246            if (fnsr_eep_m95160_info.status_reg & FNSR_M95160_RDSR_WIP) 
+    247            {
+    248                retval = ERROR;
+    249            } 
+    250            else 
+    251            {
+    252                retval = SUCCESS;
+    253            }
+    254          
+    255            return(retval);
+    256          }
+    257          
+    258          
+    259          /******************************************************************************
+    260            * @brief   drv_eep_write_enable(void)
+    261            * @param  
+    262            * @retval  
+    263            * @Description:	
+    264          
+    265           **/
+    266           
+    267          uint8_t drv_eep_write_enable(void)
+    268          {
+    269            uint8_t status = ERROR;
+    270            uint32_t  loop_cnt;
+    271          
+    272            fnsr_eep_m95160_info.wr_buf[0] = FNSR_M95160_WREN; // instruction for READ
+    273            status = arm_drv_spi_update_with_header
+    274              (
+    275                 fnsr_eep_m95160_info.cs_gpio, // SPI chip select GPIO
+    276                 FNSR_M95160_WREN_HDR_LEN, // header_len
+    277                 &fnsr_eep_m95160_info.wr_buf[0], // mo_header
+    278                 &fnsr_eep_m95160_info.rd_buf[0], // so_header
+    279                 0, // payload_len - nothing to read
+    280                 &fnsr_eep_m95160_info.wr_buf[FNSR_M95160_WREN_HDR_LEN], // mo_payload
+    281                 &fnsr_eep_m95160_info.rd_buf[FNSR_M95160_WREN_HDR_LEN]
+    282               ); 
+    283            if (status != SUCCESS) 
+    284            {
+    285              return ERROR;
+    286            }
+    287          
+    288            loop_cnt = 0;
+    289            while (loop_cnt <= fnsr_eep_m95160_info.ms_prd) 
+    290            {
+    291              drv_eep_status_rd(&fnsr_eep_m95160_info.status_reg);
+    292              if (fnsr_eep_m95160_info.status_reg & FNSR_M95160_RDSR_WEL) 
+    293              {
+    294                status = SUCCESS;
+    295                break;
+    296              }
+    297              loop_cnt++;
+    298             }
+    299          
+    300            if(loop_cnt >= fnsr_eep_m95160_info.ms_prd)
+    301            {
+    302              status = ERROR;
+    303            }
+    304            return(status);
+    305          }
+    306          
+    307          /******************************************************************************
+    308            * @brief   drv_eep_init(uint16_t cs_gpio, uint16_t wr_protect_gpio, 
+    309          uint16_t hold_gpio, uint32_t tW_cnt)
+    310            * @param  
+    311            * @retval  
+    312            * @Description:	
+    313          
+    314           **/
+    315          
+    316          uint8_t drv_eep_init(
+    317            GPIO_TypeDef* GPIOx,                 
+    318            uint16_t cs_gpio,
+    319            uint16_t wr_protect_gpio,
+    320            uint16_t hold_gpio,
+    321            uint32_t tW_prd, // tW prd in HCLK ticks
+    322            uint32_t ms_prd) // 1ms prd in HCLK ticks
+    323          {
+    324            fnsr_eep_m95160_info.GPIOx = GPIOx;
+    325            fnsr_eep_m95160_info.cs_gpio = cs_gpio;
+    326            fnsr_eep_m95160_info.wr_protect_gpio = wr_protect_gpio;
+    327            fnsr_eep_m95160_info.hold_gpio = hold_gpio;
+    328            
+    329            fnsr_eep_m95160_info.size_total_bytes = FNSR_M95160_SIZE_TOTAL_BYTES;
+    330            fnsr_eep_m95160_info.size_page_bytes = FNSR_M95160_SIZE_PAGE_BYTES;
+    331            
+    332            fnsr_eep_m95160_info.tW_prd = tW_prd;
+    333            fnsr_eep_m95160_info.ms_prd = ms_prd;
+    334            
+    335            GPIO_SetBits(fnsr_eep_m95160_info.GPIOx,hold_gpio);
+    336            GPIO_ResetBits(fnsr_eep_m95160_info.GPIOx,wr_protect_gpio);
+    337              
+    338            return(SUCCESS);
+    339          }
+    340          
+    341          /********************************************************************************
+    342            * @brief   drv_spi_access_byte()
+    343            * @param   data = 8-bit data to write. 
+    344                       ret_data = pointer to the buffer that saves data read from SPI bus.
+    345            * @retval 
+    346            * @Description:	
+    347          Apply SPI read/write transaction. This routine does not toggle
+    348          chip select pin.  This function will check if the datasize is set
+    349          correctly.  If the datasize is not set correctly, it will be changed
+    350          **/
+    351          unsigned char drv_spi_access_byte(SPI_TypeDef  *SPIx, uint8_t data, uint8_t * ret_data)
+    352          {
+    353              short   loop = 0;
+    354              uint32_t spi_status;
+    355              unsigned char rc = SUCCESS;
+    356              unsigned short word_flag = 0;
+    357          
+    358              if((SPIx->CR1 & CR1_Datasize_Mask) != SPI_DataSize_8b)
+    359              {
+    360          
+    361                /* Change SPI word size to a byte
+    362                 Disable SPI first since the datasheet says to*/
+    363                SPIx->CR1 &= CR1_SPE_Reset;
+    364                /* Change SPI word size*/
+    365                SPIx->CR1 = (SPIx->CR1 & ~CR1_Datasize_Mask) | SPI_DataSize_8b;
+    366                /* Enable SPI peripheral*/
+    367                SPIx->CR1 |= CR1_SPE_Set;
+    368          
+    369                word_flag = 1;
+    370              }
+    371               SPIx->DR = data;
+    372               while (1) 
+    373               {
+    374                    spi_status = SPIx->SR;
+    375                    if ( (spi_status & SPI_I2S_FLAG_TXE)
+    376                        && !(spi_status & (SPI_I2S_FLAG_BSY)) ) {
+    377                      break;
+    378                    }
+    379                    /* SPI lowest speed is 0.25MHz. Prepare for exceptional case: 
+    380                    64MHz/0.25MHz * 16 bits = 4096 clocks.*/
+    381                    if( loop++ > 1000 )
+    382                    {
+    383                       rc = ERROR;
+    384                       break;
+    385                    }
+    386               } 
+    387               *ret_data = SPIx->DR;
+    388          
+    389               if(word_flag)
+    390               {
+    391                 /* Change SPI word size back to 16bits*/
+    392                /* Disable SPI first since the datasheet says to*/
+    393                SPIx->CR1 &= CR1_SPE_Reset;
+    394                /*Change SPI word size*/
+    395                SPIx->CR1 = (SPIx->CR1 & ~CR1_Datasize_Mask) | SPI_DataSize_16b;
+    396                /* Enable SPI peripheral*/
+    397                SPIx->CR1 |= CR1_SPE_Set;
+    398               }
+    399               return rc;
+    400          }  
+    401          
+    402          
+    403          /*****************************************************************************
+    404            * @brief   arm_drv_spi_update_with_header()
+    405            * @param  
+    406            uint16_t cs_pin, // chip select I/O pin. 
+    407            uint16_t header_len, // header length in bytes
+    408            uint8_t *mo_header, // buffer for master out header
+    409            uint8_t *so_header, // buffer for slave out header
+    410            uint16_t payload_len, // payload length in byte
+    411            uint8_t *mo_payload, // buffer for master out payload
+    412            uint8_t *so_payload_ // buffer for slave out payload
+    413            * @retval 
+    414            * @Description:	
+    415          Initiates an read/write operation to write a sequence of bytes and then
+    416            read bytes from the slave device and places the retrieved
+    417            data into the buffer. Send out data and received data can share the
+    418           same buffer. Received data will over-write the send out data after
+    419            it is sent out. If there is an error then the appropriate error
+    420            code is returned.
+    421          **/
+    422          static unsigned char spi_buf;
+    423          
+    424          uint8_t arm_drv_spi_update_with_header(
+    425            uint32_t cs_pin, 
+    426            uint16_t header_len, 
+    427            uint8_t *mo_header, 
+    428            uint8_t *so_header, 
+    429            uint16_t payload_len,
+    430            uint8_t *mo_payload, 
+    431            uint8_t *so_payload) 
+    432          {
+    433            uint8_t rc = SUCCESS;
+    434            /*select slave chip*/
+    435            GPIO_ResetBits(fnsr_eep_m95160_info.GPIOx,cs_pin);
+    436            for( ;header_len > 0; header_len--) 
+    437            {
+    438              if (drv_spi_access_byte(SPI2,*mo_header++, &spi_buf) != SUCCESS) 
+    439              {
+    440                rc = ERROR;
+    441              }
+    442              *so_header++ = spi_buf;
+    443            }
+    444          
+    445            for( ; payload_len > 0; payload_len--)
+    446            {
+    447              if (drv_spi_access_byte(SPI2,*mo_payload++, &spi_buf) != SUCCESS) 
+    448              {
+    449                rc = ERROR;
+    450              }
+    451              *so_payload++ = spi_buf;
+    452            }
+    453            /* Deselect the slave device*/
+    454            GPIO_SetBits(fnsr_eep_m95160_info.GPIOx,cs_pin);
+    455          
+    456            return rc;
+    457          }
+    458          
+    459          
+    460          
+    461          /******************* (C) COPYRIGHT 2018 *****END OF FILE****/
+    462          
+    463          
+
+Errors: 23
+Warnings: 3

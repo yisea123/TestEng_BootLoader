@@ -1,0 +1,560 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  18:13:06
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootDrv\src\AD7949.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootDrv\src\AD7949.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\AD7949.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\AD7949.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootDrv\src\AD7949.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    AD7949.c  burn in system
+      4            * @author  h&h
+      5            * @version 
+      6            * @date    2018
+      7            * @brief   AD7949 driver
+      8            ******************************************************************************
+      9          **/ 
+     10          
+     11          
+     12          
+     13          
+     14          #include "include.h"
+     15          
+     16          #define CFG_KEEP                0x0
+     17          #define CFG_OVERWRITE           0x2000
+     18          
+     19          #define INCC_BIPOLAR_DIFFERENTIAL_PAIRS     0x0
+     20          #define INCC_BIPOLAR                        0x800
+     21          #define INCC_TEMPERATURE_SENSOR             0xC00
+     22          #define INCC_UNIPOLAR_DIFFERENTIAL_PAIRS    0x1000
+     23          #define INCC_UNIPOLAR_TO_COM                0x1800
+     24          #define INCC_UNIPOLAR_TO_GND                0x1C00
+     25          
+     26          #define IN0                                    0x0
+     27          #define IN1                                    0x80
+     28          #define IN2                                    0x100
+     29          #define IN3                                    0x180
+     30          #define IN4                                    0x200
+     31          #define IN5                                    0x280
+     32          #define IN6                                    0x300
+     33          #define IN7                                    0x380
+     34          
+     35          #define BW_0_25                                0x0
+     36          #define BW_FULL                                0x40
+     37          
+     38          #define REF_IN_2V5                            0x0
+     39          #define REF_IN_4V096                          0x8
+     40          #define REF_EX_TEM_ENABLE                     0x10
+     41          #define REF_EX_IN_BUFFER_TEM_ENABLE           0x18
+     42          #define REF_EX_TEM_DISABLE                    0x30
+     43          #define REF_EX_IN_BUFFER_TEM_DISABLE          0x38
+     44          
+     45          #define SEQ_DISABLE                                 0x0
+     46          #define SEQ_UPDATA_CONFIGURATION_DURING_SEQUENCE    0x2
+     47          #define SEQ_SCAN_TEM                                0x4
+     48          #define SEQ_SCAN                                    0x6
+     49          
+     50          #define RB_DISABLE                                   0x1
+     51          #define RB_ENABLE                                    0x0
+     52          
+     53          #define AD7949_CMD(overwrite, ch)  ((overwrite | INCC_UNIPOLAR_TO_COM | ch | BW_FULL | REF_IN_2V5 | SEQ_DISABLE | RB_DISABLE)<<2)
+     54          #define AD7949_CMD_CH(overwrite,X)  AD7949_CMD(overwrite,IN##X)
+     55          
+     56          #define AD7949_CH_NUM 8
+     57          const uint16_t AD7949_cmd_ch_ca[AD7949_CH_NUM][2] = 
+     58          {
+     59              {AD7949_CMD_CH(CFG_OVERWRITE,0),AD7949_CMD_CH(CFG_KEEP,0)},
+     60              {AD7949_CMD_CH(CFG_OVERWRITE,1),AD7949_CMD_CH(CFG_KEEP,1)},
+     61              {AD7949_CMD_CH(CFG_OVERWRITE,2),AD7949_CMD_CH(CFG_KEEP,2)},
+     62              {AD7949_CMD_CH(CFG_OVERWRITE,3),AD7949_CMD_CH(CFG_KEEP,3)},
+     63              {AD7949_CMD_CH(CFG_OVERWRITE,4),AD7949_CMD_CH(CFG_KEEP,4)},
+     64              {AD7949_CMD_CH(CFG_OVERWRITE,5),AD7949_CMD_CH(CFG_KEEP,5)},
+     65              {AD7949_CMD_CH(CFG_OVERWRITE,6),AD7949_CMD_CH(CFG_KEEP,6)},
+     66              {AD7949_CMD_CH(CFG_OVERWRITE,7),AD7949_CMD_CH(CFG_KEEP,7)},
+     67          };
+     68          
+     69          #define AD7949_CMD_OVERWRITE 0
+     70          #define AD7949_CMD_KEEP      1
+     71          
+     72          #define AD7949_READ_CHECK_ENA 1
+     73          #define AD7949_READ_CHECK_DIS 0
+     74          
+     75          #define AD7949_READ_CHECK AD7949_READ_CHECK_DIS
+     76          #define AD7949_READ_CHECK_MSK  0x000F
+     77          
+     78          #define AD7949_SPI_PORT SPI2
+     79          
+     80          #define AD7949_CNV_LOW() Enable_cs_ad()
+     81          #define AD7949_CNV_HIG() Disable_cs_ad()
+     82          #define AD7949_choose_mux(ch) Choose_MUX_Channel(ch)
+     83          
+     84          #define AD7949_ISAMP_16 0
+     85          #define AD7949_ISAMP_32 1
+     86          #define AD7949_MPD_16   2
+     87          #define AD7949_MPD_32   3
+     88          #define AD7949_VSAMP_16 4
+     89          #define AD7949_VSAMP_32 5
+     90          #define AD7949_THERMO_1 6
+     91          #define AD7949_THERMO_2 7
+     92          
+     93          
+     94          #define AD7949_CH_0     0
+     95          #define AD7949_CH_1     1
+     96          #define AD7949_CH_2     2
+     97          #define AD7949_CH_3     3
+     98          #define AD7949_CH_4     4
+     99          #define AD7949_CH_5     5
+    100          #define AD7949_CH_6     6
+    101          #define AD7949_CH_7     7
+    102          
+    103          typedef struct
+    104          {
+    105              uint16_t AD7949_isamp_buf[32];
+    106              uint16_t AD7949_mpd_buf[32];
+    107              uint16_t AD7949_vsamp_buf[32];
+    108              uint16_t AD7949_thermo_buf0[1];
+    109              uint16_t AD7949_thermo_buf1[1];
+    110          }AD7949_data_st;
+    111          
+    112          AD7949_data_st   AD7949_databuf_st;
+    113          
+    114          static void AD7949_Spi_Io_Init(void);
+    115          static void AD7949_Spi_Io_DeInit(void);
+    116          static uint8_t AD7949_Spi_Access(uint16_t RegisterData, uint16_t * ReceiveData);
+    117          static uint8_t AD7949_read_data(uint16_t chn, uint16_t *value);
+    118          static uint8_t AD7949_read_data_chk(uint16_t ch, uint16_t *rdata);
+    119          
+    120          
+    121          
+    122          static uint8_t AD7949_read_ISAMP(uint16_t ch, uint16_t *rdata);
+    123          static uint8_t AD7949_read_MPD(uint16_t ch, uint16_t *rdata);
+    124          static uint8_t AD7949_read_VSAMP(uint16_t ch, uint16_t *rdata);
+    125          static uint8_t AD7949_read_THERMO(uint16_t ch, uint16_t *rdata);
+    126          
+    127          
+    128          
+    129          
+    130          void AD7949_init(void)
+    131          {
+    132          
+    133          }
+    134          
+    135          
+    136          
+    137          void AD7949_read_all_data(void)
+    138          {
+    139          
+    140              uint8_t i;
+    141              AD7949_Spi_Io_Init();
+    142              
+    143              for(i=0; i<16; i++)
+    144              {
+    145                  AD7949_choose_mux(i);
+    146                  Delay_ms(1);
+    147                  AD7949_read_ISAMP(AD7949_ISAMP_16, &AD7949_databuf_st.AD7949_isamp_buf[i]);
+    148                  AD7949_read_ISAMP(AD7949_ISAMP_32, &AD7949_databuf_st.AD7949_isamp_buf[i+16]);
+    149                  AD7949_read_MPD(AD7949_MPD_16, &AD7949_databuf_st.AD7949_mpd_buf[i]);
+    150                  AD7949_read_MPD(AD7949_MPD_32, &AD7949_databuf_st.AD7949_mpd_buf[i+16]);
+    151                  AD7949_read_VSAMP(AD7949_VSAMP_16, &AD7949_databuf_st.AD7949_vsamp_buf[i]);
+    152                  AD7949_read_VSAMP(AD7949_VSAMP_32, &AD7949_databuf_st.AD7949_vsamp_buf[i+16]);
+    153              }
+    154              AD7949_read_THERMO(AD7949_THERMO_1, &AD7949_databuf_st.AD7949_thermo_buf0[0]);
+    155              AD7949_read_THERMO(AD7949_THERMO_2, &AD7949_databuf_st.AD7949_thermo_buf1[0]);
+    156              AD7949_Spi_Io_DeInit();
+    157          
+    158          
+    159          }
+    160          
+    161          
+    162          uint8_t AD7949_read_ISAMP_ch(uint16_t ch, uint16_t *rdata)
+    163          {
+    164              uint8_t ret = ERROR;
+    165          
+    166              if((void *)0 == rdata)
+    167                  return ERROR;
+    168              if(ch >= ISAMP_MAX_CH)
+    169                  return ERROR;
+    170              
+    171              *rdata = AD7949_databuf_st.AD7949_isamp_buf[ch];
+    172              ret = SUCCESS;
+    173          
+    174              return ret;
+    175          }
+    176          
+    177          uint8_t AD7949_read_MPD_ch(uint16_t ch, uint16_t *rdata)
+    178          {
+    179              uint8_t ret = ERROR;
+    180          
+    181              if((void *)0 == rdata)
+    182                  return ERROR;
+    183              if(ch >= MPDSAMP_MAX_CH)
+    184                  return ERROR;
+    185              
+    186              *rdata = AD7949_databuf_st.AD7949_mpd_buf[ch];
+    187              ret = SUCCESS;
+    188          
+    189              return ret;
+    190          }
+    191          
+    192          uint8_t AD7949_read_VSAMP_ch(uint16_t ch, uint16_t *rdata)
+    193          {
+    194              uint8_t ret = ERROR;
+    195          
+    196              if((void *)0 == rdata)
+    197                  return ERROR;
+    198              if(ch >= VSAMP_MAX_CH)
+    199                  return ERROR;
+    200              
+    201              *rdata = AD7949_databuf_st.AD7949_vsamp_buf[ch];
+    202              ret = SUCCESS;
+    203          
+    204              return ret;
+    205          }
+    206          
+    207          uint8_t AD7949_read_THERMO_ch(uint16_t ch, uint16_t *rdata)
+    208          {
+    209              uint8_t ret = ERROR;
+    210              if((void *)0 == rdata)
+    211                  return ret;
+    212              if(THERMO_1 == ch)
+    213              {
+    214                  *rdata = AD7949_databuf_st.AD7949_thermo_buf0[0];
+    215                  ret = SUCCESS;
+    216              }
+    217              else if(THERMO_2 == ch)
+    218              {
+    219                  *rdata = AD7949_databuf_st.AD7949_thermo_buf1[0];
+    220                  ret = SUCCESS;
+    221              }
+    222              else
+    223              {
+    224              }
+    225          
+    226              return ret; 
+    227          }
+    228          
+    229          static uint8_t AD7949_read_ISAMP(uint16_t ch, uint16_t *rdata)
+    230          {
+    231              uint8_t ret = ERROR;
+    232              uint8_t ad_ch;
+    233              if((void *)0 == rdata)
+    234                  return ERROR;
+    235              
+    236              if(AD7949_ISAMP_16 == ch)
+    237              {
+    238                  ad_ch = AD7949_CH_0;
+    239              }
+    240              else if(AD7949_ISAMP_32 == ch)
+    241              {
+    242                  ad_ch = AD7949_CH_1;
+    243              }
+    244              else
+    245              {
+    246              }
+    247              ret = AD7949_read_data_chk(ad_ch, rdata);
+    248          
+    249              return ret;
+    250          }
+    251          
+    252          
+    253          static uint8_t AD7949_read_MPD(uint16_t ch, uint16_t *rdata)
+    254          {
+    255              uint8_t ret = ERROR;
+    256              uint8_t ad_ch;
+    257              if((void *)0 == rdata)
+    258                  return ERROR;
+    259              
+    260              if(AD7949_MPD_16 == ch)
+    261              {
+    262                  ad_ch = AD7949_CH_2;
+    263              }
+    264              else if(AD7949_MPD_32 == ch)
+    265              {
+    266                  ad_ch = AD7949_CH_3;
+    267              }
+    268              else
+    269              {
+    270              }
+    271              ret = AD7949_read_data_chk(ad_ch, rdata);
+    272          
+    273              return ret;
+    274          }
+    275          
+    276          
+    277          
+    278          
+    279          static uint8_t AD7949_read_VSAMP(uint16_t ch, uint16_t *rdata)
+    280          {
+    281              uint8_t ret = ERROR;
+    282              uint8_t ad_ch;
+    283              if((void *)0 == rdata)
+    284                  return ERROR;
+    285              
+    286              if(AD7949_VSAMP_16 == ch)
+    287              {
+    288                  ad_ch = AD7949_CH_4;
+    289              }
+    290              else if(AD7949_VSAMP_32 == ch)
+    291              {
+    292                  ad_ch = AD7949_CH_5;
+    293              }
+    294              else
+    295              {
+    296              }
+    297              ret = AD7949_read_data_chk(ad_ch, rdata);
+    298          
+    299              return ret;
+    300          }
+    301          
+    302          static uint8_t AD7949_read_THERMO(uint16_t ch, uint16_t *rdata)
+    303          {
+    304              uint8_t ret = ERROR;
+    305              uint8_t ad_ch;
+    306              if((void *)0 == rdata)
+    307                  return ERROR;
+    308              
+    309              if(AD7949_THERMO_1 == ch)
+    310              {
+    311                  ad_ch = AD7949_CH_6;
+    312              }
+    313              else if(AD7949_THERMO_2 == ch)
+    314              {
+    315                  ad_ch = AD7949_CH_7;
+    316              }
+    317              else
+    318              {
+    319              }
+    320              ret = AD7949_read_data_chk(ad_ch, rdata);
+    321          
+    322              return ret;
+    323          }
+    324          
+    325          
+    326          static uint8_t AD7949_read_data_chk(uint16_t ch, uint16_t *rdata)
+    327          {
+    328              uint8_t ret = ERROR;
+    329              uint16_t adc_data0 = 0;
+    330          #if(AD7949_READ_CHECK == AD7949_READ_CHECK_ENA)
+    331              uint16_t adc_data1 = 0;
+    332              uint16_t adc_abs=0;
+    333          #endif    
+    334              if((void *)0 == rdata)
+    335                  return ERROR;
+    336          
+    337              ret = AD7949_read_data(ch, &adc_data0);
+    338          #if(AD7949_READ_CHECK == AD7949_READ_CHECK_ENA)
+    339              /*read twice to check ADC results*/
+    340              if(SUCCESS == ret)
+    341              {
+    342                  ret = AD7949_read_data(ch, &adc_data1);
+    343                  adc_abs = abs(adc_data0 - adc_data1);
+    344                  if( adc_abs < AD7949_READ_CHECK_MSK)
+    345                  {
+    346                      *rdata = (uint16_t)(((uint32_t)adc_data0 + (uint32_t)adc_data1)>>1);
+    347                      ret = SUCCESS;
+    348                  }
+    349                  else
+    350                  {
+    351                      *rdata = 0;
+    352                      ret = ERROR;
+    353                  }
+    354              }
+    355              else
+    356              {
+    357                  *rdata = 0;
+    358                  ret = ERROR;
+    359              }
+    360          #else    
+    361              if(SUCCESS == ret)
+    362              {
+    363                  *rdata = adc_data0;
+    364                  ret = SUCCESS;
+    365              }
+    366              else
+    367              {
+    368                  *rdata = 0;
+    369                  ret = ERROR;
+    370              } 
+    371          #endif
+    372              return ret;
+    373          
+    374          }
+    375          
+    376          
+    377          void AD7949_SDI_HIG(void)
+    378          {
+    379              GPIOB->BSRR |= GPIO_Pin_15;
+    380          }
+    381          
+    382          
+    383          void AD7949_SDI_LOW(void)
+    384          {
+    385              GPIOB->BRR |= GPIO_Pin_15;
+    386          }
+    387          
+    388          
+    389          void AD7949_CLK_HIG(void)
+    390          {
+    391              GPIOB->BSRR |= GPIO_Pin_13;
+    392          }
+    393          
+    394          
+    395          void AD7949_CLK_LOW(void)
+    396          {
+    397              GPIOB->BRR |= GPIO_Pin_13;
+    398          }
+    399          
+    400          static void AD7949_Spi_Io_Init(void)
+    401          {
+    402              GPIO_InitTypeDef GPIO_InitStructure;
+    403          
+    404              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;  
+    405              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
+    406              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;  
+    407              GPIO_Init(GPIOB, &GPIO_InitStructure);
+    408              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13|GPIO_Pin_15;  
+    409              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;  
+    410              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;  
+    411              GPIO_Init(GPIOB, &GPIO_InitStructure);
+    412              
+    413              AD7949_CLK_LOW();
+    414              AD7949_SDI_LOW();
+    415              AD7949_CNV_LOW();
+    416          
+    417          }
+    418          
+    419          static void AD7949_Spi_Io_DeInit(void)
+    420          {
+    421              GPIO_InitTypeDef GPIO_InitStructure;
+    422          
+    423              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13| GPIO_Pin_14 | GPIO_Pin_15;
+    424              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    425              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+    426              GPIO_Init(GPIOB, &GPIO_InitStructure);
+    427          }
+    428          
+    429          static uint8_t AD7949_Spi_Access(uint16_t RegisterData, uint16_t * ReceiveData)
+    430          {
+    431              uint16_t ReceiveData_tmp = 0;
+    432              uint16_t i = 0;
+    433          
+    434              for(i=0; i<14; i++)
+    435              {
+    436                  if(0x8000 == (RegisterData & 0x8000))
+    437                  {
+    438                      AD7949_SDI_HIG();
+    439                  }
+    440                  else
+    441                  {
+    442                      AD7949_SDI_LOW();
+    443                  }
+    444                  Delay_us(1);
+    445                  AD7949_CLK_HIG();
+    446                  Delay_us(1);
+    447                  
+    448                  if(GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_14))
+    449                  {
+    450                      ReceiveData_tmp |= 1;
+    451                  }
+    452          
+    453                  AD7949_CLK_LOW();
+    454                  Delay_us(1);
+    455                  ReceiveData_tmp <<= 1;
+    456                  RegisterData <<= 1;
+    457              }
+    458              *ReceiveData = ReceiveData_tmp;
+    459              return SUCCESS;
+    460          }
+    461          
+    462          static uint8_t AD7949_read_data(uint16_t chn, uint16_t *value)
+    463          {
+    464              uint16_t RegisterData;
+    465              uint16_t SampleTimes = 0;
+    466              uint16_t AdcValue = 0;
+    467              uint32_t SumValue = 0;
+    468          
+    469              AD7949_CNV_LOW();
+    470              Delay_us(1);
+    471              AD7949_CNV_HIG();
+    472              Delay_us(10);
+    473              AD7949_CNV_LOW();
+    474              Delay_us(1);
+    475              RegisterData = AD7949_cmd_ch_ca[chn][AD7949_CMD_OVERWRITE];
+    476              AD7949_Spi_Access(RegisterData, &AdcValue);
+    477          
+    478              AD7949_CNV_HIG();
+    479              Delay_us(10);
+    480              AD7949_CNV_LOW();
+    481              Delay_us(1);
+    482              RegisterData = AD7949_cmd_ch_ca[chn][AD7949_CMD_KEEP];
+    483              AD7949_Spi_Access(RegisterData, &AdcValue);
+    484          
+    485              while(SampleTimes<8)
+    486              {
+    487                  AD7949_CNV_HIG();
+    488                  Delay_us(10);
+    489                  AD7949_CNV_LOW();
+    490                  Delay_us(1);
+    491          
+    492                  AD7949_Spi_Access(RegisterData, &AdcValue);
+    493                  SumValue += AdcValue;
+    494                  SampleTimes++;
+    495              }
+    496              *value = SumValue/SampleTimes;
+    497          
+    498              return SUCCESS;
+    499          
+    500          }
+    501          
+    502          
+    503          
+    504          /******************* (C) COPYRIGHT 2018 *****END OF FILE****/
+    505          
+    506          
+
+Errors: 5
+Warnings: 7

@@ -1,0 +1,557 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  20:02:55
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\mb.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\mb.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\mb.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mb.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\mb.c
+      1          /* 
+      2           * FreeModbus Libary: A portable Modbus implementation for Modbus ASCII/RTU.
+      3           * Copyright (c) 2006 Christian Walter <wolti@sil.at>
+      4           * All rights reserved.
+      5           *
+      6           * Redistribution and use in source and binary forms, with or without
+      7           * modification, are permitted provided that the following conditions
+      8           * are met:
+      9           * 1. Redistributions of source code must retain the above copyright
+     10           *    notice, this list of conditions and the following disclaimer.
+     11           * 2. Redistributions in binary form must reproduce the above copyright
+     12           *    notice, this list of conditions and the following disclaimer in the
+     13           *    documentation and/or other materials provided with the distribution.
+     14           * 3. The name of the author may not be used to endorse or promote products
+     15           *    derived from this software without specific prior written permission.
+     16           *
+     17           * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+     18           * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+     19           * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+     20           * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+     21           * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     22           * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+     23           * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+     24           * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+     25           * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+     26           * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+     27           *
+     28           * File: $Id: mb.c,v 1.28 2010/06/06 13:54:40 wolti Exp $
+     29           */
+     30          
+     31          /* ----------------------- System includes ----------------------------------*/
+     32          #include "stdlib.h"
+     33          #include "string.h"
+     34          
+     35          /* ----------------------- Platform includes --------------------------------*/
+     36          #include "port.h"
+     37          
+     38          /* ----------------------- Modbus includes ----------------------------------*/
+     39          #include "mb.h"
+     40          #include "mbconfig.h"
+     41          #include "mbframe.h"
+     42          #include "mbproto.h"
+     43          #include "mbfunc.h"
+     44          
+     45          #include "mbport.h"
+     46          #if MB_RTU_ENABLED == 1
+     47          #include "mbrtu.h"
+     48          #endif
+     49          #if MB_ASCII_ENABLED == 1
+     50          #include "mbascii.h"
+     51          #endif
+     52          #if MB_TCP_ENABLED == 1
+     53          #include "mbtcp.h"
+     54          #endif
+     55          
+     56          #ifndef MB_PORT_HAS_CLOSE
+     57          #define MB_PORT_HAS_CLOSE 0
+     58          #endif
+     59          
+     60          /* ----------------------- Static variables ---------------------------------*/
+     61          
+     62          static UCHAR    ucMBAddress;
+     63          static eMBMode  eMBCurrentMode;
+     64          
+     65          static enum
+     66          {
+     67              STATE_ENABLED,
+     68              STATE_DISABLED,
+     69              STATE_NOT_INITIALIZED
+     70          } eMBState = STATE_NOT_INITIALIZED;
+     71          
+     72          /* Functions pointer which are initialized in eMBInit( ). Depending on the
+     73           * mode (RTU or ASCII) the are set to the correct implementations.
+     74           */
+     75          static peMBFrameSend peMBFrameSendCur;
+     76          static pvMBFrameStart pvMBFrameStartCur;
+     77          static pvMBFrameStop pvMBFrameStopCur;
+     78          static peMBFrameReceive peMBFrameReceiveCur;
+     79          static pvMBFrameClose pvMBFrameCloseCur;
+     80          
+     81          /* Callback functions required by the porting layer. They are called when
+     82           * an external event has happend which includes a timeout or the reception
+     83           * or transmission of a character.
+     84           */
+     85          BOOL( *pxMBFrameCBByteReceived ) ( void );
+     86          BOOL( *pxMBFrameCBTransmitterEmpty ) ( void );
+     87          BOOL( *pxMBPortCBTimerExpired ) ( void );
+     88          
+     89          BOOL( *pxMBFrameCBReceiveFSMCur ) ( void );
+     90          BOOL( *pxMBFrameCBTransmitFSMCur ) ( void );
+     91          
+     92          /* An array of Modbus functions handlers which associates Modbus function
+     93           * codes with implementing functions.
+     94           */
+     95          static xMBFunctionHandler xFuncHandlers[MB_FUNC_HANDLERS_MAX] = {
+     96          #if MB_FUNC_OTHER_REP_SLAVEID_ENABLED > 0
+     97              {MB_FUNC_OTHER_REPORT_SLAVEID, eMBFuncReportSlaveID},
+     98          #endif
+     99          #if MB_FUNC_READ_INPUT_ENABLED > 0
+    100              {MB_FUNC_READ_INPUT_REGISTER, eMBFuncReadInputRegister},
+    101          #endif
+    102          #if MB_FUNC_READ_HOLDING_ENABLED > 0
+    103              {MB_FUNC_READ_HOLDING_REGISTER, eMBFuncReadHoldingRegister},
+    104          #endif
+    105          #if MB_FUNC_WRITE_MULTIPLE_HOLDING_ENABLED > 0
+    106              {MB_FUNC_WRITE_MULTIPLE_REGISTERS, eMBFuncWriteMultipleHoldingRegister},
+    107          #endif
+    108          #if MB_FUNC_WRITE_HOLDING_ENABLED > 0
+    109              {MB_FUNC_WRITE_REGISTER, eMBFuncWriteHoldingRegister},
+    110          #endif
+    111          #if MB_FUNC_READWRITE_HOLDING_ENABLED > 0
+    112              {MB_FUNC_READWRITE_MULTIPLE_REGISTERS, eMBFuncReadWriteMultipleHoldingRegister},
+    113          #endif
+    114          #if MB_FUNC_READ_COILS_ENABLED > 0
+    115              {MB_FUNC_READ_COILS, eMBFuncReadCoils},
+    116          #endif
+    117          #if MB_FUNC_WRITE_COIL_ENABLED > 0
+    118              {MB_FUNC_WRITE_SINGLE_COIL, eMBFuncWriteCoil},
+    119          #endif
+    120          #if MB_FUNC_WRITE_MULTIPLE_COILS_ENABLED > 0
+    121              {MB_FUNC_WRITE_MULTIPLE_COILS, eMBFuncWriteMultipleCoils},
+    122          #endif
+    123          #if MB_FUNC_READ_DISCRETE_INPUTS_ENABLED > 0
+    124              {MB_FUNC_READ_DISCRETE_INPUTS, eMBFuncReadDiscreteInputs},
+    125          #endif
+    126          };
+    127          
+    128          /* ----------------------- Start implementation -----------------------------*/
+    129          eMBErrorCode
+    130          eMBInit( eMBMode eMode, UCHAR ucSlaveAddress, UCHAR ucPort, ULONG ulBaudRate, eMBParity eParity )
+    131          {
+    132              eMBErrorCode    eStatus = MB_ENOERR;
+    133          
+    134              /* check preconditions */
+    135              if( ( ucSlaveAddress == MB_ADDRESS_BROADCAST ) ||
+    136                  ( ucSlaveAddress < MB_ADDRESS_MIN ) || ( ucSlaveAddress > MB_ADDRESS_MAX ) )
+    137              {
+    138                  eStatus = MB_EINVAL;
+    139              }
+    140              else
+    141              {
+    142                  ucMBAddress = ucSlaveAddress;
+    143          
+    144                  switch ( eMode )
+    145                  {
+    146          #if MB_RTU_ENABLED > 0
+    147                  case MB_RTU:
+    148                      pvMBFrameStartCur = eMBRTUStart;
+    149                      pvMBFrameStopCur = eMBRTUStop;
+    150                      peMBFrameSendCur = eMBRTUSend;
+    151                      peMBFrameReceiveCur = eMBRTUReceive;
+    152                      pvMBFrameCloseCur = MB_PORT_HAS_CLOSE ? vMBPortClose : NULL;
+    153                      pxMBFrameCBByteReceived = xMBRTUReceiveFSM;
+    154                      pxMBFrameCBTransmitterEmpty = xMBRTUTransmitFSM;
+    155                      pxMBPortCBTimerExpired = xMBRTUTimerT35Expired;
+    156          
+    157                      eStatus = eMBRTUInit( ucMBAddress, ucPort, ulBaudRate, eParity );
+    158                      break;
+    159          #endif
+    160          #if MB_ASCII_ENABLED > 0
+    161                  case MB_ASCII:
+    162                      pvMBFrameStartCur = eMBASCIIStart;
+    163                      pvMBFrameStopCur = eMBASCIIStop;
+    164                      peMBFrameSendCur = eMBASCIISend;
+    165                      peMBFrameReceiveCur = eMBASCIIReceive;
+    166                      pvMBFrameCloseCur = MB_PORT_HAS_CLOSE ? vMBPortClose : NULL;
+    167                      pxMBFrameCBByteReceived = xMBASCIIReceiveFSM;
+    168                      pxMBFrameCBTransmitterEmpty = xMBASCIITransmitFSM;
+    169                      pxMBPortCBTimerExpired = xMBASCIITimerT1SExpired;
+    170          
+    171                      eStatus = eMBASCIIInit( ucMBAddress, ucPort, ulBaudRate, eParity );
+    172                      break;
+    173          #endif
+    174                  default:
+    175                      eStatus = MB_EINVAL;
+    176                  }
+    177          
+    178                  if( eStatus == MB_ENOERR )
+    179                  {
+    180                      if( !xMBPortEventInit(  ) )
+    181                      {
+    182                          /* port dependent event module initalization failed. */
+    183                          eStatus = MB_EPORTERR;
+    184                      }
+    185                      else
+    186                      {
+    187                          eMBCurrentMode = eMode;
+    188                          eMBState = STATE_DISABLED;
+    189                      }
+    190                  }
+    191              }
+    192              return eStatus;
+    193          }
+    194          
+    195          #if MB_TCP_ENABLED > 0
+    196          eMBErrorCode
+    197          eMBTCPInit( USHORT ucTCPPort )
+    198          {
+    199              eMBErrorCode    eStatus = MB_ENOERR;
+    200          
+    201              if( ( eStatus = eMBTCPDoInit( ucTCPPort ) ) != MB_ENOERR )
+    202              {
+    203                  eMBState = STATE_DISABLED;
+    204              }
+    205              else if( !xMBPortEventInit(  ) )
+    206              {
+    207                  /* Port dependent event module initalization failed. */
+    208                  eStatus = MB_EPORTERR;
+    209              }
+    210              else
+    211              {
+    212                  pvMBFrameStartCur = eMBTCPStart;
+    213                  pvMBFrameStopCur = eMBTCPStop;
+    214                  peMBFrameReceiveCur = eMBTCPReceive;
+    215                  peMBFrameSendCur = eMBTCPSend;
+    216                  pvMBFrameCloseCur = MB_PORT_HAS_CLOSE ? vMBTCPPortClose : NULL;
+    217                  ucMBAddress = MB_TCP_PSEUDO_ADDRESS;
+    218                  eMBCurrentMode = MB_TCP;
+    219                  eMBState = STATE_DISABLED;
+    220              }
+    221              return eStatus;
+    222          }
+    223          #endif
+    224          
+    225          eMBErrorCode
+    226          eMBRegisterCB( UCHAR ucFunctionCode, pxMBFunctionHandler pxHandler )
+    227          {
+    228              int             i;
+    229              eMBErrorCode    eStatus;
+    230          
+    231              if( ( 0 < ucFunctionCode ) && ( ucFunctionCode <= 127 ) )
+    232              {
+    233                  ENTER_CRITICAL_SECTION(  );
+    234                  if( pxHandler != NULL )
+    235                  {
+    236                      for( i = 0; i < MB_FUNC_HANDLERS_MAX; i++ )
+    237                      {
+    238                          if( ( xFuncHandlers[i].pxHandler == NULL ) ||
+    239                              ( xFuncHandlers[i].pxHandler == pxHandler ) )
+    240                          {
+    241                              xFuncHandlers[i].ucFunctionCode = ucFunctionCode;
+    242                              xFuncHandlers[i].pxHandler = pxHandler;
+    243                              break;
+    244                          }
+    245                      }
+    246                      eStatus = ( i != MB_FUNC_HANDLERS_MAX ) ? MB_ENOERR : MB_ENORES;
+    247                  }
+    248                  else
+    249                  {
+    250                      for( i = 0; i < MB_FUNC_HANDLERS_MAX; i++ )
+    251                      {
+    252                          if( xFuncHandlers[i].ucFunctionCode == ucFunctionCode )
+    253                          {
+    254                              xFuncHandlers[i].ucFunctionCode = 0;
+    255                              xFuncHandlers[i].pxHandler = NULL;
+    256                              break;
+    257                          }
+    258                      }
+    259                      /* Remove can't fail. */
+    260                      eStatus = MB_ENOERR;
+    261                  }
+    262                  EXIT_CRITICAL_SECTION(  );
+    263              }
+    264              else
+    265              {
+    266                  eStatus = MB_EINVAL;
+    267              }
+    268              return eStatus;
+    269          }
+    270          
+    271          
+    272          eMBErrorCode
+    273          eMBClose( void )
+    274          {
+    275              eMBErrorCode    eStatus = MB_ENOERR;
+    276          
+    277              if( eMBState == STATE_DISABLED )
+    278              {
+    279                  if( pvMBFrameCloseCur != NULL )
+    280                  {
+    281                      pvMBFrameCloseCur(  );
+    282                  }
+    283              }
+    284              else
+    285              {
+    286                  eStatus = MB_EILLSTATE;
+    287              }
+    288              return eStatus;
+    289          }
+    290          
+    291          eMBErrorCode
+    292          eMBEnable( void )
+    293          {
+    294              eMBErrorCode    eStatus = MB_ENOERR;
+    295          
+    296              if( eMBState == STATE_DISABLED )
+    297              {
+    298                  /* Activate the protocol stack. */
+    299                  pvMBFrameStartCur(  );
+    300                  eMBState = STATE_ENABLED;
+    301              }
+    302              else
+    303              {
+    304                  eStatus = MB_EILLSTATE;
+    305              }
+    306              return eStatus;
+    307          }
+    308          
+    309          eMBErrorCode
+    310          eMBDisable( void )
+    311          {
+    312              eMBErrorCode    eStatus;
+    313          
+    314              if( eMBState == STATE_ENABLED )
+    315              {
+    316                  pvMBFrameStopCur(  );
+    317                  eMBState = STATE_DISABLED;
+    318                  eStatus = MB_ENOERR;
+    319              }
+    320              else if( eMBState == STATE_DISABLED )
+    321              {
+    322                  eStatus = MB_ENOERR;
+    323              }
+    324              else
+    325              {
+    326                  eStatus = MB_EILLSTATE;
+    327              }
+    328              return eStatus;
+    329          }
+    330          
+    331          eMBErrorCode
+    332          eMBPoll( void )
+    333          {
+    334              static UCHAR   *ucMBFrame;
+    335              static UCHAR    ucRcvAddress;
+    336              static UCHAR    ucFunctionCode;
+    337              static USHORT   usLength;
+    338              static eMBException eException;
+    339          
+    340              int             i;
+    341              eMBErrorCode    eStatus = MB_ENOERR;
+    342              eMBEventType    eEvent;
+    343          
+    344              /* Check if the protocol stack is ready. */
+    345              if( eMBState != STATE_ENABLED )
+    346              {
+    347                  return MB_EILLSTATE;
+    348              }
+    349          
+    350              /* Check if there is a event available. If not return control to caller.
+    351               * Otherwise we will handle the event. */
+    352              if( xMBPortEventGet( &eEvent ) == TRUE )
+    353              {
+    354                  switch ( eEvent )
+    355                  {
+    356                  case EV_READY:
+    357                      break;
+    358          
+    359                  case EV_FRAME_RECEIVED:
+    360                      eStatus = peMBFrameReceiveCur( &ucRcvAddress, &ucMBFrame, &usLength );
+    361                      if( eStatus == MB_ENOERR )
+    362                      {
+    363                          /* Check if the frame is for us. If not ignore the frame. */
+    364                          if( ( ucRcvAddress == ucMBAddress ) || ( ucRcvAddress == MB_ADDRESS_BROADCAST ) )
+    365                          {
+    366                              ( void )xMBPortEventPost( EV_EXECUTE );
+    367                          }
+    368                      }
+    369                      break;
+    370          
+    371                  case EV_EXECUTE:
+    372                      ucFunctionCode = ucMBFrame[MB_PDU_FUNC_OFF];
+    373                      eException = MB_EX_ILLEGAL_FUNCTION;
+    374                      for( i = 0; i < MB_FUNC_HANDLERS_MAX; i++ )
+    375                      {
+    376                          /* No more function handlers registered. Abort. */
+    377                          if( xFuncHandlers[i].ucFunctionCode == 0 )
+    378                          {
+    379                              break;
+    380                          }
+    381                          else if( xFuncHandlers[i].ucFunctionCode == ucFunctionCode )
+    382                          {
+    383                              eException = xFuncHandlers[i].pxHandler( ucMBFrame, &usLength );
+    384                              break;
+    385                          }
+    386                      }
+    387          
+    388                      /* If the request was not sent to the broadcast address we
+    389                       * return a reply. */
+    390                      if( ucRcvAddress != MB_ADDRESS_BROADCAST )
+    391                      {
+    392                          if( eException != MB_EX_NONE )
+    393                          {
+    394                              /* An exception occured. Build an error frame. */
+    395                              usLength = 0;
+    396                              ucMBFrame[usLength++] = ( UCHAR )( ucFunctionCode | MB_FUNC_ERROR );
+    397                              ucMBFrame[usLength++] = eException;
+    398                          }
+    399                          if( ( eMBCurrentMode == MB_ASCII ) && MB_ASCII_TIMEOUT_WAIT_BEFORE_SEND_MS )
+    400                          {
+    401                              vMBPortTimersDelay( MB_ASCII_TIMEOUT_WAIT_BEFORE_SEND_MS );
+    402                          }                
+    403                          eStatus = peMBFrameSendCur( ucMBAddress, ucMBFrame, usLength );
+    404                      }
+    405                      break;
+    406          
+    407                  case EV_FRAME_SENT:
+    408                      break;
+    409                  }
+    410              }
+    411              return MB_ENOERR;
+    412          }
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   eMBClose
+         8   -- Indirect call
+       8   eMBDisable
+         8   -- Indirect call
+       8   eMBEnable
+         8   -- Indirect call
+      32   eMBInit
+        32   -> eMBASCIIInit
+        32   -> eMBRTUInit
+        32   -> xMBPortEventInit
+      16   eMBPoll
+        16   -- Indirect call
+        16   -> vMBPortTimersDelay
+        16   -> xMBPortEventGet
+        16   -> xMBPortEventPost
+       8   eMBRegisterCB
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable5
+       4  ??DataTable5_1
+       4  ??DataTable5_10
+       4  ??DataTable5_11
+       4  ??DataTable5_12
+       4  ??DataTable5_13
+       4  ??DataTable5_14
+       4  ??DataTable5_15
+       4  ??DataTable5_16
+       4  ??DataTable5_17
+       4  ??DataTable5_18
+       4  ??DataTable5_19
+       4  ??DataTable5_2
+       4  ??DataTable5_20
+       4  ??DataTable5_21
+       4  ??DataTable5_22
+       4  ??DataTable5_23
+       4  ??DataTable5_24
+       4  ??DataTable5_25
+       4  ??DataTable5_26
+       4  ??DataTable5_27
+       4  ??DataTable5_28
+       4  ??DataTable5_29
+       4  ??DataTable5_3
+       4  ??DataTable5_30
+       4  ??DataTable5_4
+       4  ??DataTable5_5
+       4  ??DataTable5_6
+       4  ??DataTable5_7
+       4  ??DataTable5_8
+       4  ??DataTable5_9
+       1  eException
+      38  eMBClose
+       1  eMBCurrentMode
+      52  eMBDisable
+      36  eMBEnable
+     276  eMBInit
+     286  eMBPoll
+     152  eMBRegisterCB
+       1  eMBState
+       4  peMBFrameReceiveCur
+       4  peMBFrameSendCur
+       4  pvMBFrameCloseCur
+       4  pvMBFrameStartCur
+       4  pvMBFrameStopCur
+       4  pxMBFrameCBByteReceived
+       4  pxMBFrameCBReceiveFSMCur
+       4  pxMBFrameCBTransmitFSMCur
+       4  pxMBFrameCBTransmitterEmpty
+       4  pxMBPortCBTimerExpired
+       1  ucFunctionCode
+       1  ucMBAddress
+       4  ucMBFrame
+       1  ucRcvAddress
+       2  usLength
+     128  xFuncHandlers
+
+ 
+  51 bytes in section .bss
+ 129 bytes in section .data
+ 964 bytes in section .text
+ 
+ 964 bytes of CODE memory
+ 180 bytes of DATA memory
+
+Errors: none
+Warnings: none

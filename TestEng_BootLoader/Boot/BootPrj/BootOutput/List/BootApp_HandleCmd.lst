@@ -1,0 +1,177 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  20:02:45
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_HandleCmd.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_HandleCmd.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\BootApp_HandleCmd.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_HandleCmd.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_HandleCmd.c
+      1          /*<BASDKey>
+      2           **********************************************************************************************************************
+      3           *
+      4           * COPYRIGHT RESERVED, FeedLiTech, 2019. All rights reserved.
+      5           * The reproduction, distribution and utilization of this document as well as the communication of its contents to
+      6           * others without explicit authorization is prohibited. Offenders will be held liable for the payment of damages.
+      7           * All rights reserved in the event of the grant of a patent, utility model or design.
+      8           *
+      9           **********************************************************************************************************************
+     10          </BASDKey>*/
+     11          
+     12          #include "BootApp_Cfg.h"
+     13          #include "BootApp_Cfg_Board.h"
+     14          #include "BootApp_Type.h"
+     15          #include "BootApp_Priv.h"
+     16          
+     17          BootApp_CommunicationBuffer_tun BootApp_CommunicationBuffer_un = {{0},};
+     18          BootApp_StatusBuffer_tun StatusBuffer_un = {{0},};
+     19          
+     20          
+     21          #if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
+     22          
+     23          void BootApp_HandleCmd_Receive(void)
+     24          {
+     25          
+     26          }
+     27          
+     28          void BootApp_HandleCmd_Send(void)
+     29          {
+     30          
+     31          }
+     32          
+     33          void BootApp_Get_CommunicationBuf(BootApp_CommunicationBuffer_tst ** ComBuffer_pst)
+     34          {
+     35              *ComBuffer_pst = &BootApp_CommunicationBuffer_un.com_st;
+     36          }
+     37          
+     38          #else
+     39          
+     40          extern eMBErrorCode  eWriteMBRegInput( USHORT * pucRegBuffer, USHORT usAddress, USHORT usNRegs);
+     41          extern eMBErrorCode  eReadMBRegHolding( USHORT * pucRegBuffer, USHORT usAddress, USHORT usNRegs);
+     42          
+     43          static void BootApp_CopyFromMb(void);
+     44          static void BootApp_SendToMb(void);
+     45          
+     46          
+     47          void BootApp_HandleCmd_Receive(void)
+     48          {
+     49              eMBPoll();
+     50              BootApp_CopyFromMb();
+     51          }
+     52          
+     53          void BootApp_HandleCmd_Send(void)
+     54          {
+     55              BootApp_SendToMb();
+     56              eMBPoll();
+     57          }
+     58          
+     59          void BootApp_CopyFromMb(void)
+     60          {
+     61              eReadMBRegHolding( &BootApp_CommunicationBuffer_un.buf_au16[0], 0, BOOTAPP_COMMUBICATION_BUF_SIZE);
+     62          }
+     63          
+     64          
+     65          void BootApp_SendToMb(void)
+     66          {
+     67              eWriteMBRegInput(&StatusBuffer_un.buf_au16[0], 2, BOOTAPP_STATUS_BUF_SIZE);
+     68          }
+     69          
+     70          void BootApp_Get_CommunicationBuf(BootApp_CommunicationBuffer_tst ** ComBuffer_pst)
+     71          {
+     72              *ComBuffer_pst = &BootApp_CommunicationBuffer_un.com_st;
+     73          }
+     74          
+     75          #endif
+     76          /*<BASDKey>
+     77           ***********************************************************************************************************************
+     78           * $History___:
+     79           *
+     80           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+     81           *
+     82           * $
+     83           ***********************************************************************************************************************
+     84          </BASDKey>*/
+     85          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   BootApp_CopyFromMb
+         8   -> eReadMBRegHolding
+       0   BootApp_Get_CommunicationBuf
+       8   BootApp_HandleCmd_Receive
+         8   -> BootApp_CopyFromMb
+         8   -> eMBPoll
+       8   BootApp_HandleCmd_Send
+         8   -> BootApp_SendToMb
+         8   -> eMBPoll
+       8   BootApp_SendToMb
+         8   -> eWriteMBRegInput
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable2
+       4  ??DataTable2_1
+     512  BootApp_CommunicationBuffer_un
+      16  BootApp_CopyFromMb
+       6  BootApp_Get_CommunicationBuf
+      12  BootApp_HandleCmd_Receive
+      12  BootApp_HandleCmd_Send
+      14  BootApp_SendToMb
+     256  StatusBuffer_un
+
+ 
+ 768 bytes in section .bss
+  68 bytes in section .text
+ 
+  68 bytes of CODE memory
+ 768 bytes of DATA memory
+
+Errors: none
+Warnings: none

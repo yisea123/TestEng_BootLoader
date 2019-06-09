@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       09/Jun/2019  18:04:59
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       09/Jun/2019  20:02:46
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -50,7 +50,6 @@
 
         EXTERN __aeabi_memclr4
 
-        PUBLIC BootApp_CommunicationBuffer_en
         PUBLIC BootApp_Enable_ReceiveData
         PUBLIC BootApp_Get_Command
         PUBLIC BootApp_Get_ReceiveData_Info
@@ -68,10 +67,6 @@
         SECTION `.bss`:DATA:REORDER:NOROOT(2)
 BootApp_SectBuffer_en:
         DS8 1024
-
-        SECTION `.bss`:DATA:REORDER:NOROOT(2)
-BootApp_CommunicationBuffer_en:
-        DS8 768
 
         SECTION `.bss`:DATA:REORDER:NOROOT(2)
 BootApp_ReceiveData_st:
@@ -228,13 +223,13 @@ BootApp_PageBuffer_Read:
         PUSH     {R4-R6}
         MOVS     R4,R0
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        CMP      R1,#+256
-        BGT.N    ??BootApp_PageBuffer_Read_0
+        CMP      R1,#+129
+        BGE.N    ??BootApp_PageBuffer_Read_0
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
         ADDS     R6,R2,R1
-        CMP      R6,#+256
-        BGT.N    ??BootApp_PageBuffer_Read_0
+        CMP      R6,#+129
+        BGE.N    ??BootApp_PageBuffer_Read_0
         UXTH     R2,R2            ;; ZeroExt  R2,R2,#+16,#+16
         CMP      R2,#+0
         BEQ.N    ??BootApp_PageBuffer_Read_0
@@ -358,7 +353,7 @@ BootApp_Receive_Data:
         CMP      R4,#+0
         BEQ.N    ??BootApp_Receive_Data_7
         LDRH     R0,[SP, #+0]
-        CMP      R0,#+3
+        CMP      R0,#+5
         BGE.N    ??BootApp_Receive_Data_8
         LDRH     R0,[SP, #+0]
         CMP      R0,#+0
@@ -376,7 +371,7 @@ BootApp_Receive_Data:
         CMP      R4,#+0
         BEQ.N    ??BootApp_Receive_Data_9
         LDRH     R0,[SP, #+2]
-        CMP      R0,#+512
+        CMP      R0,#+256
         BNE.N    ??BootApp_Receive_Data_10
         LDRH     R0,[SP, #+2]
         LDRH     R1,[SP, #+6]
@@ -397,13 +392,13 @@ BootApp_Receive_Data:
         UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
         CMP      R4,#+0
         BEQ.N    ??BootApp_Receive_Data_11
-        LDRH     R0,[SP, #+4]
-        LSLS     R0,R0,#+23
+        LDRB     R0,[SP, #+4]
+        LSLS     R0,R0,#+24
         BNE.N    ??BootApp_Receive_Data_12
         LDRH     R0,[SP, #+4]
         LDRH     R1,[SP, #+0]
         SUBS     R1,R1,#+1
-        MOV      R2,#+512
+        MOV      R2,#+256
         MULS     R1,R2,R1
         CMP      R0,R1
         BNE.N    ??BootApp_Receive_Data_12
@@ -547,7 +542,7 @@ BootApp_Receive_Data:
         STRH     R0,[R8, #+8]
         LDRH     R0,[R8, #+8]
         LDR.N    R1,??DataTable6_3
-        LDRH     R1,[R1, #+4]
+        LDRH     R1,[R1, #+8]
         CMP      R0,R1
         BNE.N    ??BootApp_Receive_Data_25
         MOVS     R0,#+1
@@ -661,13 +656,13 @@ BootApp_Enable_ReceiveData:
 
         END
 // 
-// 1 820 bytes in section .bss
+// 1 052 bytes in section .bss
 //    60 bytes in section .rodata
-// 1 104 bytes in section .text
+// 1 100 bytes in section .text
 // 
-// 1 104 bytes of CODE  memory
+// 1 100 bytes of CODE  memory
 //    60 bytes of CONST memory
-// 1 820 bytes of DATA  memory
+// 1 052 bytes of DATA  memory
 //
 //Errors: none
 //Warnings: none

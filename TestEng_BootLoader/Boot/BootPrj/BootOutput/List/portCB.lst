@@ -1,0 +1,273 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  20:02:53
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\modbus_port\portCB.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\modbus_port\portCB.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\portCB.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\portCB.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\modbus_port\portCB.c
+      1          #include <stdio.h>
+      2          #include "mb.h"
+      3          #include "mbutils.h"
+      4          
+      5          #include "BootApp.h"
+      6          
+      7          
+      8          extern eMBErrorCode  eWriteMBRegInput( USHORT * pucRegBuffer, USHORT usAddress, USHORT usNRegs);
+      9          extern eMBErrorCode  eReadMBRegHolding( USHORT * pucRegBuffer, USHORT usAddress, USHORT usNRegs);
+     10          
+     11          #define REG_HOLDING_START 0x0001
+     12          #define REG_HOLDING_NREGS BOOTAPP_COMMUBICATION_BUF_SIZE
+     13          
+     14          USHORT  usRegHoldingBuf[REG_HOLDING_NREGS] = {0};
+     15          
+     16          eMBErrorCode  eMBRegHoldingCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNRegs,
+     17          eMBRegisterMode eMode )
+     18          {
+     19          
+     20              eMBErrorCode eStatus = MB_ENOERR;
+     21              USHORT iRegIndex;
+     22              USHORT iRegData;
+     23          
+     24              if(pucRegBuffer == (void*)0)
+     25                  return MB_EINVAL;
+     26                  
+     27              if( ( (USHORT)usAddress >= REG_HOLDING_START ) \
+     28              && ( usAddress + usNRegs <= REG_HOLDING_START + REG_HOLDING_NREGS ) )
+     29              {
+     30                  iRegIndex = ( USHORT )( usAddress - REG_HOLDING_START );
+     31          
+     32                  switch ( eMode )
+     33                  {
+     34                      case MB_REG_READ:
+     35                      {
+     36                          while( usNRegs > 0 )
+     37                          {
+     38                              iRegData = usRegHoldingBuf[iRegIndex];
+     39                              *pucRegBuffer++ = ( UCHAR )( iRegData >> 8 );
+     40                              *pucRegBuffer++ = ( UCHAR )( iRegData & 0xFF );
+     41                              iRegIndex++;
+     42                              usNRegs--;
+     43                          }
+     44          
+     45                      }
+     46                      break;
+     47          
+     48                      case MB_REG_WRITE:
+     49                      {
+     50                          while( usNRegs > 0 )
+     51                          {
+     52                              iRegData = *pucRegBuffer++ << 8;
+     53                              iRegData |= *pucRegBuffer++;
+     54                              usRegHoldingBuf[iRegIndex] = iRegData;
+     55                              iRegIndex++;
+     56                              usNRegs--;
+     57                          }
+     58                      }
+     59                      break;
+     60                  }
+     61              }
+     62              else
+     63              {
+     64                  eStatus = MB_ENOREG;
+     65              }
+     66          
+     67              return eStatus;
+     68          }
+     69          
+     70          
+     71          
+     72          #define REG_INPUT_START 0x0001
+     73          #define REG_INPUT_NREGS BOOTAPP_STATUS_BUF_SIZE
+     74          USHORT  usRegInputBuf[REG_INPUT_NREGS] = {0x2019,0x0520,};
+     75          
+     76          eMBErrorCode  eMBRegInputCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNRegs )
+     77          {
+     78              eMBErrorCode eStatus = MB_ENOERR;
+     79              USHORT iRegIndex;
+     80              USHORT iRegData;
+     81              if(pucRegBuffer == (void*)0)
+     82                  return MB_EINVAL;
+     83          
+     84              if( ( (USHORT)usAddress >= REG_INPUT_START ) \
+     85              && ( usAddress + usNRegs <= REG_INPUT_START + REG_INPUT_NREGS ) )
+     86              {
+     87                  iRegIndex = ( USHORT )( usAddress - REG_INPUT_START );
+     88                  while( usNRegs > 0 )
+     89                  {
+     90                      iRegData = usRegInputBuf[iRegIndex];
+     91                      *pucRegBuffer++ = ( UCHAR )( iRegData >> 8 );
+     92                      *pucRegBuffer++ = ( UCHAR )( iRegData & 0xFF );
+     93                      iRegIndex++;
+     94                      usNRegs--;
+     95                  }
+     96              }
+     97              else
+     98              {
+     99                  eStatus = MB_ENOREG;
+    100              }
+    101          
+    102              return eStatus;
+    103          }
+    104          
+    105          
+    106          
+    107          
+    108          
+    109          
+    110          
+    111          
+    112          eMBErrorCode    eMBRegCoilsCB( UCHAR * pucRegBuffer, USHORT usAddress,
+    113                                         USHORT usNCoils, eMBRegisterMode eMode )
+    114          {
+    115              return MB_ENOERR;
+    116          
+    117          }
+    118          
+    119          eMBErrorCode    eMBRegDiscreteCB( UCHAR * pucRegBuffer, USHORT usAddress,
+    120                                            USHORT usNDiscrete )
+    121          {
+    122             return MB_ENOERR;
+    123          
+    124          }
+    125          
+    126          
+    127          eMBErrorCode  eWriteMBRegInput( USHORT * pucRegBuffer, USHORT usAddress, USHORT usNRegs)
+    128          {
+    129              eMBErrorCode eStatus = MB_ENOERR;
+    130              USHORT iRegIndex;
+    131          
+    132              if(pucRegBuffer == (void*)0)
+    133                  return MB_EINVAL;
+    134          
+    135              if( ( (USHORT)usAddress >= 0u ) \
+    136              && ( usAddress + usNRegs <= REG_INPUT_NREGS ) )
+    137              {
+    138                  iRegIndex = usAddress;
+    139                  ENTER_CRITICAL_SECTION();
+    140                  while( usNRegs > 0 )
+    141                  {
+    142                      usRegInputBuf[iRegIndex] = *pucRegBuffer++;
+    143                      iRegIndex++;
+    144                      usNRegs--;
+    145                  }
+    146                  EXIT_CRITICAL_SECTION();
+    147              }
+    148              else
+    149              {
+    150                  eStatus = MB_ENOREG;
+    151              }
+    152              return eStatus;
+    153          
+    154          }
+    155          eMBErrorCode  eReadMBRegHolding( USHORT * pucRegBuffer, USHORT usAddress, USHORT usNRegs)
+    156          {
+    157              eMBErrorCode eStatus = MB_ENOERR;
+    158              USHORT iRegIndex;
+    159              
+    160              if(pucRegBuffer == (void*)0)
+    161                  return MB_EINVAL;
+    162          
+    163          
+    164              if( ( (USHORT)usAddress >= 0u ) \
+    165              && ( usAddress + usNRegs <=  REG_HOLDING_NREGS ) )
+    166              {
+    167                  iRegIndex = usAddress;
+    168                  ENTER_CRITICAL_SECTION();
+    169                  while( usNRegs > 0 )
+    170                  {
+    171                      *pucRegBuffer++  = usRegHoldingBuf[iRegIndex];
+    172                      iRegIndex++;
+    173                      usNRegs--;
+    174                  }
+    175                  EXIT_CRITICAL_SECTION();
+    176              }
+    177              else
+    178              {
+    179                  eStatus = MB_ENOREG;
+    180              }
+    181              return eStatus;
+    182          }
+    183          
+    184          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       4   eMBRegCoilsCB
+       0   eMBRegDiscreteCB
+      16   eMBRegHoldingCB
+      12   eMBRegInputCB
+       8   eReadMBRegHolding
+      12   eWriteMBRegInput
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable3
+       4  ??DataTable3_1
+      10  eMBRegCoilsCB
+       6  eMBRegDiscreteCB
+     132  eMBRegHoldingCB
+      80  eMBRegInputCB
+      70  eReadMBRegHolding
+      68  eWriteMBRegInput
+     512  usRegHoldingBuf
+     256  usRegInputBuf
+
+ 
+ 512 bytes in section .bss
+ 256 bytes in section .data
+ 374 bytes in section .text
+ 
+ 374 bytes of CODE memory
+ 768 bytes of DATA memory
+
+Errors: none
+Warnings: 2

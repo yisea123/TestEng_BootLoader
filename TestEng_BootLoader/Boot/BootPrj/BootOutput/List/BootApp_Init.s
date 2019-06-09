@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       09/Jun/2019  18:04:58
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       09/Jun/2019  20:02:45
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -61,6 +61,7 @@
 
         PUBLIC BootApp_Get_Cfg_Gpio
         PUBLIC BootApp_Get_Cfg_Uart
+        PUBLIC BootApp_Get_Uart
         PUBLIC BootApp_Prog_init
         PUBLIC slave_addr
 
@@ -282,6 +283,46 @@ BootApp_Uart_Init:
         ADD      SP,SP,#+52
         POP      {R4,R5,PC}       ;; return
 
+        SECTION `.text`:CODE:NOROOT(1)
+        THUMB
+BootApp_Get_Uart:
+        PUSH     {R4-R6,LR}
+        SUB      SP,SP,#+8
+        MOVS     R4,R0
+        MOVS     R0,#+0
+        STR      R0,[SP, #+0]
+        ADD      R0,SP,#+0
+        BL       BootApp_Get_Cfg_Uart
+        MOVS     R5,R0
+        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+        CMP      R5,#+0
+        BEQ.N    ??BootApp_Get_Uart_0
+        MOVS     R0,#+0
+        MOVS     R6,R0
+??BootApp_Get_Uart_1:
+        MOVS     R0,R6
+        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        LDR      R1,[SP, #+0]
+        LDRH     R1,[R1, #+0]
+        UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
+        CMP      R0,R1
+        BCS.N    ??BootApp_Get_Uart_0
+        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
+        MOVS     R0,#+28
+        MLA      R0,R0,R6,R4
+        LDR      R1,[SP, #+0]
+        LDR      R1,[R1, #+4]
+        UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
+        MOVS     R2,#+20
+        MLA      R1,R2,R6,R1
+        LDR      R1,[R1, #+0]
+        MOVS     R2,#+28
+        BL       __aeabi_memcpy
+        ADDS     R6,R6,#+1
+        B.N      ??BootApp_Get_Uart_1
+??BootApp_Get_Uart_0:
+        POP      {R0,R1,R4-R6,PC}  ;; return
+
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
@@ -296,9 +337,9 @@ BootApp_Uart_Init:
         END
 // 
 //   2 bytes in section .bss
-// 370 bytes in section .text
+// 446 bytes in section .text
 // 
-// 370 bytes of CODE memory
+// 446 bytes of CODE memory
 //   2 bytes of DATA memory
 //
 //Errors: none
