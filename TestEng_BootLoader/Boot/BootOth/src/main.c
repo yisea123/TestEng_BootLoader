@@ -22,8 +22,8 @@
 
  void main(void)
 {
-    uint8_t slave_addr;
     SystemInit();
+    init();
     Delay_Init(72); 
 
     /*Disable JTAG  Enable SWD*/

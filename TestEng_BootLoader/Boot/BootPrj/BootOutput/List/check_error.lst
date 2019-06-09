@@ -1,0 +1,104 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  20:28:23
+# Copyright 1999-2014 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootOth\src\check_error.c
+#    Command line =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootOth\src\check_error.c
+#        -lcN
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -lb
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        -o
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        -I
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        7.0\arm\CMSIS\Include\"
+#    List file    =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\check_error.lst
+#    Object file  =  
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\check_error.o
+#
+###############################################################################
+
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootOth\src\check_error.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    check_error.c  burn in system
+      4            * @author  h&h
+      5            * @version 
+      6            * @date    
+      7          * @brief   digital monitor & dignose
+      8            ******************************************************************************
+      9          **/ 
+     10          
+     11          #include "include.h"
+     12          
+     13          
+     14          
+     15          
+     16          /******************************************************************************
+     17            * @brief   check_error
+     18            * @param   
+     19            * @retval  
+     20            * @Description:	
+     21                  
+     22            */
+     23           uint8_t check_error(uint16_t * data_buf,
+     24                              uint8_t error_type,
+     25                              uint8_t datanum, 
+     26                              uint16_t max_safe_value, 
+     27                              uint16_t min_safe_value)
+     28          {
+     29              for(uint8_t i=0;i<datanum;i++)
+     30              {
+     31          	if( (*(data_buf+i) > max_safe_value) || (*(data_buf+i) < min_safe_value))
+     32          	{
+     33          	    
+     34                      if(error_type==DFB_CURRENT_ERROR || error_type==DFB_MPD_ERROR)
+     35                      {
+     36                      }
+     37                      
+     38                      if(error_type==DFB_VOLTAGE_ERROR)
+     39                      {
+     40                          //Disable_vout_output_all();
+     41                      }
+     42                          
+     43          	    //set_module_state(RESET_STATE);
+     44          	    return ERROR;
+     45          	}
+     46              }
+     47              return SUCCESS;
+     48          }
+     49          
+     50          /******************* (C) COPYRIGHT 2018 *****END OF FILE****/
+
+Errors: 3
+Warnings: none

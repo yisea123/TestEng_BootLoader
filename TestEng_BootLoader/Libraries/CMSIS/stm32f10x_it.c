@@ -18,17 +18,12 @@
 * Output         : None
 * Return         : None
 *******************************************************************************/
-#if 0
+
 void USART2_IRQHandler(void)
 {
-    /*clear USART_IT_RXNE flag*/
-    USART2->SR &= (uint16_t)~USART_IT_RXNE;
-    uint8_t current_byte;
-    /*get current received data*/
-    current_byte=USART2->DR;
-    uart_isr(current_byte);
+
 }
-#endif
+
 
 /*******************************************************************************
 * Function Name  : EXTI9_5_IRQHandler
@@ -39,11 +34,7 @@ void USART2_IRQHandler(void)
 *******************************************************************************/
 void EXTI9_5_IRQHandler(void)
 {
-    EXTI_ClearITPendingBit(EXTI_Line5);
-    if(Get_test_n())
-    {
-        Disable_sw_vs1();
-    }
+
 }
 
 

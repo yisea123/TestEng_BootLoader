@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  20:02:47
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  21:46:05
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -91,34 +91,63 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootDrv_Ada
      40          
      41          uint8_t BootDrv_EreaseFlash(uint32_t str_addr, uint32_t sect_siz)
      42          {
-     43              return 1;
-     44          }
-     45          
-     46          uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uint32_t length_u32)
-     47          {
-     48              return 1;
-     49          }
-     50          
-     51          
-     52          #endif
-     53          
-     54          
-     55          /*<BASDKey>
-     56           ***********************************************************************************************************************
-     57           * $History___:
-     58           *
-     59           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
-     60           *
-     61           * $
-     62           ***********************************************************************************************************************
-     63          </BASDKey>*/
-     64          
+     43              uint8_t ret;
+     44              
+     45              FLASH_Status sts;
+     46              if( (str_addr >= BOOTAPP_APP_START_ADDR) &&
+     47                  (str_addr < BOOTAPP_APP_END_ADDR) )
+     48              {
+     49                  BootApp_Enter_Schm();
+     50                  FLASH_Unlock();
+     51                  str_addr &= BOOTAPP_APP_SECTOR_SIZE;
+     52                  sts = FLASH_ErasePage(str_addr);
+     53                  FLASH_Lock();
+     54                  BootApp_Exit_Schm();
+     55          
+     56                  if(FLASH_COMPLETE == sts)
+     57                  {
+     58                      ret = 1;
+     59                  }
+     60                  else
+     61                  {
+     62                      ret = 0;
+     63                  }
+     64              }
+     65              else
+     66              {
+     67                  ret = 0;
+     68              }
+     69              return ret;
+     70          }
+     71          
+     72          uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uint32_t length_u32)
+     73          {
+     74              return 1;
+     75          }
+     76          
+     77          
+     78          #endif
+     79          
+     80          
+     81          /*<BASDKey>
+     82           ***********************************************************************************************************************
+     83           * $History___:
+     84           *
+     85           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+     86           *
+     87           * $
+     88           ***********************************************************************************************************************
+     89          </BASDKey>*/
+     90          
 
    Maximum stack usage in bytes:
 
    .cstack Function
    ------- --------
-       0   BootDrv_EreaseFlash
+      24   BootDrv_EreaseFlash
+        24   -> FLASH_ErasePage
+        24   -> FLASH_Lock
+        24   -> FLASH_Unlock
        0   BootDrv_ProgramFlash
        8   BootDrv_Reset
          8   -> NVIC_SystemReset
@@ -129,17 +158,19 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootDrv_Ada
 
    Bytes  Function/Label
    -----  --------------
-       4  ??DataTable0
-       4  ??DataTable0_1
-       6  BootDrv_EreaseFlash
+       4  ??DataTable1
+       4  ??DataTable1_1
+       4  ??DataTable1_2
+       4  ??DataTable1_3
+      70  BootDrv_EreaseFlash
        6  BootDrv_ProgramFlash
       14  BootDrv_Reset
       26  NVIC_SystemReset
 
  
- 60 bytes in section .text
+ 132 bytes in section .text
  
- 60 bytes of CODE memory
+ 132 bytes of CODE memory
 
 Errors: none
 Warnings: none

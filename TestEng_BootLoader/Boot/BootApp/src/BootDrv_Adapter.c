@@ -40,7 +40,33 @@ void BootDrv_Reset(void)
 
 uint8_t BootDrv_EreaseFlash(uint32_t str_addr, uint32_t sect_siz)
 {
-    return 1;
+    uint8_t ret;
+    
+    FLASH_Status sts;
+    if( (str_addr >= BOOTAPP_APP_START_ADDR) &&
+        (str_addr < BOOTAPP_APP_END_ADDR) )
+    {
+        BootApp_Enter_Schm();
+        FLASH_Unlock();
+        str_addr &= BOOTAPP_APP_SECTOR_SIZE;
+        sts = FLASH_ErasePage(str_addr);
+        FLASH_Lock();
+        BootApp_Exit_Schm();
+
+        if(FLASH_COMPLETE == sts)
+        {
+            ret = 1;
+        }
+        else
+        {
+            ret = 0;
+        }
+    }
+    else
+    {
+        ret = 0;
+    }
+    return ret;
 }
 
 uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uint32_t length_u32)

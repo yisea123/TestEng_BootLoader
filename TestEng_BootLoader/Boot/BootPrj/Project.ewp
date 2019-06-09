@@ -1007,65 +1007,20 @@
     <file>
       <name>$PROJ_DIR$\..\BootApp\src\BootDrv_Adapter.c</name>
     </file>
-    <file>
-      <name>$PROJ_DIR$\..\BootApp\src\main.c</name>
-    </file>
   </group>
   <group>
     <name>BootDrv</name>
     <file>
-      <name>$PROJ_DIR$\..\BootDrv\src\AD7949.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\BootDrv\src\AT24HC02C.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\BootDrv\src\delay.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\BootDrv\src\eep_m95160.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\BootDrv\src\i2c.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\BootDrv\src\init.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\BootDrv\src\LTC2380.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\BootDrv\src\LTC2620.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\BootDrv\src\LTC2668.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\BootDrv\src\MAX5478.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\BootDrv\src\max7312.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\BootDrv\src\spi.c</name>
     </file>
   </group>
   <group>
     <name>BootOth</name>
     <file>
-      <name>$PROJ_DIR$\..\BootOth\src\Boot_GetApp_Data.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\BootOth\src\check_error.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\BootOth\src\command.c</name>
-    </file>
-    <file>
       <name>$PROJ_DIR$\..\BootOth\src\main.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\BootOth\src\power_manage.c</name>
     </file>
   </group>
   <group>
@@ -1078,6 +1033,12 @@
     <name>EWARMv5</name>
     <file>
       <name>$PROJ_DIR$\..\..\Libraries\CMSIS\iar\startup_stm32f10x_md.s</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Libraries\stm32f10x_flash.icf</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\Libraries\CMSIS\stm32f10x_it.c</name>
     </file>
   </group>
   <group>
@@ -1257,12 +1218,6 @@
       <name>$PROJ_DIR$\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_wwdg.c</name>
     </file>
   </group>
-  <file>
-    <name>$PROJ_DIR$\..\..\Libraries\stm32f10x_flash.icf</name>
-  </file>
-  <file>
-    <name>$PROJ_DIR$\..\..\Libraries\CMSIS\stm32f10x_it.c</name>
-  </file>
 </project>
 
 

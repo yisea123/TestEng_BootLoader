@@ -1,14 +1,14 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  20:02:48
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  21:27:06
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
 #    Endian       =  little
 #    Source file  =  
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\main.c
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootOth\src\main.c
 #    Command line =  
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\main.c
+#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootOth\src\main.c
 #        -lcN
 #        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
 #        -lb
@@ -48,36 +48,79 @@
 #
 ###############################################################################
 
-F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\main.c
-      1          #include "BootApp_Cfg.h"
-      2          #include "BootApp_Cfg_Board.h"
-      3          #include "BootApp_Type.h"
-      4          #include "BootApp_Priv.h"
-      5          #include "BootApp.h"
-      6          
-      7          #if 0
-      8          int main_debug(void)
-      9          {
-     10              uint16_t i;
-     11              for(i=0;i<BOOTAPP_APP_PAGE_SIZE;i++)
-     12              {
-     13                  BootApp_CommunicationBuffer_en.com_st.pagebuffer_en.buf_au8[i] = i;
-     14              }
-     15              while(1)
-     16              {
-     17                  BootApp_StateMachine();
-     18              }
-     19          
-     20              return 0;
+F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootOth\src\main.c
+      1          /*<BASDKey>
+      2           **********************************************************************************************************************
+      3           *
+      4           * COPYRIGHT RESERVED, FeedLiTech, 2019. All rights reserved.
+      5           * The reproduction, distribution and utilization of this document as well as the communication of its contents to
+      6           * others without explicit authorization is prohibited. Offenders will be held liable for the payment of damages.
+      7           * All rights reserved in the event of the grant of a patent, utility model or design.
+      8           *
+      9           **********************************************************************************************************************
+     10          </BASDKey>*/
+     11          
+     12          
+     13          #include "include.h"
+     14          #include "mb.h"
+     15          
+     16          #include "BootApp_Cfg.h"
+     17          #include "BootApp_Cfg_Board.h"
+     18          #include "BootApp_Type.h"
+     19          #include "BootApp_Priv.h"
+     20          #include "BootApp.h"
      21          
-     22          }
-     23          #endif
+     22          
+     23           void main(void)
+     24          {
+     25              SystemInit();
+     26              init();
+     27              Delay_Init(72); 
+     28          
+     29              /*Disable JTAG  Enable SWD*/
+     30              AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_JTAGDISABLE;
+     31          
+     32              while(1)
+     33              {
+     34                  BootApp_StateMachine();
+     35              }
+     36          
+     37          }
+     38           
+     39          
+     40          
+     41          /*<BASDKey>
+     42           ***********************************************************************************************************************
+     43           * $History___:
+     44           *
+     45           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+     46           *
+     47           * $
+     48           ***********************************************************************************************************************
+     49          </BASDKey>*/
+     50          
 
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   main
+         8   -> BootApp_StateMachine
+         8   -> Delay_Init
+         8   -> SystemInit
+         8   -> init
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      40  main
 
  
-
+ 40 bytes in section .text
  
-
+ 40 bytes of CODE memory
 
 Errors: none
 Warnings: none
