@@ -13,14 +13,12 @@
 #define _BOOTAPP_H_
 
 #include "BootApp_Cfg.h"
+#include "BootApp_Cfg_Board.h"
 
 extern void BootApp_StateMachine(void);
 
-#if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
-void BootApp_Get_Uart(BootApp_USART_TypeDef * USART_TypeDef);
-#else
-void BootApp_Get_Uart(USART_TypeDef * USART_TypeDef);
-#endif
+void BootApp_Get_Uart(BootApp_USART_TypeDef ** USART_TypeDef);
+
 
 extern void BootApp_Disable_usart_rx(void);
 extern void BootApp_Enable_usart_rx(void);

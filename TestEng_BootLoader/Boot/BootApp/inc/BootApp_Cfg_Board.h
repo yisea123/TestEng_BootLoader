@@ -26,6 +26,8 @@
 #define BootApp_USART_TypeDef     USART_TypeDef
 #define BootApp_USART_InitTypeDef USART_InitTypeDef
 #define BootApp_UART_Init         USART_Init
+#define BootApp_USART_Cmd         USART_Cmd
+
 #define BootApp_GPIO_WriteBit     GPIO_WriteBit
 #define BootApp_GPIO_ReadInputDataBit GPIO_ReadInputDataBit
 
@@ -38,6 +40,7 @@
 #define BootApp_GPIO_TypeDef      GPIO_TypeDef
 #define BootApp_GPIO_InitTypeDef  GPIO_InitTypeDef
 #define BootApp_GPIO_Init         GPIO_Init
+#define BootApp_USART_Cmd         USART_Cmd
 
 #define BootApp_USART_TypeDef     USART_TypeDef
 #define BootApp_USART_InitTypeDef USART_InitTypeDef

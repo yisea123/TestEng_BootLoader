@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  21:49:38
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        18/Jun/2019  23:23:38
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -70,7 +70,7 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Jum
      19          #if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
      20              ;
      21          #else
-     22              ((*((ptf)(BOOTAPP_APP_START_ADDR)))());
+     22              //((*((ptf)(BOOTAPP_APP_START_ADDR)))());
      23          #endif
      24          }
      25          
@@ -89,20 +89,19 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Jum
 
    .cstack Function
    ------- --------
-       8   BootApp_Run_App
-         8   -- Indirect call
+       0   BootApp_Run_App
 
 
    Section sizes:
 
    Bytes  Function/Label
    -----  --------------
-      12  BootApp_Run_App
+       2  BootApp_Run_App
 
  
- 12 bytes in section .text
+ 2 bytes in section .text
  
- 12 bytes of CODE memory
+ 2 bytes of CODE memory
 
 Errors: none
 Warnings: none

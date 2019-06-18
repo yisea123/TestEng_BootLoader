@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=1554616063
+Checksum=-1942556715
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -47,46 +47,28 @@ UseAuto=0
 TypeViolation=1
 UnspecRange=1
 ActionState=1
-[PowerLog]
-LogEnabled=0
-GraphEnabled=0
-ShowTimeLog=1
-ShowTimeSum=0
-Title_0=I0
-Symbol_0=0 4 1
-LiveEnabled=0
-LiveFile=PowerLogLive.log
-[EventLog]
-LogEnabled=0
-SumEnabled=0
-GraphEnabled=0
-ShowTimeLog=1
-ShowTimeSum=1
-SumSortOrder=0
-[PowerProbe]
-Frequency=10000
-Probe0=I0
-ProbeSetup0=2 1 1 2 0 0
 [struct_types]
 Fmt0=GPIO_InitTypeDef-GPIO_Pin	4	0
 [array_types]
 Fmt0=USHORT[104]	4	0
-Fmt1=USHORT[25]	4	0
-Fmt2=USHORT[40]	4	0
-Fmt3=uint16_t[10]	4	0
-Fmt4=uint16_t[14]	4	0
-Fmt5=uint16_t[16]	4	0
-Fmt6=uint16_t[1]	4	0
-Fmt7=uint16_t[2]	4	0
-Fmt8=uint16_t[300]	4	0
-Fmt9=uint16_t[32]	4	0
-Fmt10=uint16_t[8]	4	0
-Fmt11=uint16_t[9]	4	0
-Fmt12=uint8_t[100]	4	0
-Fmt13=uint8_t[128]	4	0
-Fmt14=uint8_t[256]	4	0
-Fmt15=unsigned char[256]	4	0
-Fmt16=unsigned short[8]	4	0
+Fmt1=USHORT[128]	4	0
+Fmt2=USHORT[25]	4	0
+Fmt3=USHORT[40]	4	0
+Fmt4=uint16_t[10]	4	0
+Fmt5=uint16_t[14]	4	0
+Fmt6=uint16_t[16]	4	0
+Fmt7=uint16_t[1]	4	0
+Fmt8=uint16_t[2]	4	0
+Fmt9=uint16_t[300]	4	0
+Fmt10=uint16_t[32]	4	0
+Fmt11=uint16_t[8]	4	0
+Fmt12=uint16_t[9]	4	0
+Fmt13=uint8_t[100]	4	0
+Fmt14=uint8_t[128]	4	0
+Fmt15=uint8_t[16]	3	0
+Fmt16=uint8_t[256]	4	0
+Fmt17=unsigned char[256]	4	0
+Fmt18=unsigned short[8]	4	0
 [watch_formats]
 Fmt0={W}0:gOutboundData	4	0
 Fmt1={W}0:globle_flag_dfb_voltage_status	4	0
@@ -102,6 +84,17 @@ Fmt10={W}1:cmd_pwrdn_current_st	4	0
 Fmt11={W}1:cmd_pwrdn_update_ch_st	4	0
 Fmt12={W}1:head_len	4	0
 Fmt13={W}1:ltc2620_all	4	0
+[CallStackLog]
+Enabled=0
+[DriverProfiling]
+Enabled=0
+Mode=3
+Graph=0
+Symbiont=0
+Exclusions=
+[Trace2]
+Enabled=0
+ShowSource=0
 [SWOTraceWindow]
 PcSampling=0
 InterruptLogs=0
@@ -111,12 +104,28 @@ EventEXC=0
 EventFOLD=0
 EventLSU=0
 EventSLEEP=0
+[PowerLog]
+LogEnabled=0
+GraphEnabled=0
+ShowTimeLog=1
+ShowTimeSum=0
+Title_0=I0
+Symbol_0=0 4 1
+LiveEnabled=0
+LiveFile=PowerLogLive.log
 [DataLog]
 LogEnabled=0
 SumEnabled=0
 GraphEnabled=0
 ShowTimeLog=1
 ShowTimeSum=1
+[EventLog]
+LogEnabled=0
+SumEnabled=0
+GraphEnabled=0
+ShowTimeLog=1
+ShowTimeSum=1
+SumSortOrder=0
 [InterruptLog]
 LogEnabled=0
 SumEnabled=0
@@ -124,32 +133,28 @@ GraphEnabled=0
 ShowTimeLog=1
 ShowTimeSum=1
 SumSortOrder=0
+[Disassemble mode]
+mode=1
+[Breakpoints2]
+Bp0=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\command.c}.176.10" 0 0 1 "" 0 "" 0
+Bp1=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\command.c}.242.10" 0 0 1 "" 0 "" 0
+Bp2=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\command.c}.252.18" 0 0 1 "" 0 "" 0
+Bp3=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\main.c}.46.18" 0 0 1 "" 0 "" 0
+Count=4
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
 Category=_ 0
-[TermIOLog]
-LoggingEnabled=_ 0
-LogFile=_ ""
-[CallStackLog]
-Enabled=0
-[DriverProfiling]
-Enabled=0
-Mode=3
-Graph=0
-Symbiont=0
-Exclusions=
-[Disassemble mode]
-mode=1
-[Breakpoints2]
-Bp0=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\command.c}.176.10" 0 0 1 "" 0 "" 0
-Bp1=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\command.c}.242.10" 0 0 1 "" 0 "" 0
-Bp2=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\command.c}.252.18" 0 0 1 "" 0 "" 0
-Bp3=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\main.c}.46.18" 0 0 1 "" 0 "" 0
-Count=4
 [Aliases]
 A0=_ "C:\Documents and Settings\he.huang\Desktop\burn_in_2_v350301\dfb\DFB_src\main.c" ""
 A1=_ "C:\Users\he.huang\Desktop\burn_in_2_v350504\dfb\DFB_src\command.c" ""
 A2=_ "C:\Users\he.huang\Desktop\burn_in_2_v350504\dfb\DFB_src\main.c" ""
 Count=3
 SuppressDialog=0
+[PowerProbe]
+Frequency=10000
+Probe0=I0
+ProbeSetup0=2 1 1 2 0 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""

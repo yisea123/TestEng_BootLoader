@@ -104,8 +104,8 @@ uint8_t BootApp_Validate_Info(const BootApp_App_Cfg_tst * App_Cfg_cpcst)
     {
         ret = 0;
     }
-
-    return ret;
+    return 0;
+    //return ret;
 }
 
 

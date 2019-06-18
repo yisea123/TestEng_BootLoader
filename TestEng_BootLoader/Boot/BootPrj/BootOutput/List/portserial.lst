@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  21:27:06
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        18/Jun/2019  23:23:45
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -83,7 +83,7 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\modbus_port\port
      32          #include "mb.h"
      33          #include "mbport.h"
      34          
-     35          USART_TypeDef MB_USART_PORT[1];
+     35          USART_TypeDef* MB_USART_PORT[1];
      36          
      37          BOOL xMBPortSerialInit( UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits, eMBParity eParity )
      38          {
@@ -102,27 +102,27 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\modbus_port\port
      51              if(xRxEnable)
      52              {
      53                  BootApp_Enable_usart_rx();
-     54                  USART_ITConfig(MB_USART_PORT, USART_IT_RXNE, ENABLE);
+     54                  USART_ITConfig(MB_USART_PORT[0], USART_IT_RXNE, ENABLE);
      55                  
      56              }
      57              else
      58              {
      59                  BootApp_Disable_usart_rx();
-     60                  USART_ITConfig(MB_USART_PORT, USART_IT_RXNE, DISABLE); 
+     60                  USART_ITConfig(MB_USART_PORT[0], USART_IT_RXNE, DISABLE); 
      61                  
      62              }
      63          
      64              if(xTxEnable)
      65              {
      66                  BootApp_Enable_usart_tx();
-     67                  USART_ITConfig(MB_USART_PORT, USART_IT_TXE, ENABLE);
+     67                  USART_ITConfig(MB_USART_PORT[0], USART_IT_TXE, ENABLE);
      68                  
      69              }
      70              else
      71              {
      72                  Delay_ms(5);
      73                  BootApp_Disable_usart_tx();
-     74                  USART_ITConfig(MB_USART_PORT, USART_IT_TXE, DISABLE);
+     74                  USART_ITConfig(MB_USART_PORT[0], USART_IT_TXE, DISABLE);
      75              }
      76          
      77          }
@@ -130,12 +130,12 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\modbus_port\port
      79          
      80          BOOL xMBPortSerialPutByte( CHAR ucByte )
      81          {
-     82              USART_SendData(MB_USART_PORT, ucByte);
+     82              USART_SendData(MB_USART_PORT[0], ucByte);
      83              return TRUE;
      84          }
      85          BOOL xMBPortSerialGetByte( CHAR * pucByte )
      86          {
-     87              *pucByte = USART_ReceiveData(MB_USART_PORT);
+     87              *pucByte = USART_ReceiveData(MB_USART_PORT[0]);
      88              return TRUE;
      89          }
      90          
@@ -153,16 +153,16 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\modbus_port\port
     102          void USART1_IRQHandler(void)
     103          {
     104          
-    105              if(USART_GetITStatus(MB_USART_PORT, USART_IT_RXNE) == SET)
+    105              if(USART_GetITStatus(MB_USART_PORT[0], USART_IT_RXNE) == SET)
     106              {
     107                  prvvUARTRxISR(); 
-    108                  USART_ClearITPendingBit(MB_USART_PORT, USART_IT_RXNE); 
+    108                  USART_ClearITPendingBit(MB_USART_PORT[0], USART_IT_RXNE); 
     109              }
     110          
-    111              if(USART_GetITStatus(MB_USART_PORT, USART_IT_TXE) == SET)
+    111              if(USART_GetITStatus(MB_USART_PORT[0], USART_IT_TXE) == SET)
     112              {
     113                  prvvUARTTxReadyISR();
-    114                  USART_ClearITPendingBit(MB_USART_PORT, USART_IT_TXE);
+    114                  USART_ClearITPendingBit(MB_USART_PORT[0], USART_IT_TXE);
     115              }
     116          }
     117          
@@ -205,22 +205,22 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\modbus\modbus_port\port
        4  ??DataTable6
        4  ??DataTable6_1
        4  ??DataTable6_2
-      28  MB_USART_PORT
-      60  USART1_IRQHandler
+       4  MB_USART_PORT
+      68  USART1_IRQHandler
       10  prvvUARTRxISR
       10  prvvUARTTxReadyISR
       12  vMBPortClose
-      94  vMBPortSerialEnable
-      16  xMBPortSerialGetByte
+     102  vMBPortSerialEnable
+      18  xMBPortSerialGetByte
       20  xMBPortSerialInit
-      20  xMBPortSerialPutByte
+      22  xMBPortSerialPutByte
 
  
-  28 bytes in section .bss
- 254 bytes in section .text
+   4 bytes in section .bss
+ 274 bytes in section .text
  
- 254 bytes of CODE memory
-  28 bytes of DATA memory
+ 274 bytes of CODE memory
+   4 bytes of DATA memory
 
 Errors: none
 Warnings: none

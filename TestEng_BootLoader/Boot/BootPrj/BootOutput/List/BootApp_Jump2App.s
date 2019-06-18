@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       09/Jun/2019  21:49:38
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       18/Jun/2019  23:23:38
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -51,16 +51,10 @@
         PUBLIC BootApp_Run_App
 
 
-        SECTION `.text`:CODE:NOROOT(2)
+        SECTION `.text`:CODE:NOROOT(1)
         THUMB
 BootApp_Run_App:
-        PUSH     {R7,LR}
-        LDR.N    R0,??BootApp_Run_App_0  ;; 0x800c000
-        BLX      R0
-        POP      {R0,PC}          ;; return
-        DATA
-??BootApp_Run_App_0:
-        DC32     0x800c000
+        BX       LR               ;; return
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -75,9 +69,9 @@ BootApp_Run_App:
 
         END
 // 
-// 12 bytes in section .text
+// 2 bytes in section .text
 // 
-// 12 bytes of CODE memory
+// 2 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

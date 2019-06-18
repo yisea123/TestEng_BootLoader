@@ -15,7 +15,7 @@
 
 #if (BOOTAPP_BOARD_SUPPORT == TestEng_FL0001A00)
 
-const BootApp_GpioPin_tst BootApp_App_GpioPin_cast[BOOTAPP_APP_GPIO_NUM] =
+BootApp_GpioPin_tst BootApp_App_GpioPin_cast[BOOTAPP_APP_GPIO_NUM] =
 {
     {
         GPIOB,
@@ -104,7 +104,7 @@ const BootApp_GpioPin_tst BootApp_App_GpioPin_cast[BOOTAPP_APP_GPIO_NUM] =
 
 };
 
-const BootApp_UartPort_tst BootApp_UartPort_cast[BOOTAPP_APP_UART_NUM] =
+BootApp_UartPort_tst BootApp_UartPort_cast[BOOTAPP_APP_UART_NUM] =
 {
     {
         USART1,

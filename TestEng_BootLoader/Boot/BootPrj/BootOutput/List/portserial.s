@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       09/Jun/2019  21:27:06
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       18/Jun/2019  23:23:45
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -73,7 +73,7 @@
 
         SECTION `.bss`:DATA:REORDER:NOROOT(2)
 MB_USART_PORT:
-        DS8 28
+        DS8 4
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -110,6 +110,7 @@ vMBPortSerialEnable:
         MOVS     R2,#+1
         MOVW     R1,#+1317
         LDR.N    R0,??DataTable6
+        LDR      R0,[R0, #+0]
         BL       USART_ITConfig
         B.N      ??vMBPortSerialEnable_1
 ??vMBPortSerialEnable_0:
@@ -117,6 +118,7 @@ vMBPortSerialEnable:
         MOVS     R2,#+0
         MOVW     R1,#+1317
         LDR.N    R0,??DataTable6
+        LDR      R0,[R0, #+0]
         BL       USART_ITConfig
 ??vMBPortSerialEnable_1:
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
@@ -126,6 +128,7 @@ vMBPortSerialEnable:
         MOVS     R2,#+1
         MOVW     R1,#+1831
         LDR.N    R0,??DataTable6
+        LDR      R0,[R0, #+0]
         BL       USART_ITConfig
         B.N      ??vMBPortSerialEnable_3
 ??vMBPortSerialEnable_2:
@@ -135,6 +138,7 @@ vMBPortSerialEnable:
         MOVS     R2,#+0
         MOVW     R1,#+1831
         LDR.N    R0,??DataTable6
+        LDR      R0,[R0, #+0]
         BL       USART_ITConfig
 ??vMBPortSerialEnable_3:
         POP      {R0,R4,R5,PC}    ;; return
@@ -148,6 +152,7 @@ xMBPortSerialPutByte:
         MOVS     R1,R4
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         LDR.N    R0,??DataTable6
+        LDR      R0,[R0, #+0]
         BL       USART_SendData
         MOVS     R0,#+1
         POP      {R4,PC}          ;; return
@@ -158,6 +163,7 @@ xMBPortSerialGetByte:
         PUSH     {R4,LR}
         MOVS     R4,R0
         LDR.N    R0,??DataTable6
+        LDR      R0,[R0, #+0]
         BL       USART_ReceiveData
         STRB     R0,[R4, #+0]
         MOVS     R0,#+1
@@ -187,22 +193,26 @@ USART1_IRQHandler:
         PUSH     {R7,LR}
         MOVW     R1,#+1317
         LDR.N    R0,??DataTable6
+        LDR      R0,[R0, #+0]
         BL       USART_GetITStatus
         CMP      R0,#+1
         BNE.N    ??USART1_IRQHandler_0
         BL       prvvUARTRxISR
         MOVW     R1,#+1317
         LDR.N    R0,??DataTable6
+        LDR      R0,[R0, #+0]
         BL       USART_ClearITPendingBit
 ??USART1_IRQHandler_0:
         MOVW     R1,#+1831
         LDR.N    R0,??DataTable6
+        LDR      R0,[R0, #+0]
         BL       USART_GetITStatus
         CMP      R0,#+1
         BNE.N    ??USART1_IRQHandler_1
         BL       prvvUARTTxReadyISR
         MOVW     R1,#+1831
         LDR.N    R0,??DataTable6
+        LDR      R0,[R0, #+0]
         BL       USART_ClearITPendingBit
 ??USART1_IRQHandler_1:
         POP      {R0,PC}          ;; return
@@ -238,11 +248,11 @@ USART1_IRQHandler:
 
         END
 // 
-//  28 bytes in section .bss
-// 254 bytes in section .text
+//   4 bytes in section .bss
+// 274 bytes in section .text
 // 
-// 254 bytes of CODE memory
-//  28 bytes of DATA memory
+// 274 bytes of CODE memory
+//   4 bytes of DATA memory
 //
 //Errors: none
 //Warnings: none

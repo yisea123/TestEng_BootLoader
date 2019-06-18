@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  21:49:38
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        18/Jun/2019  23:23:38
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -191,12 +191,12 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_IoF
     140          
     141          void BootApp_Disable_usart_tx(void)
     142          {
-    143              BootApp_IoFunction(GPIO_UART_RX_EN, GPIO_WRITE, 1);
+    143              BootApp_IoFunction(GPIO_UART_TX_EN, GPIO_WRITE, 0);
     144          }
     145          
     146          void BootApp_Enable_usart_tx(void)
     147          {
-    148              BootApp_IoFunction(GPIO_UART_RX_EN, GPIO_WRITE, 0);
+    148              BootApp_IoFunction(GPIO_UART_TX_EN, GPIO_WRITE, 1);
     149          }
     150          
     151          void BootApp_Disable_run_led(void)

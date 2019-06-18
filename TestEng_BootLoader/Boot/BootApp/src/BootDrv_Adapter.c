@@ -34,14 +34,16 @@ uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uin
 
 void BootDrv_Reset(void)
 {
+#if 0
     __set_FAULTMASK(1);
     NVIC_SystemReset();
+#endif
 }
 
 uint8_t BootDrv_EreaseFlash(uint32_t str_addr_u32, uint32_t sect_siz_u32)
 {
     uint8_t ret;
-    
+#if 0 
     FLASH_Status sts;
     if( (str_addr_u32 >= BOOTAPP_APP_START_ADDR) &&
         (str_addr_u32 < BOOTAPP_APP_END_ADDR) )
@@ -67,6 +69,8 @@ uint8_t BootDrv_EreaseFlash(uint32_t str_addr_u32, uint32_t sect_siz_u32)
         ret = 0;
     }
     return ret;
+#endif
+    return 1;
 }
 
 uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uint32_t length_u32)
@@ -75,7 +79,7 @@ uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uin
     uint16_t i;
     uint32_t data;
     FLASH_Status sts = FLASH_BUSY;
-
+#if 0
     (void)length_u32;
     if( (start_addr_u32 >= BOOTAPP_APP_START_ADDR) &&
         (start_addr_u32 < BOOTAPP_APP_END_ADDR) )
@@ -113,7 +117,8 @@ uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uin
         ret = 0;
     }
     return ret;
-
+#endif
+    return 1;
 }
 
 

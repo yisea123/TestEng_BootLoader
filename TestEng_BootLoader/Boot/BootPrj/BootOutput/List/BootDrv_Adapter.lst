@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  22:15:06
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        18/Jun/2019  23:23:40
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -85,138 +85,129 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootDrv_Ada
      34          
      35          void BootDrv_Reset(void)
      36          {
-     37              __set_FAULTMASK(1);
-     38              NVIC_SystemReset();
-     39          }
-     40          
-     41          uint8_t BootDrv_EreaseFlash(uint32_t str_addr_u32, uint32_t sect_siz_u32)
-     42          {
-     43              uint8_t ret;
-     44              
-     45              FLASH_Status sts;
-     46              if( (str_addr_u32 >= BOOTAPP_APP_START_ADDR) &&
-     47                  (str_addr_u32 < BOOTAPP_APP_END_ADDR) )
-     48              {
-     49                  BootApp_Enter_Schm();
-     50                  FLASH_Unlock();
-     51                  str_addr_u32 &= BOOTAPP_APP_SECTOR_SIZE;
-     52                  sts = FLASH_ErasePage(str_addr_u32);
-     53                  FLASH_Lock();
-     54                  BootApp_Exit_Schm();
-     55          
-     56                  if(FLASH_COMPLETE == sts)
-     57                  {
-     58                      ret = 1;
-     59                  }
-     60                  else
-     61                  {
-     62                      ret = 0;
-     63                  }
-     64              }
-     65              else
-     66              {
-     67                  ret = 0;
-     68              }
-     69              return ret;
-     70          }
-     71          
-     72          uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uint32_t length_u32)
-     73          {
-     74              uint8_t ret;
-     75              uint16_t i;
-     76              uint32_t data;
-     77              FLASH_Status sts = FLASH_BUSY;
-     78          
-     79              (void)length_u32;
-     80              if( (start_addr_u32 >= BOOTAPP_APP_START_ADDR) &&
-     81                  (start_addr_u32 < BOOTAPP_APP_END_ADDR) )
-     82              {
-     83                  BootApp_Enter_Schm();
-     84                  FLASH_Unlock();
-     85          
-     86                  for(i=0; i<BOOTAPP_APP_SECTOR_SIZE/4; i++)
-     87                  {
-     88                      
-     89                      ret = BootApp_SectBuffer_Read(i, 1, &data);
-     90                      if(ret)
-     91                      {
-     92                          sts = FLASH_ProgramWord(start_addr_u32, data);
-     93                      }
-     94                      else
+     37          #if 0
+     38              __set_FAULTMASK(1);
+     39              NVIC_SystemReset();
+     40          #endif
+     41          }
+     42          
+     43          uint8_t BootDrv_EreaseFlash(uint32_t str_addr_u32, uint32_t sect_siz_u32)
+     44          {
+     45              uint8_t ret;
+     46          #if 0 
+     47              FLASH_Status sts;
+     48              if( (str_addr_u32 >= BOOTAPP_APP_START_ADDR) &&
+     49                  (str_addr_u32 < BOOTAPP_APP_END_ADDR) )
+     50              {
+     51                  BootApp_Enter_Schm();
+     52                  FLASH_Unlock();
+     53                  str_addr_u32 &= BOOTAPP_APP_SECTOR_SIZE;
+     54                  sts = FLASH_ErasePage(str_addr_u32);
+     55                  FLASH_Lock();
+     56                  BootApp_Exit_Schm();
+     57          
+     58                  if(FLASH_COMPLETE == sts)
+     59                  {
+     60                      ret = 1;
+     61                  }
+     62                  else
+     63                  {
+     64                      ret = 0;
+     65                  }
+     66              }
+     67              else
+     68              {
+     69                  ret = 0;
+     70              }
+     71              return ret;
+     72          #endif
+     73              return 1;
+     74          }
+     75          
+     76          uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uint32_t length_u32)
+     77          {
+     78              uint8_t ret;
+     79              uint16_t i;
+     80              uint32_t data;
+     81              FLASH_Status sts = FLASH_BUSY;
+     82          #if 0
+     83              (void)length_u32;
+     84              if( (start_addr_u32 >= BOOTAPP_APP_START_ADDR) &&
+     85                  (start_addr_u32 < BOOTAPP_APP_END_ADDR) )
+     86              {
+     87                  BootApp_Enter_Schm();
+     88                  FLASH_Unlock();
+     89          
+     90                  for(i=0; i<BOOTAPP_APP_SECTOR_SIZE/4; i++)
+     91                  {
+     92                      
+     93                      ret = BootApp_SectBuffer_Read(i, 1, &data);
+     94                      if(ret)
      95                      {
-     96                          break;
+     96                          sts = FLASH_ProgramWord(start_addr_u32, data);
      97                      }
-     98                  }
-     99                  FLASH_Lock();
-    100                  BootApp_Exit_Schm();
-    101          
-    102                  if(FLASH_COMPLETE == sts)
-    103                  {
-    104                      ret = 1;
-    105                  }
-    106                  else
+     98                      else
+     99                      {
+    100                          break;
+    101                      }
+    102                  }
+    103                  FLASH_Lock();
+    104                  BootApp_Exit_Schm();
+    105          
+    106                  if(FLASH_COMPLETE == sts)
     107                  {
-    108                      ret = 0;
+    108                      ret = 1;
     109                  }
-    110              }
-    111              else
-    112              {
-    113                  ret = 0;
+    110                  else
+    111                  {
+    112                      ret = 0;
+    113                  }
     114              }
-    115              return ret;
-    116          
-    117          }
-    118          
-    119          
+    115              else
+    116              {
+    117                  ret = 0;
+    118              }
+    119              return ret;
     120          #endif
-    121          
-    122          
-    123          /*<BASDKey>
-    124           ***********************************************************************************************************************
-    125           * $History___:
-    126           *
-    127           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
-    128           *
-    129           * $
-    130           ***********************************************************************************************************************
-    131          </BASDKey>*/
-    132          
+    121              return 1;
+    122          }
+    123          
+    124          
+    125          #endif
+    126          
+    127          
+    128          /*<BASDKey>
+    129           ***********************************************************************************************************************
+    130           * $History___:
+    131           *
+    132           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+    133           *
+    134           * $
+    135           ***********************************************************************************************************************
+    136          </BASDKey>*/
+    137          
 
    Maximum stack usage in bytes:
 
    .cstack Function
    ------- --------
-      24   BootDrv_EreaseFlash
-        24   -> FLASH_ErasePage
-        24   -> FLASH_Lock
-        24   -> FLASH_Unlock
-      32   BootDrv_ProgramFlash
-        32   -> BootApp_SectBuffer_Read
-        32   -> FLASH_Lock
-        32   -> FLASH_ProgramWord
-        32   -> FLASH_Unlock
-       8   BootDrv_Reset
-         8   -> NVIC_SystemReset
-       0   NVIC_SystemReset
+       0   BootDrv_EreaseFlash
+       4   BootDrv_ProgramFlash
+       0   BootDrv_Reset
 
 
    Section sizes:
 
    Bytes  Function/Label
    -----  --------------
-       4  ??DataTable2
-       4  ??DataTable2_1
-       4  ??DataTable2_2
-       4  ??DataTable2_3
-      70  BootDrv_EreaseFlash
-     122  BootDrv_ProgramFlash
-      14  BootDrv_Reset
-      26  NVIC_SystemReset
+       6  BootDrv_EreaseFlash
+      12  BootDrv_ProgramFlash
+       2  BootDrv_Reset
 
  
- 248 bytes in section .text
+ 20 bytes in section .text
  
- 248 bytes of CODE memory
+ 20 bytes of CODE memory
 
 Errors: none
-Warnings: none
+Warnings: 5

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       09/Jun/2019  21:49:38
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       18/Jun/2019  23:23:38
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -235,9 +235,9 @@ BootApp_Enable_usart_rx:
         THUMB
 BootApp_Disable_usart_tx:
         PUSH     {R7,LR}
-        MOVS     R2,#+1
+        MOVS     R2,#+0
         MOVS     R1,#+0
-        MOVS     R0,#+3
+        MOVS     R0,#+4
         BL       BootApp_IoFunction
         POP      {R0,PC}          ;; return
 
@@ -245,9 +245,9 @@ BootApp_Disable_usart_tx:
         THUMB
 BootApp_Enable_usart_tx:
         PUSH     {R7,LR}
-        MOVS     R2,#+0
+        MOVS     R2,#+1
         MOVS     R1,#+0
-        MOVS     R0,#+3
+        MOVS     R0,#+4
         BL       BootApp_IoFunction
         POP      {R0,PC}          ;; return
 

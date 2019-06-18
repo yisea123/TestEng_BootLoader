@@ -1004,12 +1004,12 @@
     <file>
       <name>$PROJ_DIR$\..\BootApp\src\BootApp_ValidateApp.c</name>
     </file>
-    <file>
-      <name>$PROJ_DIR$\..\BootApp\src\BootDrv_Adapter.c</name>
-    </file>
   </group>
   <group>
     <name>BootDrv</name>
+    <file>
+      <name>$PROJ_DIR$\..\BootApp\src\BootDrv_Adapter.c</name>
+    </file>
     <file>
       <name>$PROJ_DIR$\..\BootDrv\src\delay.c</name>
     </file>

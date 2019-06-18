@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       09/Jun/2019  21:49:38
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       18/Jun/2019  23:23:38
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -53,9 +53,8 @@
         EXTERN BootApp_Enable_usart_rx
         EXTERN BootApp_Get_board_address
         EXTERN GPIO_Init
+        EXTERN USART_Cmd
         EXTERN USART_Init
-        EXTERN __aeabi_memcpy
-        EXTERN __aeabi_memcpy4
         EXTERN eMBEnable
         EXTERN eMBInit
 
@@ -188,8 +187,7 @@ BootApp_Get_Cfg_Uart:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 BootApp_Gpio_Init:
-        PUSH     {R4,R5,LR}
-        SUB      SP,SP,#+36
+        PUSH     {R3-R7,LR}
         MOVS     R0,#+0
         STR      R0,[SP, #+0]
         ADD      R0,SP,#+0
@@ -208,36 +206,32 @@ BootApp_Gpio_Init:
         UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
         CMP      R0,R1
         BCS.N    ??BootApp_Gpio_Init_0
-        ADD      R0,SP,#+8
-        LDR      R1,[SP, #+0]
-        LDR      R1,[R1, #+4]
-        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
-        MOVS     R2,#+12
-        MLA      R1,R2,R5,R1
-        LDR      R1,[R1, #+0]
-        MOVS     R2,#+28
-        BL       __aeabi_memcpy4
         LDR      R0,[SP, #+0]
         LDR      R0,[R0, #+4]
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
         MOVS     R1,#+12
         MLA      R0,R1,R5,R0
-        LDR      R0,[R0, #+6]
-        STR      R0,[SP, #+4]
-        ADD      R1,SP,#+4
-        ADD      R0,SP,#+8
+        LDR      R0,[R0, #+0]
+        MOVS     R6,R0
+        LDR      R0,[SP, #+0]
+        LDR      R0,[R0, #+4]
+        UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+        MOVS     R1,#+12
+        MLA      R0,R1,R5,R0
+        ADDS     R0,R0,#+6
+        MOVS     R7,R0
+        MOVS     R1,R7
+        MOVS     R0,R6
         BL       GPIO_Init
         ADDS     R5,R5,#+1
         B.N      ??BootApp_Gpio_Init_1
 ??BootApp_Gpio_Init_0:
-        ADD      SP,SP,#+36
-        POP      {R4,R5,PC}       ;; return
+        POP      {R0,R4-R7,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 BootApp_Uart_Init:
-        PUSH     {R4,R5,LR}
-        SUB      SP,SP,#+52
+        PUSH     {R3-R7,LR}
         MOVS     R0,#+0
         STR      R0,[SP, #+0]
         ADD      R0,SP,#+0
@@ -256,32 +250,30 @@ BootApp_Uart_Init:
         UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
         CMP      R0,R1
         BCS.N    ??BootApp_Uart_Init_0
-        ADD      R0,SP,#+20
-        LDR      R1,[SP, #+0]
-        LDR      R1,[R1, #+4]
+        LDR      R0,[SP, #+0]
+        LDR      R0,[R0, #+4]
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
-        MOVS     R2,#+20
-        MLA      R1,R2,R5,R1
-        LDR      R1,[R1, #+0]
-        MOVS     R2,#+28
-        BL       __aeabi_memcpy
-        ADD      R0,SP,#+4
-        LDR      R1,[SP, #+0]
-        LDR      R1,[R1, #+4]
+        MOVS     R1,#+20
+        MLA      R0,R1,R5,R0
+        LDR      R0,[R0, #+0]
+        MOVS     R6,R0
+        LDR      R0,[SP, #+0]
+        LDR      R0,[R0, #+4]
         UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
-        MOVS     R2,#+20
-        MLA      R1,R2,R5,R1
-        ADDS     R1,R1,#+4
-        MOVS     R2,#+16
-        BL       __aeabi_memcpy4
-        ADD      R1,SP,#+4
-        ADD      R0,SP,#+20
+        MOVS     R1,#+20
+        MLA      R0,R1,R5,R0
+        ADDS     R0,R0,#+4
+        MOVS     R7,R0
+        MOVS     R1,R7
+        MOVS     R0,R6
         BL       USART_Init
+        MOVS     R1,#+1
+        MOVS     R0,R6
+        BL       USART_Cmd
         ADDS     R5,R5,#+1
         B.N      ??BootApp_Uart_Init_1
 ??BootApp_Uart_Init_0:
-        ADD      SP,SP,#+52
-        POP      {R4,R5,PC}       ;; return
+        POP      {R0,R4-R7,PC}    ;; return
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -307,17 +299,14 @@ BootApp_Get_Uart:
         UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
         CMP      R0,R1
         BCS.N    ??BootApp_Get_Uart_0
+        LDR      R0,[SP, #+0]
+        LDR      R0,[R0, #+4]
         UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
-        MOVS     R0,#+28
-        MLA      R0,R0,R6,R4
-        LDR      R1,[SP, #+0]
-        LDR      R1,[R1, #+4]
+        MOVS     R1,#+20
+        MLA      R0,R1,R6,R0
+        LDR      R0,[R0, #+0]
         UXTB     R6,R6            ;; ZeroExt  R6,R6,#+24,#+24
-        MOVS     R2,#+20
-        MLA      R1,R2,R6,R1
-        LDR      R1,[R1, #+0]
-        MOVS     R2,#+28
-        BL       __aeabi_memcpy
+        STR      R0,[R4, R6, LSL #+2]
         ADDS     R6,R6,#+1
         B.N      ??BootApp_Get_Uart_1
 ??BootApp_Get_Uart_0:
@@ -337,10 +326,10 @@ BootApp_Get_Uart:
         END
 // 
 //   2 bytes in section .bss
-// 446 bytes in section .text
+// 418 bytes in section .text
 // 
-// 446 bytes of CODE memory
+// 418 bytes of CODE memory
 //   2 bytes of DATA memory
 //
 //Errors: none
-//Warnings: none
+//Warnings: 1

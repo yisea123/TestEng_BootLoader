@@ -223,7 +223,7 @@ typedef struct
 {
     uint16_t  app_cfg_gpio_num;
     uint16_t  app_cfg_addr_num;
-    const BootApp_GpioPin_tst *  app_cfg_gpio_init_past;
+    BootApp_GpioPin_tst *  app_cfg_gpio_init_past;
 }BootApp_Gpio_tst;
 
 
@@ -236,7 +236,7 @@ typedef struct
 typedef struct
 {
     uint16_t app_cfg_uart_num;
-    const BootApp_UartPort_tst * app_cfg_uart_init_past;
+    BootApp_UartPort_tst * app_cfg_uart_init_past;
 }BootApp_Uart_tst;
 
 typedef struct
@@ -256,8 +256,8 @@ typedef struct
 typedef struct
 {
 
-    const BootApp_Gpio_tst * const app_cfg_gpio_cpcst;
-    const BootApp_Uart_tst * const app_cfg_uart_cpcst;
+    BootApp_Gpio_tst * const app_cfg_gpio_cpcst;
+    BootApp_Uart_tst * const app_cfg_uart_cpcst;
     const BootApp_Prolog_tst * const app_cfg_prolog_cpcst;
     const BootApp_Epilog_tst * const app_cfg_epilog_cpcst;
 }BootApp_App_Cfg_tst;

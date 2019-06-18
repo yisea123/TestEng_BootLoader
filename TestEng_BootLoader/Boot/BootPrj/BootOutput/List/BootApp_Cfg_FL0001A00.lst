@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  21:49:37
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        18/Jun/2019  23:23:36
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -66,7 +66,7 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Cfg
      15          
      16          #if (BOOTAPP_BOARD_SUPPORT == TestEng_FL0001A00)
      17          
-     18          const BootApp_GpioPin_tst BootApp_App_GpioPin_cast[BOOTAPP_APP_GPIO_NUM] =
+     18          BootApp_GpioPin_tst BootApp_App_GpioPin_cast[BOOTAPP_APP_GPIO_NUM] =
      19          {
      20              {
      21                  GPIOB,
@@ -155,7 +155,7 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Cfg
     104          
     105          };
     106          
-    107          const BootApp_UartPort_tst BootApp_UartPort_cast[BOOTAPP_APP_UART_NUM] =
+    107          BootApp_UartPort_tst BootApp_UartPort_cast[BOOTAPP_APP_UART_NUM] =
     108          {
     109              {
     110                  USART1,
@@ -208,9 +208,11 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Cfg
       20  BootApp_UartPort_cast
 
  
- 260 bytes in section .rodata
+ 164 bytes in section .data
+  96 bytes in section .rodata
  
- 260 bytes of CONST memory
+  96 bytes of CONST memory
+ 164 bytes of DATA  memory
 
 Errors: none
 Warnings: none

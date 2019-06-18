@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       09/Jun/2019  21:49:39
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       18/Jun/2019  23:23:39
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -97,98 +97,98 @@ BootApp_Validate_App:
 BootApp_Validate_Info:
         PUSH     {R4-R6}
         MOVS     R1,R0
+        MOVS     R3,#+0
+        LDR      R4,[R1, #+8]
+        LDR      R5,[R1, #+12]
+        LDR.N    R0,??DataTable1_2  ;; 0x800c400
+        CMP      R4,R0
+        BCC.N    ??BootApp_Validate_Info_0
+        LDR.N    R0,??DataTable1_3  ;; 0x800c800
+        CMP      R4,R0
+        BCS.N    ??BootApp_Validate_Info_0
+        LDR.N    R0,??DataTable1_4  ;; 0x801fc00
+        CMP      R5,R0
+        BCC.N    ??BootApp_Validate_Info_0
+        LDR.N    R0,??DataTable1_5  ;; 0x8020000
+        CMP      R5,R0
+        BCS.N    ??BootApp_Validate_Info_0
         MOVS     R0,#+0
-        LDR      R2,[R1, #+8]
-        LDR      R3,[R1, #+12]
-        LDR.N    R5,??DataTable1_2  ;; 0x800c400
-        CMP      R2,R5
-        BCC.N    ??BootApp_Validate_Info_0
-        LDR.N    R5,??DataTable1_3  ;; 0x800c800
-        CMP      R2,R5
-        BCS.N    ??BootApp_Validate_Info_0
-        LDR.N    R5,??DataTable1_4  ;; 0x801fc00
-        CMP      R3,R5
-        BCC.N    ??BootApp_Validate_Info_0
-        LDR.N    R5,??DataTable1_5  ;; 0x8020000
-        CMP      R3,R5
-        BCS.N    ??BootApp_Validate_Info_0
-        MOVS     R5,#+0
-        MOVS     R4,R5
+        MOVS     R2,R0
 ??BootApp_Validate_Info_1:
-        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
-        CMP      R4,#+16
+        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+        CMP      R2,#+16
         BGE.N    ??BootApp_Validate_Info_2
-        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
-        LDRB     R5,[R4, R2]
-        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
-        LDRB     R6,[R4, R3]
-        CMP      R5,R6
+        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+        LDRB     R0,[R2, R4]
+        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+        LDRB     R6,[R2, R5]
+        CMP      R0,R6
         BEQ.N    ??BootApp_Validate_Info_3
-        MOVS     R5,#+0
-        MOVS     R0,R5
+        MOVS     R0,#+0
+        MOVS     R3,R0
         B.N      ??BootApp_Validate_Info_2
 ??BootApp_Validate_Info_3:
-        MOVS     R5,#+1
-        MOVS     R0,R5
-        ADDS     R4,R4,#+1
+        MOVS     R0,#+1
+        MOVS     R3,R0
+        ADDS     R2,R2,#+1
         B.N      ??BootApp_Validate_Info_1
 ??BootApp_Validate_Info_2:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+0
+        UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+        CMP      R3,#+0
         BEQ.N    ??BootApp_Validate_Info_4
-        MOVS     R5,#+0
-        MOVS     R4,R5
+        MOVS     R0,#+0
+        MOVS     R2,R0
 ??BootApp_Validate_Info_5:
-        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
-        CMP      R4,#+16
+        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+        CMP      R2,#+16
         BGE.N    ??BootApp_Validate_Info_4
-        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
-        ADDS     R5,R4,R2
-        LDRB     R5,[R5, #+32]
-        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
-        ADDS     R6,R4,R3
+        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+        ADDS     R0,R2,R4
+        LDRB     R0,[R0, #+32]
+        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+        ADDS     R6,R2,R5
         LDRB     R6,[R6, #+32]
-        CMP      R5,R6
+        CMP      R0,R6
         BEQ.N    ??BootApp_Validate_Info_6
-        MOVS     R5,#+0
-        MOVS     R0,R5
+        MOVS     R0,#+0
+        MOVS     R3,R0
         B.N      ??BootApp_Validate_Info_4
 ??BootApp_Validate_Info_6:
-        MOVS     R5,#+1
-        MOVS     R0,R5
-        ADDS     R4,R4,#+1
+        MOVS     R0,#+1
+        MOVS     R3,R0
+        ADDS     R2,R2,#+1
         B.N      ??BootApp_Validate_Info_5
 ??BootApp_Validate_Info_4:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
-        CMP      R0,#+0
+        UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+        CMP      R3,#+0
         BEQ.N    ??BootApp_Validate_Info_7
-        MOVS     R5,#+0
-        MOVS     R4,R5
+        MOVS     R0,#+0
+        MOVS     R2,R0
 ??BootApp_Validate_Info_8:
-        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
-        CMP      R4,#+16
+        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+        CMP      R2,#+16
         BGE.N    ??BootApp_Validate_Info_7
-        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
-        ADDS     R5,R4,R2
-        LDRB     R5,[R5, #+16]
-        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
-        ADDS     R6,R4,R3
+        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+        ADDS     R0,R2,R4
+        LDRB     R0,[R0, #+16]
+        UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+        ADDS     R6,R2,R5
         LDRB     R6,[R6, #+16]
-        CMP      R5,R6
+        CMP      R0,R6
         BEQ.N    ??BootApp_Validate_Info_9
-        MOVS     R5,#+0
-        MOVS     R0,R5
+        MOVS     R0,#+0
+        MOVS     R3,R0
         B.N      ??BootApp_Validate_Info_7
 ??BootApp_Validate_Info_9:
-        MOVS     R5,#+1
-        MOVS     R0,R5
-        ADDS     R4,R4,#+1
+        MOVS     R0,#+1
+        MOVS     R3,R0
+        ADDS     R2,R2,#+1
         B.N      ??BootApp_Validate_Info_8
 ??BootApp_Validate_Info_0:
-        MOVS     R5,#+0
-        MOVS     R0,R5
+        MOVS     R0,#+0
+        MOVS     R3,R0
 ??BootApp_Validate_Info_7:
-        UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+        MOVS     R0,#+0
         POP      {R4-R6}
         BX       LR               ;; return
 

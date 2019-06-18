@@ -36,7 +36,7 @@ void BootApp_StateMachine(void)
     state_en = BootApp_Get_State();
     BootApp_Status_ten status_en = BOOTAPP_STATUS_INI;
 
-    BootApp_CommunicationBuffer_tst * ComBuffer_pst;
+    BootApp_CommunicationBuffer_tst * ComBuffer_pst = (void *)0;
     BootApp_Get_CommunicationBuf(&ComBuffer_pst);
 
     BootApp_CmdBuffer_tst * CmdBuffer_pst = &(ComBuffer_pst->cmdbuffer_st);

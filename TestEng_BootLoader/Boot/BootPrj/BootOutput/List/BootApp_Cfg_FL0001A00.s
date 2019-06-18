@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       09/Jun/2019  21:49:37
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       18/Jun/2019  23:23:36
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -54,7 +54,7 @@
         PUBLIC BootApp_UartPort_cast
 
 
-        SECTION `.rodata`:CONST:REORDER:NOROOT(2)
+        SECTION `.data`:DATA:REORDER:NOROOT(2)
 BootApp_App_GpioPin_cast:
         DATA
         DC32 40010C00H
@@ -106,7 +106,7 @@ BootApp_App_GpioPin_cast:
         DC16 32768
         DC8 3, 16, 0, 0
 
-        SECTION `.rodata`:CONST:REORDER:NOROOT(2)
+        SECTION `.data`:DATA:REORDER:NOROOT(2)
 BootApp_UartPort_cast:
         DATA
         DC32 40013800H, 19200
@@ -146,9 +146,11 @@ BootApp_Epilog_st:
 
         END
 // 
-// 260 bytes in section .rodata
+// 164 bytes in section .data
+//  96 bytes in section .rodata
 // 
-// 260 bytes of CONST memory
+//  96 bytes of CONST memory
+// 164 bytes of DATA  memory
 //
 //Errors: none
 //Warnings: none

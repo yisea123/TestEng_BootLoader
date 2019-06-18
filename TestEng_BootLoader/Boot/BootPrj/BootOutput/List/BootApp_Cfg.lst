@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  21:49:36
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        18/Jun/2019  23:23:36
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -79,7 +79,7 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Cfg
      28          
      29          
      30          
-     31          const BootApp_Gpio_tst BootApp_Gpio_cst =
+     31          BootApp_Gpio_tst BootApp_Gpio_cst =
      32          {
      33              BOOTAPP_APP_GPIO_NUM,
      34              BOOTAPP_APP_ADDR_NUM,
@@ -87,7 +87,7 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Cfg
      36          };
      37          
      38          
-     39          const BootApp_Uart_tst BootApp_Uart_cst =
+     39          BootApp_Uart_tst BootApp_Uart_cst =
      40          {
      41              BOOTAPP_APP_UART_NUM,
      42              &BootApp_UartPort_cast[0],
@@ -134,9 +134,11 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Cfg
        8  BootApp_Uart_cst
 
  
- 64 bytes in section .rodata
+ 16 bytes in section .data
+ 48 bytes in section .rodata
  
- 64 bytes of CONST memory
+ 48 bytes of CONST memory
+ 16 bytes of DATA  memory
 
 Errors: none
 Warnings: none

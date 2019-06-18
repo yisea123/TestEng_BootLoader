@@ -18,9 +18,7 @@
 #define BOOTAPP_BOARD_SUPPORT      TestEng_FL0001A00
 
 #if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
-typedef unsigned char   uint8_t;
-typedef unsigned short  uint16_t;
-typedef unsigned long   uint32_t;
+#include "include.h"
 #define BootApp_Enter_Schm()
 #define BootApp_Exit_Schm()
 

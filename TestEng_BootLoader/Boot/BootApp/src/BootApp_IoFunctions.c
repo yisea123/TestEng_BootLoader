@@ -140,12 +140,12 @@ void BootApp_Enable_usart_rx(void)
 
 void BootApp_Disable_usart_tx(void)
 {
-    BootApp_IoFunction(GPIO_UART_RX_EN, GPIO_WRITE, 1);
+    BootApp_IoFunction(GPIO_UART_TX_EN, GPIO_WRITE, 0);
 }
 
 void BootApp_Enable_usart_tx(void)
 {
-    BootApp_IoFunction(GPIO_UART_RX_EN, GPIO_WRITE, 0);
+    BootApp_IoFunction(GPIO_UART_TX_EN, GPIO_WRITE, 1);
 }
 
 void BootApp_Disable_run_led(void)

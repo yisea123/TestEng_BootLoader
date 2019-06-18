@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  21:49:39
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        18/Jun/2019  23:23:39
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -87,7 +87,7 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Sta
      36              state_en = BootApp_Get_State();
      37              BootApp_Status_ten status_en = BOOTAPP_STATUS_INI;
      38          
-     39              BootApp_CommunicationBuffer_tst * ComBuffer_pst;
+     39              BootApp_CommunicationBuffer_tst * ComBuffer_pst = (void *)0;
      40              BootApp_Get_CommunicationBuf(&ComBuffer_pst);
      41          
      42              BootApp_CmdBuffer_tst * CmdBuffer_pst = &(ComBuffer_pst->cmdbuffer_st);
@@ -281,15 +281,15 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Sta
        4  ??DataTable1
        6  BootApp_Get_State
        6  BootApp_Set_State
-     374  BootApp_StateMachine
+     378  BootApp_StateMachine
       60  BootApp_State_Init_Act
        1  BootApp_State_en
 
  
    1 byte  in section .bss
- 450 bytes in section .text
+ 454 bytes in section .text
  
- 450 bytes of CODE memory
+ 454 bytes of CODE memory
    1 byte  of DATA memory
 
 Errors: none

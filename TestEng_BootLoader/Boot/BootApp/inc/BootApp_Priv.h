@@ -19,8 +19,8 @@
 extern const BootApp_Flash_Info_tst * const BootApp_Flash_Info_cpcst;
 extern const BootApp_App_Cfg_tst * const BootApp_App_Cfg_cpcst;
 
-extern const BootApp_GpioPin_tst BootApp_App_GpioPin_cast[BOOTAPP_APP_GPIO_NUM];
-extern const BootApp_UartPort_tst BootApp_UartPort_cast[BOOTAPP_APP_UART_NUM];
+extern BootApp_GpioPin_tst BootApp_App_GpioPin_cast[BOOTAPP_APP_GPIO_NUM];
+extern BootApp_UartPort_tst BootApp_UartPort_cast[BOOTAPP_APP_UART_NUM];
 extern const BootApp_Prolog_tst BootApp_App_Prolog_st;
 extern const BootApp_Epilog_tst BootApp_Epilog_st;
 

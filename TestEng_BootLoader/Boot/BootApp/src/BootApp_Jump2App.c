@@ -19,7 +19,7 @@ void BootApp_Run_App(void)
 #if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
     ;
 #else
-    ((*((ptf)(BOOTAPP_APP_START_ADDR)))());
+    //((*((ptf)(BOOTAPP_APP_START_ADDR)))());
 #endif
 }
 

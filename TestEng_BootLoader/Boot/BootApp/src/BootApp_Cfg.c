@@ -28,7 +28,7 @@ const BootApp_Flash_Info_tst BootApp_Flash_Info_cst =
 
 
 
-const BootApp_Gpio_tst BootApp_Gpio_cst =
+BootApp_Gpio_tst BootApp_Gpio_cst =
 {
     BOOTAPP_APP_GPIO_NUM,
     BOOTAPP_APP_ADDR_NUM,
@@ -36,7 +36,7 @@ const BootApp_Gpio_tst BootApp_Gpio_cst =
 };
 
 
-const BootApp_Uart_tst BootApp_Uart_cst =
+BootApp_Uart_tst BootApp_Uart_cst =
 {
     BOOTAPP_APP_UART_NUM,
     &BootApp_UartPort_cast[0],

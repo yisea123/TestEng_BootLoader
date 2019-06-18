@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        09/Jun/2019  21:49:38
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        18/Jun/2019  23:23:38
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -150,8 +150,8 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Ini
      99              uint8_t ret;
     100              uint8_t i;
     101              const BootApp_Gpio_tst * gpio_cfg = (void *) 0;
-    102              BootApp_GPIO_TypeDef GPIO_TypeDef;
-    103              BootApp_GPIO_InitTypeDef GPIO_InitTypeDef;
+    102              BootApp_GPIO_TypeDef * GPIO_TypeDef;
+    103              BootApp_GPIO_InitTypeDef * GPIO_InitTypeDef;
     104          
     105          
     106              ret = BootApp_Get_Cfg_Gpio(&gpio_cfg);
@@ -160,10 +160,10 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Ini
     109                  for(i=0; i<gpio_cfg->app_cfg_gpio_num; i++)
     110                  {
     111                      /*copy from flash*/
-    112                      GPIO_TypeDef = *gpio_cfg->app_cfg_gpio_init_past[i].app_cfg_gpio;
-    113                      GPIO_InitTypeDef = gpio_cfg->app_cfg_gpio_init_past[i].app_cfg_gpio_pin_st;
+    112                      GPIO_TypeDef = gpio_cfg->app_cfg_gpio_init_past[i].app_cfg_gpio;
+    113                      GPIO_InitTypeDef = &gpio_cfg->app_cfg_gpio_init_past[i].app_cfg_gpio_pin_st;
     114                      
-    115                      BootApp_GPIO_Init( &GPIO_TypeDef,&GPIO_InitTypeDef);
+    115                      BootApp_GPIO_Init( GPIO_TypeDef, GPIO_InitTypeDef);
     116                  }
     117              }
     118              else
@@ -176,8 +176,8 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Ini
     125              uint8_t ret;
     126              uint8_t i;
     127              const BootApp_Uart_tst * uart_cfg = (void *) 0;
-    128              BootApp_USART_TypeDef USART_TypeDef;
-    129              BootApp_USART_InitTypeDef USART_InitTypeDef;
+    128              BootApp_USART_TypeDef * USART_TypeDef;
+    129              BootApp_USART_InitTypeDef * USART_InitTypeDef;
     130          
     131              ret = BootApp_Get_Cfg_Uart(&uart_cfg);
     132              if(ret)
@@ -185,11 +185,11 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Ini
     134                  for(i=0; i<uart_cfg->app_cfg_uart_num; i++)
     135                  {
     136                      /*copy from flash*/
-    137                      USART_TypeDef = *uart_cfg->app_cfg_uart_init_past[i].app_cfg_uart;
-    138                      USART_InitTypeDef = uart_cfg->app_cfg_uart_init_past[i].app_cfg_uart_port_st;
+    137                      USART_TypeDef = uart_cfg->app_cfg_uart_init_past[i].app_cfg_uart;
+    138                      USART_InitTypeDef = &uart_cfg->app_cfg_uart_init_past[i].app_cfg_uart_port_st;
     139                      
-    140                      BootApp_UART_Init( &USART_TypeDef,
-    141                                         &USART_InitTypeDef);
+    140                      BootApp_UART_Init( USART_TypeDef, USART_InitTypeDef);
+    141                      BootApp_USART_Cmd( USART_TypeDef, 1);
     142                  }
     143              }
     144              else
@@ -197,7 +197,7 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Ini
     146              }
     147          }
     148          
-    149          void BootApp_Get_Uart(BootApp_USART_TypeDef * USART_TypeDef)
+    149          void BootApp_Get_Uart(BootApp_USART_TypeDef ** USART_TypeDef)
     150          {
     151              uint8_t ret;
     152              uint8_t i;
@@ -210,7 +210,7 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Ini
     159                  for(i=0; i<uart_cfg->app_cfg_uart_num; i++)
     160                  {
     161                      /*copy from flash*/
-    162                      *(USART_TypeDef + i) = *uart_cfg->app_cfg_uart_init_past[i].app_cfg_uart;
+    162                      *(USART_TypeDef + i) = uart_cfg->app_cfg_uart_init_past[i].app_cfg_uart;
     163                  }
     164              }
     165              else
@@ -238,11 +238,9 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Ini
        0   BootApp_Get_Cfg_Uart
       24   BootApp_Get_Uart
         24   -> BootApp_Get_Cfg_Uart
-        24   -> __aeabi_memcpy
-      48   BootApp_Gpio_Init
-        48   -> BootApp_Get_Cfg_Gpio
-        48   -> GPIO_Init
-        48   -> __aeabi_memcpy4
+      24   BootApp_Gpio_Init
+        24   -> BootApp_Get_Cfg_Gpio
+        24   -> GPIO_Init
        8   BootApp_Prog_init
          8   -> BootApp_Disable_usart_tx
          8   -> BootApp_Enable_usart_rx
@@ -251,11 +249,10 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Ini
          8   -> BootApp_Uart_Init
          8   -> eMBEnable
          8   -> eMBInit
-      64   BootApp_Uart_Init
-        64   -> BootApp_Get_Cfg_Uart
-        64   -> USART_Init
-        64   -> __aeabi_memcpy
-        64   -> __aeabi_memcpy4
+      24   BootApp_Uart_Init
+        24   -> BootApp_Get_Cfg_Uart
+        24   -> USART_Cmd
+        24   -> USART_Init
 
 
    Section sizes:
@@ -268,18 +265,18 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Ini
        1  BootApp_GetApp_init_en
       42  BootApp_Get_Cfg_Gpio
       42  BootApp_Get_Cfg_Uart
-      76  BootApp_Get_Uart
-      96  BootApp_Gpio_Init
+      68  BootApp_Get_Uart
+      84  BootApp_Gpio_Init
       78  BootApp_Prog_init
-     100  BootApp_Uart_Init
+      92  BootApp_Uart_Init
        1  slave_addr
 
  
    2 bytes in section .bss
- 446 bytes in section .text
+ 418 bytes in section .text
  
- 446 bytes of CODE memory
+ 418 bytes of CODE memory
    2 bytes of DATA memory
 
 Errors: none
-Warnings: none
+Warnings: 1
