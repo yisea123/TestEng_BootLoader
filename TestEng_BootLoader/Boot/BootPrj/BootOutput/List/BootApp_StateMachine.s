@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       18/Jun/2019  23:23:39
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       21/Jun/2019  21:26:54
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -166,6 +166,12 @@ BootApp_StateMachine:
 ??BootApp_StateMachine_11:
         B.N      ??BootApp_StateMachine_8
 ??BootApp_StateMachine_4:
+        MOV      R0,R8
+        BL       BootApp_NewCmd_Received
+        MOVS     R4,R0
+        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+        CMP      R4,#+0
+        BEQ.N    ??BootApp_StateMachine_12
         MOVW     R1,#+12289
         MOVS     R0,#+3
         BL       BootApp_Log_Exe_Status
@@ -303,9 +309,9 @@ BootApp_State_Init_Act:
         END
 // 
 //   1 byte  in section .bss
-// 454 bytes in section .text
+// 468 bytes in section .text
 // 
-// 454 bytes of CODE memory
+// 468 bytes of CODE memory
 //   1 byte  of DATA memory
 //
 //Errors: none

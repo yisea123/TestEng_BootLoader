@@ -84,12 +84,20 @@ void BootApp_StateMachine(void)
     }
     case BOOTAPP_STATE_RDAT:
     {
-        BootApp_Log_Exe_Status(BOOTAPP_STATE_RDAT, BOOTAPP_RDATA_ONGOING);
-        status_en = BootApp_Receive_Data(ComBuffer_pst);
-        BootApp_Log_Exe_Status(BOOTAPP_STATE_RDAT, status_en);
-        if(BootApp_Receive_Data_Finish())
+        newcmd = BootApp_NewCmd_Received(CmdBuffer_pst);
+        if(newcmd)
         {
-            BootApp_Set_State(BOOTAPP_STATE_RCMD);
+            BootApp_Log_Exe_Status(BOOTAPP_STATE_RDAT, BOOTAPP_RDATA_ONGOING);
+            status_en = BootApp_Receive_Data(ComBuffer_pst);
+            BootApp_Log_Exe_Status(BOOTAPP_STATE_RDAT, status_en);
+            if(BootApp_Receive_Data_Finish())
+            {
+                BootApp_Set_State(BOOTAPP_STATE_RCMD);
+            }
+            else
+            {
+
+            }
         }
         else
         {

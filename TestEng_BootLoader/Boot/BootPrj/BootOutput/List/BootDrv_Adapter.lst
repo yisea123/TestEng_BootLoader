@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        18/Jun/2019  23:23:40
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        21/Jun/2019  22:09:12
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -94,14 +94,14 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootDrv_Ada
      43          uint8_t BootDrv_EreaseFlash(uint32_t str_addr_u32, uint32_t sect_siz_u32)
      44          {
      45              uint8_t ret;
-     46          #if 0 
+     46          
      47              FLASH_Status sts;
      48              if( (str_addr_u32 >= BOOTAPP_APP_START_ADDR) &&
      49                  (str_addr_u32 < BOOTAPP_APP_END_ADDR) )
      50              {
      51                  BootApp_Enter_Schm();
      52                  FLASH_Unlock();
-     53                  str_addr_u32 &= BOOTAPP_APP_SECTOR_SIZE;
+     53                  str_addr_u32 &= (uint32_t)(~(BOOTAPP_APP_SECTOR_SIZE - 1));
      54                  sts = FLASH_ErasePage(str_addr_u32);
      55                  FLASH_Lock();
      56                  BootApp_Exit_Schm();
@@ -120,31 +120,31 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootDrv_Ada
      69                  ret = 0;
      70              }
      71              return ret;
-     72          #endif
-     73              return 1;
-     74          }
-     75          
-     76          uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uint32_t length_u32)
-     77          {
-     78              uint8_t ret;
-     79              uint16_t i;
-     80              uint32_t data;
-     81              FLASH_Status sts = FLASH_BUSY;
-     82          #if 0
-     83              (void)length_u32;
-     84              if( (start_addr_u32 >= BOOTAPP_APP_START_ADDR) &&
-     85                  (start_addr_u32 < BOOTAPP_APP_END_ADDR) )
-     86              {
-     87                  BootApp_Enter_Schm();
-     88                  FLASH_Unlock();
-     89          
-     90                  for(i=0; i<BOOTAPP_APP_SECTOR_SIZE/4; i++)
-     91                  {
-     92                      
-     93                      ret = BootApp_SectBuffer_Read(i, 1, &data);
-     94                      if(ret)
-     95                      {
-     96                          sts = FLASH_ProgramWord(start_addr_u32, data);
+     72          
+     73          }
+     74          
+     75          uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uint32_t length_u32)
+     76          {
+     77              uint8_t ret;
+     78              uint16_t i;
+     79              uint32_t data;
+     80              FLASH_Status sts = FLASH_BUSY;
+     81          
+     82              (void)length_u32;
+     83              if( (start_addr_u32 >= BOOTAPP_APP_START_ADDR) &&
+     84                  (start_addr_u32 < BOOTAPP_APP_END_ADDR) )
+     85              {
+     86                  BootApp_Enter_Schm();
+     87                  FLASH_Unlock();
+     88          
+     89                  for(i=0; i<BOOTAPP_APP_SECTOR_SIZE/4; i++)
+     90                  {
+     91                      
+     92                      ret = BootApp_SectBuffer_Read(i, 1, &data);
+     93                      if(ret)
+     94                      {
+     95                          sts = FLASH_ProgramWord(start_addr_u32, data);
+     96                          start_addr_u32 += 4;
      97                      }
      98                      else
      99                      {
@@ -168,31 +168,37 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootDrv_Ada
     117                  ret = 0;
     118              }
     119              return ret;
-    120          #endif
-    121              return 1;
-    122          }
+    120          
+    121          }
+    122          
     123          
-    124          
-    125          #endif
+    124          #endif
+    125          
     126          
-    127          
-    128          /*<BASDKey>
-    129           ***********************************************************************************************************************
-    130           * $History___:
-    131           *
-    132           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
-    133           *
-    134           * $
-    135           ***********************************************************************************************************************
-    136          </BASDKey>*/
-    137          
+    127          /*<BASDKey>
+    128           ***********************************************************************************************************************
+    129           * $History___:
+    130           *
+    131           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+    132           *
+    133           * $
+    134           ***********************************************************************************************************************
+    135          </BASDKey>*/
+    136          
 
    Maximum stack usage in bytes:
 
    .cstack Function
    ------- --------
-       0   BootDrv_EreaseFlash
-       4   BootDrv_ProgramFlash
+      24   BootDrv_EreaseFlash
+        24   -> FLASH_ErasePage
+        24   -> FLASH_Lock
+        24   -> FLASH_Unlock
+      32   BootDrv_ProgramFlash
+        32   -> BootApp_SectBuffer_Read
+        32   -> FLASH_Lock
+        32   -> FLASH_ProgramWord
+        32   -> FLASH_Unlock
        0   BootDrv_Reset
 
 
@@ -200,14 +206,16 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootDrv_Ada
 
    Bytes  Function/Label
    -----  --------------
-       6  BootDrv_EreaseFlash
-      12  BootDrv_ProgramFlash
+       4  ??DataTable1
+       4  ??DataTable1_1
+      70  BootDrv_EreaseFlash
+     124  BootDrv_ProgramFlash
        2  BootDrv_Reset
 
  
- 20 bytes in section .text
+ 204 bytes in section .text
  
- 20 bytes of CODE memory
+ 204 bytes of CODE memory
 
 Errors: none
-Warnings: 5
+Warnings: none

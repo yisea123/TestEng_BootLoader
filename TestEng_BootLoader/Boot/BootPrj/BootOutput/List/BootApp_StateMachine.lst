@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        18/Jun/2019  23:23:39
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        21/Jun/2019  21:26:54
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -135,112 +135,120 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Sta
      84              }
      85              case BOOTAPP_STATE_RDAT:
      86              {
-     87                  BootApp_Log_Exe_Status(BOOTAPP_STATE_RDAT, BOOTAPP_RDATA_ONGOING);
-     88                  status_en = BootApp_Receive_Data(ComBuffer_pst);
-     89                  BootApp_Log_Exe_Status(BOOTAPP_STATE_RDAT, status_en);
-     90                  if(BootApp_Receive_Data_Finish())
-     91                  {
-     92                      BootApp_Set_State(BOOTAPP_STATE_RCMD);
-     93                  }
-     94                  else
-     95                  {
-     96          
-     97                  }
-     98                  break;
-     99              }
-    100              case BOOTAPP_STATE_WDAT:
-    101              {
-    102                  BootApp_Log_Exe_Status(BOOTAPP_STATE_WDAT, BOOTAPP_WDAT_ONGOING);
-    103                  status_en = BootApp_Program_Flash(ComBuffer_pst);
-    104                  BootApp_Log_Exe_Status(BOOTAPP_STATE_WDAT, status_en);
-    105                  if(BOOTAPP_WDAT_SEC_FINISH == status_en)
-    106                  {
-    107                      BootApp_Enable_ReceiveData();
-    108                      BootApp_Set_State(BOOTAPP_STATE_RCMD);
-    109                  }
-    110                  else if(BOOTAPP_WDAT_FINISH == status_en)
-    111                  {
-    112                      BootApp_Set_State(BOOTAPP_STATE_VALI);
-    113                  }
-    114                  else if(BOOTAPP_WDAT_PROG_FLASH_ERR == status_en)
-    115                  {
-    116                      BootApp_Reset_Sys();
+     87                  newcmd = BootApp_NewCmd_Received(CmdBuffer_pst);
+     88                  if(newcmd)
+     89                  {
+     90                      BootApp_Log_Exe_Status(BOOTAPP_STATE_RDAT, BOOTAPP_RDATA_ONGOING);
+     91                      status_en = BootApp_Receive_Data(ComBuffer_pst);
+     92                      BootApp_Log_Exe_Status(BOOTAPP_STATE_RDAT, status_en);
+     93                      if(BootApp_Receive_Data_Finish())
+     94                      {
+     95                          BootApp_Set_State(BOOTAPP_STATE_RCMD);
+     96                      }
+     97                      else
+     98                      {
+     99          
+    100                      }
+    101                  }
+    102                  else
+    103                  {
+    104          
+    105                  }
+    106                  break;
+    107              }
+    108              case BOOTAPP_STATE_WDAT:
+    109              {
+    110                  BootApp_Log_Exe_Status(BOOTAPP_STATE_WDAT, BOOTAPP_WDAT_ONGOING);
+    111                  status_en = BootApp_Program_Flash(ComBuffer_pst);
+    112                  BootApp_Log_Exe_Status(BOOTAPP_STATE_WDAT, status_en);
+    113                  if(BOOTAPP_WDAT_SEC_FINISH == status_en)
+    114                  {
+    115                      BootApp_Enable_ReceiveData();
+    116                      BootApp_Set_State(BOOTAPP_STATE_RCMD);
     117                  }
-    118                  else
+    118                  else if(BOOTAPP_WDAT_FINISH == status_en)
     119                  {
-    120                      BootApp_Set_State(BOOTAPP_STATE_RCMD);
+    120                      BootApp_Set_State(BOOTAPP_STATE_VALI);
     121                  }
-    122                  break;
-    123              }
-    124              case BOOTAPP_STATE_VALI:
-    125              {
-    126                  BootApp_Log_Exe_Status(BOOTAPP_STATE_VALI, BOOTAAPP_VALI_ONGOING);
-    127                  status_en = BootApp_Validate_App();
-    128                  BootApp_Log_Exe_Status(BOOTAPP_STATE_VALI, status_en);
-    129                  if(BOOTAAPP_VALI_COMPLETE == status_en)
-    130                  {
-    131                      BootApp_Set_State(BOOTAPP_STATE_JUMP);
-    132                  }
-    133                  else if(BOOTAAPP_VALI_NOT_COMPLETE == status_en)
-    134                  {
-    135                      BootApp_Reset_Sys();
-    136                  }
-    137                  break;
-    138              }
-    139              case BOOTAPP_STATE_JUMP:
-    140              {
-    141                  BootApp_Log_Exe_Status(BOOTAPP_STATE_JUMP, BOOTAPP_JUMP_TO_APP);
-    142                  BootApp_Run_App();
-    143                  break;
-    144              }
-    145              default :
-    146                  break;
-    147              }
-    148          
-    149              BootApp_HandleCmd_Send();
-    150          }
-    151          
-    152          void BootApp_State_Init_Act(void)
-    153          {
-    154              /*callout for state machine*/
-    155              BootApp_Reset_ten reset_en;
-    156              BootApp_Status_ten  status_en;
-    157          
-    158              #if 1
-    159              reset_en = BootApp_GetReset_Reason();
-    160          
-    161              if(BOOTAPP_RESET_POWERON == reset_en)
-    162              {
-    163                  status_en = BootApp_Validate_App();
-    164                  if(BOOTAAPP_VALI_COMPLETE == status_en)
-    165                  {
-    166                      BootApp_Run_App();
-    167                  }
-    168                  else
-    169                  {
-    170                      BootApp_Prog_init();
-    171                  }
-    172              }
-    173              else if(BOOTAPP_RESET_PROG == reset_en)
-    174              {
-    175                  BootApp_Prog_init();
-    176              }
-    177              else
-    178              {
-    179                  BootApp_Reset_Sys();
+    122                  else if(BOOTAPP_WDAT_PROG_FLASH_ERR == status_en)
+    123                  {
+    124                      BootApp_Reset_Sys();
+    125                  }
+    126                  else
+    127                  {
+    128                      BootApp_Set_State(BOOTAPP_STATE_RCMD);
+    129                  }
+    130                  break;
+    131              }
+    132              case BOOTAPP_STATE_VALI:
+    133              {
+    134                  BootApp_Log_Exe_Status(BOOTAPP_STATE_VALI, BOOTAAPP_VALI_ONGOING);
+    135                  status_en = BootApp_Validate_App();
+    136                  BootApp_Log_Exe_Status(BOOTAPP_STATE_VALI, status_en);
+    137                  if(BOOTAAPP_VALI_COMPLETE == status_en)
+    138                  {
+    139                      BootApp_Set_State(BOOTAPP_STATE_JUMP);
+    140                  }
+    141                  else if(BOOTAAPP_VALI_NOT_COMPLETE == status_en)
+    142                  {
+    143                      BootApp_Reset_Sys();
+    144                  }
+    145                  break;
+    146              }
+    147              case BOOTAPP_STATE_JUMP:
+    148              {
+    149                  BootApp_Log_Exe_Status(BOOTAPP_STATE_JUMP, BOOTAPP_JUMP_TO_APP);
+    150                  BootApp_Run_App();
+    151                  break;
+    152              }
+    153              default :
+    154                  break;
+    155              }
+    156          
+    157              BootApp_HandleCmd_Send();
+    158          }
+    159          
+    160          void BootApp_State_Init_Act(void)
+    161          {
+    162              /*callout for state machine*/
+    163              BootApp_Reset_ten reset_en;
+    164              BootApp_Status_ten  status_en;
+    165          
+    166              #if 1
+    167              reset_en = BootApp_GetReset_Reason();
+    168          
+    169              if(BOOTAPP_RESET_POWERON == reset_en)
+    170              {
+    171                  status_en = BootApp_Validate_App();
+    172                  if(BOOTAAPP_VALI_COMPLETE == status_en)
+    173                  {
+    174                      BootApp_Run_App();
+    175                  }
+    176                  else
+    177                  {
+    178                      BootApp_Prog_init();
+    179                  }
     180              }
-    181              #endif
-    182          }
-    183          
-    184          /*<BASDKey>
-    185           ***********************************************************************************************************************
-    186           * $History___:
-    187           *
-    188           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
-    189           *
-    190           * $
-    191           ***********************************************************************************************************************
-    192          </BASDKey>*/
+    181              else if(BOOTAPP_RESET_PROG == reset_en)
+    182              {
+    183                  BootApp_Prog_init();
+    184              }
+    185              else
+    186              {
+    187                  BootApp_Reset_Sys();
+    188              }
+    189              #endif
+    190          }
+    191          
+    192          /*<BASDKey>
+    193           ***********************************************************************************************************************
+    194           * $History___:
+    195           *
+    196           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+    197           *
+    198           * $
+    199           ***********************************************************************************************************************
+    200          </BASDKey>*/
 
    Maximum stack usage in bytes:
 
@@ -281,15 +289,15 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Sta
        4  ??DataTable1
        6  BootApp_Get_State
        6  BootApp_Set_State
-     378  BootApp_StateMachine
+     392  BootApp_StateMachine
       60  BootApp_State_Init_Act
        1  BootApp_State_en
 
  
    1 byte  in section .bss
- 454 bytes in section .text
+ 468 bytes in section .text
  
- 454 bytes of CODE memory
+ 468 bytes of CODE memory
    1 byte  of DATA memory
 
 Errors: none
