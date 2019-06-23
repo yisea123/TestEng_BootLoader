@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       18/Jun/2019  23:23:38
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       23/Jun/2019  15:46:48
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -48,13 +48,37 @@
 
         #define SHT_PROGBITS 0x1
 
+        EXTERN NVIC_SetVectorTable
+
         PUBLIC BootApp_Run_App
 
 
-        SECTION `.text`:CODE:NOROOT(1)
+        SECTION `.text`:CODE:NOROOT(2)
         THUMB
 BootApp_Run_App:
-        BX       LR               ;; return
+        PUSH     {R7,LR}
+        LDR.N    R0,??BootApp_Run_App_0  ;; 0x800c000
+        LDR      R0,[R0, #+0]
+        LDR.N    R1,??BootApp_Run_App_0+0x4  ;; 0x2ffe0000
+        ANDS     R0,R1,R0
+        CMP      R0,#+536870912
+        BNE.N    ??BootApp_Run_App_1
+        LDR.N    R0,??BootApp_Run_App_0  ;; 0x800c000
+        LDR      R0,[R0, #+0]
+        MSR      MSP,R0
+        MOV      R1,#+49152
+        MOVS     R0,#+134217728
+        BL       NVIC_SetVectorTable
+        LDR.N    R0,??BootApp_Run_App_0+0x8  ;; 0x800c004
+        BLX      R0
+??BootApp_Run_App_1:
+        POP      {R0,PC}          ;; return
+        Nop      
+        DATA
+??BootApp_Run_App_0:
+        DC32     0x800c000
+        DC32     0x2ffe0000
+        DC32     0x800c004
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -69,9 +93,9 @@ BootApp_Run_App:
 
         END
 // 
-// 2 bytes in section .text
+// 56 bytes in section .text
 // 
-// 2 bytes of CODE memory
+// 56 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

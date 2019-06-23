@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=508853354
+Checksum=-2037179360
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -149,17 +149,18 @@ Bp0=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\command.c}.176.10" 0 0 1 "" 0 "" 0
 Bp1=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\command.c}.242.10" 0 0 1 "" 0 "" 0
 Bp2=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\command.c}.252.18" 0 0 1 "" 0 "" 0
 Bp3=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\main.c}.46.18" 0 0 1 "" 0 "" 0
-Bp4=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\BootApp\src\BootApp_ProgramFlash.c}.134.13" 0 0 1 "" 0 "" 0
-Bp5=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\BootApp\src\BootApp_StateMachine.c}.111.9" 0 0 1 "" 0 "" 0
-Bp6=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\BootApp\src\BootApp_StateMachine.c}.113.9" 0 0 1 "" 0 "" 0
-Count=7
+Bp4=_ 0 "EMUL_CODE" "0x0800233C" 0 0 1 "" 0 "" 0
+Bp5=_ 0 "EMUL_CODE" "0x08002996" 0 0 1 "" 0 "" 0
+Bp6=_ 0 "EMUL_CODE" "0x08002A96" 0 0 1 "" 0 "" 0
+Bp7=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\BootApp\src\BootApp_Jump2App.c}.36.1" 0 0 1 "" 0 "" 0
+Bp8=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\BootApp\src\BootApp_Jump2App.c}.36.1" 0 0 1 "" 0 "" 0
+Bp9=_ 0 "EMUL_CODE" "0x0800C000" 0 0 1 "" 0 "" 0
+Bp10=_ 0 "EMUL_CODE" "0x0800E6DC" 0 0 1 "" 0 "" 0
+Count=11
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
 Category=_ 0
-[TermIOLog]
-LoggingEnabled=_ 0
-LogFile=_ ""
 [Aliases]
 A0=_ "C:\Documents and Settings\he.huang\Desktop\burn_in_2_v350301\dfb\DFB_src\main.c" ""
 A1=_ "C:\Users\he.huang\Desktop\burn_in_2_v350504\dfb\DFB_src\command.c" ""
@@ -178,3 +179,6 @@ Mode=3
 Graph=0
 Symbiont=0
 Exclusions=
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
