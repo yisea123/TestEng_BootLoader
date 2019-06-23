@@ -268,7 +268,7 @@ typedef enum
     BOOTAPP_GETAPP_INI
 }BootApp_GetApp_init_ten;
 
-typedef void (*ptf)(void);
+
 
 #endif
 

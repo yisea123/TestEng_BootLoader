@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        23/Jun/2019  15:48:42
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        23/Jun/2019  16:32:31
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -104,8 +104,8 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Val
      53              {
      54                  for(i=0; i<16; i++)
      55                  {
-     56                      if(app_cfg_prolog_cpcst->app_cfg_hardversion[i] !=
-     57                              app_cfg_epilog_cpcst->app_cfg_hardversion[i])
+     56                      if( (app_cfg_prolog_cpcst->app_cfg_hardversion[i] != app_cfg_epilog_cpcst->app_cfg_hardversion[i]) ||
+     57                          (app_cfg_prolog_cpcst->app_cfg_hardversion[i] == 0xFF) )
      58                      {
      59                          ret = 0;
      60                          break;
@@ -120,8 +120,8 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Val
      69                  {
      70                      for(i=0; i<16; i++)
      71                      {
-     72                          if(app_cfg_prolog_cpcst->app_cfg_signature[i] !=
-     73                                      app_cfg_epilog_cpcst->app_cfg_signature[i])
+     72                          if( (app_cfg_prolog_cpcst->app_cfg_signature[i] != app_cfg_epilog_cpcst->app_cfg_signature[i]) ||
+     73                              (app_cfg_prolog_cpcst->app_cfg_signature[i] == 0xFF) )
      74                          {
      75                              ret = 0;
      76                              break;
@@ -137,8 +137,8 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Val
      86                  {
      87                      for(i=0; i<16; i++)
      88                      {
-     89                          if(app_cfg_prolog_cpcst->app_cfg_fwversion[i] !=
-     90                                      app_cfg_epilog_cpcst->app_cfg_fwversion[i])
+     89                          if( (app_cfg_prolog_cpcst->app_cfg_fwversion[i] != app_cfg_epilog_cpcst->app_cfg_fwversion[i]) ||
+     90                              (app_cfg_prolog_cpcst->app_cfg_fwversion[i] == 0xFF) )
      91                          {
      92                              ret = 0;
      93                              break;
@@ -191,13 +191,13 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Val
        4  ??DataTable1_5
        2  BootApp_App_Valid_en
       62  BootApp_Validate_App
-     176  BootApp_Validate_Info
+     206  BootApp_Validate_Info
 
  
    2 bytes in section .data
- 262 bytes in section .text
+ 292 bytes in section .text
  
- 262 bytes of CODE memory
+ 292 bytes of CODE memory
    2 bytes of DATA memory
 
 Errors: none

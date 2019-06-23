@@ -20,36 +20,14 @@ void BootApp_Run_App(void)
     ;
 #else
 
-      if(((*(uint32_t*)BOOTAPP_APP_START_ADDR)&0x2FFE0000)==0x20000000)
-      {
-          //__set_PSP(*(volatile uint32_t*) BOOTAPP_APP_START_ADDR);
-          //__set_CONTROL(0);
-          __set_MSP(*(volatile uint32_t*) BOOTAPP_APP_START_ADDR);
-          NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0xC000);
-          ((*((ptf)(BOOTAPP_APP_START_ADDR + 4)))());
-      }
-  
-#if 0
-  TIM_ITConfig(TIM4,TIM_IT_Update,DISABLE);
-  TIM_Cmd(TIM4, DISABLE);
-  USART_DeInit(USART1);
-  USART_DeInit(USART2);
-  USART_ITConfig(USART1, USART_IT_RXNE, DISABLE);
-  USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
-  USART_ITConfig(USART2, USART_IT_RXNE, DISABLE);
-  USART_ITConfig(USART2, USART_IT_TXE, DISABLE);
-  Delay_ms(10);
-  
-  __disable_irq();
-  ptf app_main;
-  if(((*(uint32_t*)BOOTAPP_APP_START_ADDR)&0x2FFE0000)==0x20000000)
-  {
-      __set_MSP(*(volatile uint32_t*)BOOTAPP_APP_START_ADDR);
-      app_main = (ptf)(volatile uint32_t *)(BOOTAPP_APP_START_ADDR + 4);
-      app_main();
-      //((*((ptf)(BOOTAPP_APP_START_ADDR + 4)))());
-  }
-#endif
+    __disable_irq();
+    if(((*(uint32_t*)BOOTAPP_APP_START_ADDR)&0x2FFE0000)==0x20000000)
+    {
+        uint32_t   *app_main;
+        app_main = (uint32_t *)(BOOTAPP_APP_START_ADDR + 4);
+        __set_MSP(*(volatile uint32_t*) BOOTAPP_APP_START_ADDR);
+        ((void (*)())(*app_main))();
+    }
 
 #endif
 }
