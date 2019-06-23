@@ -152,15 +152,19 @@ Bp3=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\main.c}.46.18" 0 0 1 "" 0 "" 0
 Bp4=_ 0 "EMUL_CODE" "0x0800233C" 0 0 1 "" 0 "" 0
 Bp5=_ 0 "EMUL_CODE" "0x08002996" 0 0 1 "" 0 "" 0
 Bp6=_ 0 "EMUL_CODE" "0x08002A96" 0 0 1 "" 0 "" 0
-Bp7=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\BootApp\src\BootApp_Jump2App.c}.36.1" 0 0 1 "" 0 "" 0
-Bp8=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\BootApp\src\BootApp_Jump2App.c}.36.1" 0 0 1 "" 0 "" 0
+Bp7=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\BootApp\src\BootApp_Jump2App.c}.55.1" 0 0 1 "" 0 "" 0
+Bp8=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\BootApp\src\BootApp_Jump2App.c}.55.1" 0 0 1 "" 0 "" 0
 Bp9=_ 0 "EMUL_CODE" "0x0800C000" 0 0 1 "" 0 "" 0
 Bp10=_ 0 "EMUL_CODE" "0x0800E6DC" 0 0 1 "" 0 "" 0
-Count=11
+Bp11=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\BootApp\src\BootApp_Jump2App.c}.29.11" 0 0 1 "" 0 "" 0
+Count=12
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
 Category=_ 0
+[TermIOLog]
+LoggingEnabled=_ 0
+LogFile=_ ""
 [Aliases]
 A0=_ "C:\Documents and Settings\he.huang\Desktop\burn_in_2_v350301\dfb\DFB_src\main.c" ""
 A1=_ "C:\Users\he.huang\Desktop\burn_in_2_v350504\dfb\DFB_src\command.c" ""
@@ -179,6 +183,3 @@ Mode=3
 Graph=0
 Symbiont=0
 Exclusions=
-[TermIOLog]
-LoggingEnabled=_ 0
-LogFile=_ ""

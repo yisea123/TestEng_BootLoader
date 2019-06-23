@@ -53,8 +53,8 @@ uint8_t BootApp_Validate_Info(const BootApp_App_Cfg_tst * App_Cfg_cpcst)
     {
         for(i=0; i<16; i++)
         {
-            if(app_cfg_prolog_cpcst->app_cfg_hardversion[i] !=
-                    app_cfg_epilog_cpcst->app_cfg_hardversion[i])
+            if( (app_cfg_prolog_cpcst->app_cfg_hardversion[i] != app_cfg_epilog_cpcst->app_cfg_hardversion[i]) ||
+                (app_cfg_prolog_cpcst->app_cfg_hardversion[i] == 0xFF) )
             {
                 ret = 0;
                 break;
@@ -69,8 +69,8 @@ uint8_t BootApp_Validate_Info(const BootApp_App_Cfg_tst * App_Cfg_cpcst)
         {
             for(i=0; i<16; i++)
             {
-                if(app_cfg_prolog_cpcst->app_cfg_signature[i] !=
-                            app_cfg_epilog_cpcst->app_cfg_signature[i])
+                if( (app_cfg_prolog_cpcst->app_cfg_signature[i] != app_cfg_epilog_cpcst->app_cfg_signature[i]) ||
+                    (app_cfg_prolog_cpcst->app_cfg_signature[i] == 0xFF) )
                 {
                     ret = 0;
                     break;
@@ -86,8 +86,8 @@ uint8_t BootApp_Validate_Info(const BootApp_App_Cfg_tst * App_Cfg_cpcst)
         {
             for(i=0; i<16; i++)
             {
-                if(app_cfg_prolog_cpcst->app_cfg_fwversion[i] !=
-                            app_cfg_epilog_cpcst->app_cfg_fwversion[i])
+                if( (app_cfg_prolog_cpcst->app_cfg_fwversion[i] != app_cfg_epilog_cpcst->app_cfg_fwversion[i]) ||
+                    (app_cfg_prolog_cpcst->app_cfg_fwversion[i] == 0xFF) )
                 {
                     ret = 0;
                     break;
@@ -104,8 +104,8 @@ uint8_t BootApp_Validate_Info(const BootApp_App_Cfg_tst * App_Cfg_cpcst)
     {
         ret = 0;
     }
-    return 0;
-    //return ret;
+    
+    return ret;
 }
 
 
