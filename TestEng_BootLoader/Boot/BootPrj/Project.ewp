@@ -784,19 +784,19 @@
         </option>
         <option>
           <name>DoFill</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>FillerByte</name>
-          <state>0xFF</state>
+          <state>0xC3</state>
         </option>
         <option>
           <name>FillerStart</name>
-          <state>0x0</state>
+          <state>0x08000000</state>
         </option>
         <option>
           <name>FillerEnd</name>
-          <state>0x0</state>
+          <state>0x0800BFFF</state>
         </option>
         <option>
           <name>CrcSize</name>

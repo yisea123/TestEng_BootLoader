@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=-793192832
+Checksum=-1759825326
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -93,9 +93,6 @@ Fmt17={W}1:sect_siz	4	0
 Fmt18={W}1:start_addr_u32	4	0
 Fmt19={W}1:str_addr	4	0
 Fmt20={W}1:str_addr_u32	4	0
-[Trace2]
-Enabled=0
-ShowSource=0
 [SWOTraceWindow]
 PcSampling=0
 InterruptLogs=0
@@ -134,6 +131,22 @@ GraphEnabled=0
 ShowTimeLog=1
 ShowTimeSum=1
 SumSortOrder=0
+[Log file]
+LoggingEnabled=_ 0
+LogFile=_ ""
+Category=_ 0
+[CallStackLog]
+Enabled=0
+[PowerProbe]
+Frequency=10000
+Probe0=I0
+ProbeSetup0=2 1 1 2 0 0
+[DriverProfiling]
+Enabled=0
+Mode=3
+Graph=0
+Symbiont=0
+Exclusions=
 [Disassemble mode]
 mode=1
 [Breakpoints2]
@@ -147,28 +160,12 @@ Bp6=_ 0 "EMUL_CODE" "0x0800C000" 0 0 1 "" 0 "" 0
 Bp7=_ 0 "EMUL_CODE" "0x0800E6DC" 0 0 1 "" 0 "" 0
 Bp8=_ 0 "EMUL_CODE" "0x08002996" 0 0 1 "" 0 "" 0
 Count=9
-[Log file]
-LoggingEnabled=_ 0
-LogFile=_ ""
-Category=_ 0
 [Aliases]
 A0=_ "C:\Documents and Settings\he.huang\Desktop\burn_in_2_v350301\dfb\DFB_src\main.c" ""
 A1=_ "C:\Users\he.huang\Desktop\burn_in_2_v350504\dfb\DFB_src\command.c" ""
 A2=_ "C:\Users\he.huang\Desktop\burn_in_2_v350504\dfb\DFB_src\main.c" ""
 Count=3
 SuppressDialog=0
-[CallStackLog]
-Enabled=0
-[PowerProbe]
-Frequency=10000
-Probe0=I0
-ProbeSetup0=2 1 1 2 0 0
-[DriverProfiling]
-Enabled=0
-Mode=3
-Graph=0
-Symbiont=0
-Exclusions=
 [TermIOLog]
 LoggingEnabled=_ 0
 LogFile=_ ""
