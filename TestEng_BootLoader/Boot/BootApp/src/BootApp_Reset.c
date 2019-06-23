@@ -14,6 +14,9 @@
 #include "BootApp_Type.h"
 #include "BootApp_Priv.h"
 
+#pragma location = "ram_noinit" 
+__root uint16_t magic_word;
+
 BootApp_Reset_ten BootApp_Reset_en = BOOTAPP_RESET_POWERON;
 
 BootApp_Reset_ten BootApp_GetReset_Reason(void)
@@ -25,6 +28,7 @@ BootApp_Reset_ten BootApp_GetReset_Reason(void)
     magic_word = BootApp_Get_MagicWord();
     if(BOOTAPP_MAGIC_WORD == magic_word)
     {
+        BootApp_Set_MagicWord(BOOTAPP_MAGIC_WORD_DEFAULT);
         BootApp_Reset_en = BOOTAPP_RESET_PROG;
     }
     else

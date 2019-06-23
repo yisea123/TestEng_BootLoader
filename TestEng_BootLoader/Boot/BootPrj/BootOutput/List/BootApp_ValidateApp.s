@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       23/Jun/2019  16:32:31
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       23/Jun/2019  19:27:57
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -100,10 +100,10 @@ BootApp_Validate_Info:
         MOVS     R0,#+0
         LDR      R3,[R1, #+8]
         LDR      R4,[R1, #+12]
-        LDR.N    R5,??DataTable1_2  ;; 0x800c400
+        LDR.N    R5,??DataTable1_2  ;; 0x800c000
         CMP      R3,R5
         BCC.N    ??BootApp_Validate_Info_0
-        LDR.N    R5,??DataTable1_3  ;; 0x800c800
+        LDR.N    R5,??DataTable1_3  ;; 0x800c400
         CMP      R3,R5
         BCS.N    ??BootApp_Validate_Info_0
         LDR.N    R5,??DataTable1_4  ;; 0x801fc00
@@ -225,13 +225,13 @@ BootApp_Validate_Info:
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable1_2:
-        DC32     0x800c400
+        DC32     0x800c000
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable1_3:
-        DC32     0x800c800
+        DC32     0x800c400
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0

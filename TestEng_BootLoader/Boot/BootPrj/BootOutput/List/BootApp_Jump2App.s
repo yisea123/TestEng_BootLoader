@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       23/Jun/2019  16:33:05
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       23/Jun/2019  19:27:56
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -56,15 +56,15 @@
 BootApp_Run_App:
         PUSH     {R4,LR}
         CPSID    I
-        LDR.N    R0,??BootApp_Run_App_0  ;; 0x800c000
+        LDR.N    R0,??BootApp_Run_App_0  ;; 0x800c400
         LDR      R0,[R0, #+0]
         LDR.N    R1,??BootApp_Run_App_0+0x4  ;; 0x2ffe0000
         ANDS     R0,R1,R0
         CMP      R0,#+536870912
         BNE.N    ??BootApp_Run_App_1
-        LDR.N    R0,??BootApp_Run_App_0+0x8  ;; 0x800c004
+        LDR.N    R0,??BootApp_Run_App_0+0x8  ;; 0x800c404
         MOVS     R4,R0
-        LDR.N    R0,??BootApp_Run_App_0  ;; 0x800c000
+        LDR.N    R0,??BootApp_Run_App_0  ;; 0x800c400
         LDR      R0,[R0, #+0]
         MSR      MSP,R0
         LDR      R0,[R4, #+0]
@@ -73,9 +73,9 @@ BootApp_Run_App:
         POP      {R4,PC}          ;; return
         DATA
 ??BootApp_Run_App_0:
-        DC32     0x800c000
+        DC32     0x800c400
         DC32     0x2ffe0000
-        DC32     0x800c004
+        DC32     0x800c404
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0

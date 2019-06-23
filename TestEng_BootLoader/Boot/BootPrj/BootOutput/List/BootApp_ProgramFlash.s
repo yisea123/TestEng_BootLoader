@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       23/Jun/2019  16:32:31
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       23/Jun/2019  19:27:56
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -58,7 +58,7 @@
 
         SECTION `.bss`:DATA:REORDER:NOROOT(2)
 BootApp_WriteData_ast:
-        DS8 960
+        DS8 948
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
@@ -119,7 +119,7 @@ BootApp_Program_Flash:
         BNE.N    ??BootApp_Program_Flash_4
         UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
         MOV      R0,#+1024
-        LDR.N    R1,??DataTable1  ;; 0x800bc00
+        LDR.N    R1,??DataTable1  ;; 0x800c000
         MLA      R0,R0,R5,R1
         CMP      R6,R0
         BNE.N    ??BootApp_Program_Flash_5
@@ -154,7 +154,7 @@ BootApp_Program_Flash:
         CMP      R5,#+0
         BEQ.N    ??BootApp_Program_Flash_9
         UXTH     R5,R5            ;; ZeroExt  R5,R5,#+16,#+16
-        CMP      R5,#+81
+        CMP      R5,#+80
         BGE.N    ??BootApp_Program_Flash_9
         MOVS     R0,#+1
         MOV      R8,R0
@@ -257,7 +257,7 @@ BootApp_Program_Flash_Finish:
         MOVS     R1,R3
 ??BootApp_Program_Flash_Finish_0:
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        CMP      R1,#+80
+        CMP      R1,#+79
         BGE.N    ??BootApp_Program_Flash_Finish_1
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
         MOVS     R3,#+12
@@ -269,7 +269,7 @@ BootApp_Program_Flash_Finish:
         B.N      ??BootApp_Program_Flash_Finish_0
 ??BootApp_Program_Flash_Finish_1:
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        CMP      R1,#+80
+        CMP      R1,#+79
         BNE.N    ??BootApp_Program_Flash_Finish_3
         MOVS     R3,#+1
         MOVS     R0,R3
@@ -285,7 +285,7 @@ BootApp_Program_Flash_Finish:
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable1:
-        DC32     0x800bc00
+        DC32     0x800c000
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -306,11 +306,11 @@ BootApp_Program_Flash_Finish:
 
         END
 // 
-// 960 bytes in section .bss
+// 948 bytes in section .bss
 // 482 bytes in section .text
 // 
 // 482 bytes of CODE memory
-// 960 bytes of DATA memory
+// 948 bytes of DATA memory
 //
 //Errors: none
 //Warnings: none

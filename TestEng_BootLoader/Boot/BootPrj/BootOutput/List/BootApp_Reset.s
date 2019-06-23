@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       23/Jun/2019  16:32:31
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       23/Jun/2019  19:27:57
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -53,7 +53,12 @@
         PUBLIC BootApp_GetReset_Reason
         PUBLIC BootApp_Reset_Sys
         PUBLIC BootApp_Reset_en
+        PUBLIC magic_word
 
+
+        SECTION ram_noinit:DATA:REORDER:ROOT(1)
+magic_word:
+        DS8 2
 
         SECTION `.bss`:DATA:REORDER:NOROOT(0)
 BootApp_Reset_en:
@@ -62,41 +67,50 @@ BootApp_Reset_en:
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 BootApp_GetReset_Reason:
-        MOVS     R0,#+536870912
+        LDR.N    R0,??DataTable1  ;; 0x20004f00
         LDRH     R0,[R0, #+0]
         MOVS     R1,R0
         UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
-        MOVW     R0,#+43981
+        MOVW     R0,#+42405
         CMP      R1,R0
         BNE.N    ??BootApp_GetReset_Reason_0
+        MOVS     R0,#+0
+        LDR.N    R2,??DataTable1  ;; 0x20004f00
+        STRH     R0,[R2, #+0]
         MOVS     R0,#+1
-        LDR.N    R2,??DataTable0
+        LDR.N    R2,??DataTable1_1
         STRB     R0,[R2, #+0]
         B.N      ??BootApp_GetReset_Reason_1
 ??BootApp_GetReset_Reason_0:
         MOVS     R0,#+0
-        LDR.N    R2,??DataTable0
+        LDR.N    R2,??DataTable1_1
         STRB     R0,[R2, #+0]
 ??BootApp_GetReset_Reason_1:
-        LDR.N    R0,??DataTable0
+        LDR.N    R0,??DataTable1_1
         LDRB     R0,[R0, #+0]
         BX       LR               ;; return
-
-        SECTION `.text`:CODE:NOROOT(2)
-        SECTION_TYPE SHT_PROGBITS, 0
-        DATA
-??DataTable0:
-        DC32     BootApp_Reset_en
 
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 BootApp_Reset_Sys:
         PUSH     {R7,LR}
         MOVS     R0,#+0
-        MOVS     R1,#+536870912
+        LDR.N    R1,??DataTable1  ;; 0x20004f00
         STRH     R0,[R1, #+0]
         BL       BootDrv_Reset
         POP      {R0,PC}          ;; return
+
+        SECTION `.text`:CODE:NOROOT(2)
+        SECTION_TYPE SHT_PROGBITS, 0
+        DATA
+??DataTable1:
+        DC32     0x20004f00
+
+        SECTION `.text`:CODE:NOROOT(2)
+        SECTION_TYPE SHT_PROGBITS, 0
+        DATA
+??DataTable1_1:
+        DC32     BootApp_Reset_en
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -112,10 +126,11 @@ BootApp_Reset_Sys:
         END
 // 
 //  1 byte  in section .bss
-// 58 bytes in section .text
+// 64 bytes in section .text
+//  2 bytes in section ram_noinit
 // 
-// 58 bytes of CODE memory
-//  1 byte  of DATA memory
+// 64 bytes of CODE memory
+//  3 bytes of DATA memory
 //
 //Errors: none
 //Warnings: none
