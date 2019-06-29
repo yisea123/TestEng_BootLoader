@@ -170,6 +170,8 @@ uint8_t BootApp_Program_Flash_Finish(void)
     {
         if( (BootApp_WriteData_past + i)->sect_prog_u16 )
             continue;
+        else
+            break;
     }
 
     if(BOOTAPP_APP_SECTOR_NUM == i)
