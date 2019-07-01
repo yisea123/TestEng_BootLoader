@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       29/Jun/2019  20:37:21
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       30/Jun/2019  12:01:39
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -138,27 +138,32 @@ BootDrv_ProgramFlash:
         MOVS     R0,R4
         BL       FLASH_ProgramWord
         MOV      R9,R0
+        UXTB     R9,R9            ;; ZeroExt  R9,R9,#+24,#+24
+        CMP      R9,#+4
+        BNE.N    ??BootDrv_ProgramFlash_4
         ADDS     R4,R4,#+4
         ADDS     R8,R8,#+1
         B.N      ??BootDrv_ProgramFlash_1
+??BootDrv_ProgramFlash_4:
+        B.N      ??BootDrv_ProgramFlash_2
 ??BootDrv_ProgramFlash_3:
 ??BootDrv_ProgramFlash_2:
         BL       FLASH_Lock
         CPSIE    I
         UXTB     R9,R9            ;; ZeroExt  R9,R9,#+24,#+24
         CMP      R9,#+4
-        BNE.N    ??BootDrv_ProgramFlash_4
+        BNE.N    ??BootDrv_ProgramFlash_5
         MOVS     R0,#+1
         MOVS     R7,R0
-        B.N      ??BootDrv_ProgramFlash_5
-??BootDrv_ProgramFlash_4:
+        B.N      ??BootDrv_ProgramFlash_6
+??BootDrv_ProgramFlash_5:
         MOVS     R0,#+0
         MOVS     R7,R0
-        B.N      ??BootDrv_ProgramFlash_5
+        B.N      ??BootDrv_ProgramFlash_6
 ??BootDrv_ProgramFlash_0:
         MOVS     R0,#+0
         MOVS     R7,R0
-??BootDrv_ProgramFlash_5:
+??BootDrv_ProgramFlash_6:
         MOVS     R0,R7
         UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
         POP      {R1,R4-R9,PC}    ;; return
@@ -188,9 +193,9 @@ BootDrv_ProgramFlash:
 
         END
 // 
-// 204 bytes in section .text
+// 216 bytes in section .text
 // 
-// 204 bytes of CODE memory
+// 216 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

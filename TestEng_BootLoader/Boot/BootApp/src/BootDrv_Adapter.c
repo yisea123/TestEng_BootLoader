@@ -93,7 +93,14 @@ uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uin
             if(ret)
             {
                 sts = FLASH_ProgramWord(start_addr_u32, data);
-                start_addr_u32 += 4;
+                if(FLASH_COMPLETE == sts)
+                {
+                    start_addr_u32 += 4;
+                }
+                else
+                {
+                    break;
+                }
             }
             else
             {

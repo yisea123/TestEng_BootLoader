@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        29/Jun/2019  20:37:21
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        30/Jun/2019  12:01:39
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -144,47 +144,54 @@ D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootDrv_Adapter
      93                      if(ret)
      94                      {
      95                          sts = FLASH_ProgramWord(start_addr_u32, data);
-     96                          start_addr_u32 += 4;
-     97                      }
-     98                      else
-     99                      {
-    100                          break;
-    101                      }
-    102                  }
-    103                  FLASH_Lock();
-    104                  BootApp_Exit_Schm();
-    105          
-    106                  if(FLASH_COMPLETE == sts)
-    107                  {
-    108                      ret = 1;
+     96                          if(FLASH_COMPLETE == sts)
+     97                          {
+     98                              start_addr_u32 += 4;
+     99                          }
+    100                          else
+    101                          {
+    102                              break;
+    103                          }
+    104                      }
+    105                      else
+    106                      {
+    107                          break;
+    108                      }
     109                  }
-    110                  else
-    111                  {
-    112                      ret = 0;
-    113                  }
-    114              }
-    115              else
-    116              {
-    117                  ret = 0;
-    118              }
-    119              return ret;
-    120          
-    121          }
-    122          
-    123          
-    124          #endif
-    125          
-    126          
-    127          /*<BASDKey>
-    128           ***********************************************************************************************************************
-    129           * $History___:
-    130           *
-    131           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
-    132           *
-    133           * $
-    134           ***********************************************************************************************************************
-    135          </BASDKey>*/
-    136          
+    110                  FLASH_Lock();
+    111                  BootApp_Exit_Schm();
+    112          
+    113                  if(FLASH_COMPLETE == sts)
+    114                  {
+    115                      ret = 1;
+    116                  }
+    117                  else
+    118                  {
+    119                      ret = 0;
+    120                  }
+    121              }
+    122              else
+    123              {
+    124                  ret = 0;
+    125              }
+    126              return ret;
+    127          
+    128          }
+    129          
+    130          
+    131          #endif
+    132          
+    133          
+    134          /*<BASDKey>
+    135           ***********************************************************************************************************************
+    136           * $History___:
+    137           *
+    138           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+    139           *
+    140           * $
+    141           ***********************************************************************************************************************
+    142          </BASDKey>*/
+    143          
 
    Maximum stack usage in bytes:
 
@@ -209,13 +216,13 @@ D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootDrv_Adapter
        4  ??DataTable1
        4  ??DataTable1_1
       70  BootDrv_EreaseFlash
-     124  BootDrv_ProgramFlash
+     136  BootDrv_ProgramFlash
        2  BootDrv_Reset
 
  
- 204 bytes in section .text
+ 216 bytes in section .text
  
- 204 bytes of CODE memory
+ 216 bytes of CODE memory
 
 Errors: none
 Warnings: none
