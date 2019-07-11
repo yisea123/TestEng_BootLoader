@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=-1636913702
+Checksum=-1240203430
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -54,8 +54,6 @@ ActionState=1
 Fmt0=GPIO_InitTypeDef-GPIO_Pin	4	0
 Fmt1=struct <Unnamed 28>-cmd32_00	4	0
 Fmt2=struct <Unnamed 28>-cmd32_01	4	0
-Fmt3=struct <Unnamed 57>-end_addr_u32	4	0
-Fmt4=struct <Unnamed 57>-start_addr_u32	4	0
 [array_types]
 Fmt0=USHORT[104]	4	0
 Fmt1=USHORT[128]	4	0
@@ -75,12 +73,13 @@ Fmt14=uint16_t[512]	4	0
 Fmt15=uint16_t[8]	4	0
 Fmt16=uint16_t[9]	4	0
 Fmt17=uint32_t[256]	4	0
-Fmt18=uint8_t[100]	4	0
-Fmt19=uint8_t[128]	4	0
-Fmt20=uint8_t[16]	3	0
-Fmt21=uint8_t[256]	4	0
-Fmt22=unsigned char[256]	4	0
-Fmt23=unsigned short[8]	4	0
+Fmt18=uint32_t[64]	4	0
+Fmt19=uint8_t[100]	4	0
+Fmt20=uint8_t[128]	4	0
+Fmt21=uint8_t[16]	3	0
+Fmt22=uint8_t[256]	4	0
+Fmt23=unsigned char[256]	4	0
+Fmt24=unsigned short[8]	4	0
 [watch_formats]
 Fmt0={W}0:gOutboundData	4	0
 Fmt1={W}0:globle_flag_dfb_voltage_status	4	0
@@ -103,9 +102,6 @@ Fmt17={W}1:sect_siz	4	0
 Fmt18={W}1:start_addr_u32	4	0
 Fmt19={W}1:str_addr	4	0
 Fmt20={W}1:str_addr_u32	4	0
-[Trace1]
-Enabled=0
-ShowSource=1
 [Trace2]
 Enabled=0
 ShowSource=0
@@ -150,18 +146,7 @@ SumSortOrder=0
 [Disassemble mode]
 mode=1
 [Breakpoints2]
-Bp0=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\command.c}.176.10" 0 0 1 "" 0 "" 0
-Bp1=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\command.c}.242.10" 0 0 1 "" 0 "" 0
-Bp2=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\command.c}.252.18" 0 0 1 "" 0 "" 0
-Bp3=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\DFB_src\main.c}.46.18" 0 0 1 "" 0 "" 0
-Bp4=_ 0 "EMUL_CODE" "0x0800233C" 0 0 1 "" 0 "" 0
-Bp5=_ 0 "EMUL_CODE" "0x08002A96" 0 0 1 "" 0 "" 0
-Bp6=_ 0 "EMUL_CODE" "0x0800C000" 0 0 1 "" 0 "" 0
-Bp7=_ 0 "EMUL_CODE" "0x0800E6DC" 0 0 1 "" 0 "" 0
-Bp8=_ 0 "EMUL_CODE" "0x08002996" 0 0 1 "" 0 "" 0
-Bp9=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\BootApp\src\BootApp_StateMachine.c}.120.13" 0 0 1 "" 0 "" 0
-Bp10=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\BootApp\src\BootApp_StateMachine.c}.124.13" 0 0 1 "" 0 "" 0
-Count=11
+Count=0
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
