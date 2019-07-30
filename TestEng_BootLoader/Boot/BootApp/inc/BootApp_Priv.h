@@ -45,6 +45,7 @@ extern void BootApp_Log_Exe_Status(BootApp_State_ten state_en,  BootApp_Status_t
 extern void BootApp_HandleCmd_Receive(void);
 extern void BootApp_HandleCmd_Send(void);
 extern void BootApp_Get_CommunicationBuf(BootApp_CommunicationBuffer_tst ** ComBuffer_pst);
+extern void BootApp_Get_StatusBuf(BootApp_StsBuffer_tst ** stsBuffer_pst);
 
 extern uint8_t BootApp_SectBuffer_Write(uint16_t start_addr, uint16_t length, const uint32_t *src);
 extern uint8_t BootApp_SectBuffer_Read(uint16_t start_addr, uint16_t length, uint32_t *des);
@@ -70,6 +71,9 @@ extern BootApp_Status_ten BootApp_Validate_App(void);
 extern void BootDrv_Reset(void);
 extern uint8_t BootDrv_EreaseFlash(uint32_t str_addr_u32, uint32_t sect_siz_u32);
 extern uint8_t BootDrv_ProgramFlash(uint32_t start_addr_u32, uint32_t end_addr_u32, uint32_t length_u32);
+
+extern eMBErrorCode  eWriteMBRegInput( USHORT * pucRegBuffer, USHORT usAddress, USHORT usNRegs);
+extern eMBErrorCode  eReadMBRegHolding( USHORT * pucRegBuffer, USHORT usAddress, USHORT usNRegs);
 
 
 #if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)

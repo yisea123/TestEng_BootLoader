@@ -147,6 +147,10 @@ typedef union
 
 typedef struct
 {
+    uint16_t fw_version0;
+    uint16_t fw_version1;
+    uint16_t fw_version2;
+    uint16_t fw_res[5];
     uint16_t sts16_00;
     uint16_t sts16_01;
     uint16_t sts16_02;
@@ -155,14 +159,6 @@ typedef struct
     uint16_t sts16_05;
     uint16_t sts16_06;
     uint16_t sts16_07;
-    uint16_t sts16_08;
-    uint16_t sts16_09;
-    uint16_t sts16_0a;
-    uint16_t sts16_0b;
-    uint16_t sts16_0c;
-    uint16_t sts16_0d;
-    uint16_t sts16_0e;
-    uint16_t sts16_0f;
     uint16_t sts_res[BOOTAPP_STATUS_BUF_SIZE - 16];
 }BootApp_StsBuffer_tst;
 

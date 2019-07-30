@@ -71,7 +71,7 @@ eMBRegisterMode eMode )
 
 #define REG_INPUT_START 0x0001
 #define REG_INPUT_NREGS BOOTAPP_STATUS_BUF_SIZE
-USHORT  usRegInputBuf[REG_INPUT_NREGS] = {0x2019,0x0520,};
+USHORT  usRegInputBuf[REG_INPUT_NREGS] = {FW_MAIN_VERSION,FW_SUB_VERSION,FW_REVISION,};
 
 eMBErrorCode  eMBRegInputCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNRegs )
 {

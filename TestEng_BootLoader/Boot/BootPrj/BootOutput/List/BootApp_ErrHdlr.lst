@@ -1,54 +1,54 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        03/Jul/2019  23:23:49
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        30/Jul/2019  11:35:17
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
 #    Endian       =  little
 #    Source file  =  
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ErrHdlr.c
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ErrHdlr.c
 #    Command line =  
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ErrHdlr.c
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ErrHdlr.c
 #        -lcN
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
 #        -lb
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
 #        -o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
 #        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
 #        --no_clustering --no_scheduling --debug --endian=little
-#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "D:\Program Files
 #        (x86)\IAR Systems\Embedded Workbench
 #        7.0\arm\INC\c\DLib_Config_Normal.h" -I
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
 #        -I
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
 #        -I
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
 #        -I
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
 #        -I
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
 #        -I
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
 #        -I
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
 #        -I
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
 #        -I
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
 #        -I
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
-#        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+#        -On -I "D:\Program Files (x86)\IAR Systems\Embedded Workbench
 #        7.0\arm\CMSIS\Include\"
 #    List file    =  
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\BootApp_ErrHdlr.lst
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\BootApp_ErrHdlr.lst
 #    Object file  =  
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_ErrHdlr.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_ErrHdlr.o
 #
 ###############################################################################
 
-F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ErrHdlr.c
+D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ErrHdlr.c
       1          /*<BASDKey>
       2           **********************************************************************************************************************
       3           *
@@ -68,38 +68,42 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Err
      17          void BootApp_Log_Exe_Status(BootApp_State_ten state_en,
      18                                      BootApp_Status_ten status_en)
      19          {
-     20              state_en = state_en;
-     21              status_en = status_en;
-     22          }
-     23          
-     24          
-     25          /*<BASDKey>
-     26           ***********************************************************************************************************************
-     27           * $History___:
-     28           *
-     29           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
-     30           *
-     31           * $
-     32           ***********************************************************************************************************************
-     33          </BASDKey>*/
+     20              BootApp_StsBuffer_tst * StsBuffer_pst = (void *)0;
+     21              BootApp_Get_StatusBuf(&StsBuffer_pst);
+     22          
+     23              StsBuffer_pst->sts16_00 = state_en;
+     24              StsBuffer_pst->sts16_01 = status_en;
+     25          }
+     26          
+     27          
+     28          /*<BASDKey>
+     29           ***********************************************************************************************************************
+     30           * $History___:
+     31           *
+     32           * U1.0.0;      20.05.2019 new created for BootLoader he.huang@feedlitech.com
+     33           *
+     34           * $
+     35           ***********************************************************************************************************************
+     36          </BASDKey>*/
 
    Maximum stack usage in bytes:
 
    .cstack Function
    ------- --------
-       0   BootApp_Log_Exe_Status
+      16   BootApp_Log_Exe_Status
+        16   -> BootApp_Get_StatusBuf
 
 
    Section sizes:
 
    Bytes  Function/Label
    -----  --------------
-       2  BootApp_Log_Exe_Status
+      28  BootApp_Log_Exe_Status
 
  
- 2 bytes in section .text
+ 28 bytes in section .text
  
- 2 bytes of CODE memory
+ 28 bytes of CODE memory
 
 Errors: none
 Warnings: none

@@ -17,8 +17,11 @@
 void BootApp_Log_Exe_Status(BootApp_State_ten state_en,
                             BootApp_Status_ten status_en)
 {
-    state_en = state_en;
-    status_en = status_en;
+    BootApp_StsBuffer_tst * StsBuffer_pst = (void *)0;
+    BootApp_Get_StatusBuf(&StsBuffer_pst);
+
+    StsBuffer_pst->sts16_00 = state_en;
+    StsBuffer_pst->sts16_01 = status_en;
 }
 
 
@@ -31,3 +34,4 @@ void BootApp_Log_Exe_Status(BootApp_State_ten state_en,
  * $
  ***********************************************************************************************************************
 </BASDKey>*/
+

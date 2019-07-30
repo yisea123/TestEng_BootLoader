@@ -163,7 +163,7 @@ void BootApp_State_Init_Act(void)
     BootApp_Reset_ten reset_en;
     BootApp_Status_ten  status_en;
 
-    #if 1
+#if 1
     reset_en = BootApp_GetReset_Reason();
 
     if(BOOTAPP_RESET_POWERON == reset_en)
@@ -186,7 +186,7 @@ void BootApp_State_Init_Act(void)
     {
         BootApp_Reset_Sys();
     }
-    #endif
+#endif
 }
 
 /*<BASDKey>

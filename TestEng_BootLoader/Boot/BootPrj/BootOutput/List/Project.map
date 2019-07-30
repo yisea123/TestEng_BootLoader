@@ -1,80 +1,80 @@
 ###############################################################################
 #
-# IAR ELF Linker V7.20.2.7424/W32 for ARM                 03/Jul/2019  23:23:52
+# IAR ELF Linker V7.20.2.7424/W32 for ARM                 30/Jul/2019  11:35:17
 # Copyright 2007-2014 IAR Systems AB.
 #
 #    Output file  =  
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Exe\Project.out.tmp
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Exe\Project.out.tmp
 #    Map file     =  
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\Project.map
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\Project.map
 #    Command line =  
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Cfg.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Cfg_Debug.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Cfg_FL0001A00.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Cfg_FLT804A00.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_EreaseApp.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_ErrHdlr.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_HandleCmd.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Init.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_IoFunctions.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Jump2App.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_ProgramFlash.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_ReceiveData.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Reset.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_StateMachine.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_ValidateApp.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootDrv_Adapter.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\delay.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\init.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\main.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mb.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbascii.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbcrc.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbfunccoils.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbfuncdiag.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbfuncdisc.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbfuncholding.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbfuncinput.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbfuncother.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbrtu.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbtcp.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbutils.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\misc.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\portCB.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\portevent.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\portserial.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\porttimer.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\startup_stm32f10x_md.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_adc.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_bkp.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_can.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_cec.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_crc.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_dac.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_dbgmcu.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_dma.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_exti.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_flash.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_fsmc.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_gpio.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_i2c.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_it.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_iwdg.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_pwr.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_rcc.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_rtc.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_sdio.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_spi.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_tim.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_usart.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_wwdg.o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\system_stm32f10x.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Cfg.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Cfg_Debug.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Cfg_FL0001A00.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Cfg_FLT804A00.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_EreaseApp.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_ErrHdlr.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_HandleCmd.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Init.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_IoFunctions.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Jump2App.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_ProgramFlash.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_ReceiveData.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_Reset.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_StateMachine.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootApp_ValidateApp.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\BootDrv_Adapter.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\delay.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\init.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\main.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mb.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbascii.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbcrc.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbfunccoils.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbfuncdiag.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbfuncdisc.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbfuncholding.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbfuncinput.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbfuncother.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbrtu.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbtcp.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\mbutils.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\misc.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\portCB.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\portevent.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\portserial.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\porttimer.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\startup_stm32f10x_md.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_adc.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_bkp.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_can.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_cec.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_crc.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_dac.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_dbgmcu.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_dma.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_exti.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_flash.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_fsmc.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_gpio.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_i2c.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_it.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_iwdg.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_pwr.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_rcc.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_rtc.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_sdio.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_spi.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_tim.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_usart.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\stm32f10x_wwdg.o
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\system_stm32f10x.o
 #        -o
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Exe\Project.out.tmp
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Exe\Project.out.tmp
 #        --map
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\Project.map
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\Project.map
 #        --config
-#        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\stm32f10x_flash.icf
+#        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\stm32f10x_flash.icf
 #        --semihosting --entry __iar_program_start --vfe
 #
 ###############################################################################
@@ -102,7 +102,7 @@ __SystemLibrary = DLib
   .intvec            ro code  0x08000000    0xec  startup_stm32f10x_md.o [1]
                             - 0x080000ec    0xec
 
-"P2":                                     0x32c4
+"P2":                                     0x32f7
   .text              ro code  0x080000ec   0x404  BootApp_ReceiveData.o [1]
   .text              ro code  0x080004f0     0x6  ABImemclr4.o [4]
   .text              ro code  0x080004f6    0x22  zero_init3.o [4]
@@ -130,46 +130,36 @@ __SystemLibrary = DLib
   .text              ro code  0x08002360    0xd8  BootDrv_Adapter.o [1]
   .text              ro code  0x08002438   0x182  stm32f10x_flash.o [1]
   .text              ro code  0x080025bc   0x1d4  BootApp_StateMachine.o [1]
-  .text              ro code  0x08002790    0x44  BootApp_HandleCmd.o [1]
-  .text              ro code  0x080027d4     0x2  BootApp_ErrHdlr.o [1]
-  .text              ro code  0x080027d8    0x50  BootApp_EreaseApp.o [1]
-  .text              ro code  0x08002828    0x40  BootApp_Reset.o [1]
-  .text              ro code  0x08002868   0x124  BootApp_ValidateApp.o [1]
-  .text              ro code  0x0800298c    0x30  BootApp_Jump2App.o [1]
-  .text              ro code  0x080029bc   0x158  system_stm32f10x.o [1]
-  .rodata            const    0x08002b14   0x100  mbcrc.o [1]
-  .rodata            const    0x08002c14   0x100  mbcrc.o [1]
-  .text              ro code  0x08002d14    0xd2  packbits_init.o [4]
-  .text              ro code  0x08002de6     0x6  abort.o [3]
-  .text              ro code  0x08002dec    0x14  exit.o [5]
-  .text              ro code  0x08002e00    0xbe  mbfuncdisc.o [1]
-  .text              ro code  0x08002ebe    0xa2  mbfuncinput.o [1]
-  .text              ro code  0x08002f60    0x80  init.o [1]
-  .text              ro code  0x08002fe0    0x76  ABImemcpy_unaligned.o [4]
-  .text              ro code  0x08003058    0x34  mbfuncother.o [1]
-  .text              ro code  0x0800308c    0x2a  stm32f10x_it.o [1]
-  .text              ro code  0x080030b8    0x28  main.o [1]
-  .text              ro code  0x080030e0    0x28  data_init.o [4]
-  .rodata            const    0x08003108    0x24  BootApp_ReceiveData.o [1]
-  .iar.init_table    const    0x0800312c    0x2c  - Linker created -
-  .text              ro code  0x08003158    0x1a  cmain.o [4]
-  .text              ro code  0x08003172     0x4  low_level_init.o [3]
-  .text              ro code  0x08003176     0x4  exit.o [3]
-  .text              ro code  0x0800317c     0xa  cexit.o [4]
-  .rodata            const    0x08003188    0x10  BootApp_Cfg.o [1]
-  .text              ro code  0x08003198    0x10  startup_stm32f10x_md.o [1]
-  .text              ro code  0x080031a8     0xc  cstartup_M.o [4]
-  .rodata            const    0x080031b4     0x4  BootApp_Cfg.o [1]
-  .text              ro code  0x080031b8     0x4  startup_stm32f10x_md.o [1]
-  .text              ro code  0x080031bc     0x4  startup_stm32f10x_md.o [1]
-  .text              ro code  0x080031c0     0x4  startup_stm32f10x_md.o [1]
-  .text              ro code  0x080031c4     0x4  startup_stm32f10x_md.o [1]
-  .text              ro code  0x080031c8     0x4  startup_stm32f10x_md.o [1]
-  .text              ro code  0x080031cc     0x4  startup_stm32f10x_md.o [1]
-  .text              ro code  0x080031d0     0x4  startup_stm32f10x_md.o [1]
-  .text              ro code  0x080031d4     0x4  startup_stm32f10x_md.o [1]
-  .text              ro code  0x080031d8     0x4  startup_stm32f10x_md.o [1]
-  .text              ro code  0x080031dc     0x4  startup_stm32f10x_md.o [1]
+  .text              ro code  0x08002790    0x50  BootApp_HandleCmd.o [1]
+  .text              ro code  0x080027e0    0x1c  BootApp_ErrHdlr.o [1]
+  .text              ro code  0x080027fc    0x54  BootApp_EreaseApp.o [1]
+  .text              ro code  0x08002850    0x40  BootApp_Reset.o [1]
+  .text              ro code  0x08002890   0x124  BootApp_ValidateApp.o [1]
+  .text              ro code  0x080029b4    0x30  BootApp_Jump2App.o [1]
+  .text              ro code  0x080029e4   0x158  system_stm32f10x.o [1]
+  .rodata            const    0x08002b3c   0x100  mbcrc.o [1]
+  .rodata            const    0x08002c3c   0x100  mbcrc.o [1]
+  .text              ro code  0x08002d3c    0xd2  packbits_init.o [4]
+  .text              ro code  0x08002e0e     0x6  abort.o [3]
+  .text              ro code  0x08002e14    0x14  exit.o [5]
+  .text              ro code  0x08002e28    0xbe  mbfuncdisc.o [1]
+  .text              ro code  0x08002ee6    0xa2  mbfuncinput.o [1]
+  .text              ro code  0x08002f88    0x80  init.o [1]
+  .text              ro code  0x08003008    0x76  ABImemcpy_unaligned.o [4]
+  .text              ro code  0x08003080    0x34  mbfuncother.o [1]
+  .text              ro code  0x080030b4    0x2a  stm32f10x_it.o [1]
+  .text              ro code  0x080030e0    0x28  main.o [1]
+  .text              ro code  0x08003108    0x28  data_init.o [4]
+  .rodata            const    0x08003130    0x24  BootApp_ReceiveData.o [1]
+  .iar.init_table    const    0x08003154    0x2c  - Linker created -
+  .text              ro code  0x08003180    0x1a  cmain.o [4]
+  .text              ro code  0x0800319a     0x4  low_level_init.o [3]
+  .text              ro code  0x0800319e     0x4  exit.o [3]
+  .text              ro code  0x080031a4     0xa  cexit.o [4]
+  .rodata            const    0x080031b0    0x10  BootApp_Cfg.o [1]
+  .text              ro code  0x080031c0    0x10  startup_stm32f10x_md.o [1]
+  .text              ro code  0x080031d0     0xc  cstartup_M.o [4]
+  .rodata            const    0x080031dc     0x4  BootApp_Cfg.o [1]
   .text              ro code  0x080031e0     0x4  startup_stm32f10x_md.o [1]
   .text              ro code  0x080031e4     0x4  startup_stm32f10x_md.o [1]
   .text              ro code  0x080031e8     0x4  startup_stm32f10x_md.o [1]
@@ -212,30 +202,40 @@ __SystemLibrary = DLib
   .text              ro code  0x0800327c     0x4  startup_stm32f10x_md.o [1]
   .text              ro code  0x08003280     0x4  startup_stm32f10x_md.o [1]
   .text              ro code  0x08003284     0x4  startup_stm32f10x_md.o [1]
-  .rodata            const    0x08003288     0x0  zero_init3.o [4]
-  .rodata            const    0x08003288     0x0  packbits_init.o [4]
-  Initializer bytes  ro data  0x08003288   0x128  <for P3 s0>
-                            - 0x080033b0  0x32c4
+  .text              ro code  0x08003288     0x4  startup_stm32f10x_md.o [1]
+  .text              ro code  0x0800328c     0x4  startup_stm32f10x_md.o [1]
+  .text              ro code  0x08003290     0x4  startup_stm32f10x_md.o [1]
+  .text              ro code  0x08003294     0x4  startup_stm32f10x_md.o [1]
+  .text              ro code  0x08003298     0x4  startup_stm32f10x_md.o [1]
+  .text              ro code  0x0800329c     0x4  startup_stm32f10x_md.o [1]
+  .text              ro code  0x080032a0     0x4  startup_stm32f10x_md.o [1]
+  .text              ro code  0x080032a4     0x4  startup_stm32f10x_md.o [1]
+  .text              ro code  0x080032a8     0x4  startup_stm32f10x_md.o [1]
+  .text              ro code  0x080032ac     0x4  startup_stm32f10x_md.o [1]
+  .rodata            const    0x080032b0     0x0  zero_init3.o [4]
+  .rodata            const    0x080032b0     0x0  packbits_init.o [4]
+  Initializer bytes  ro data  0x080032b0   0x133  <for P3 s0>
+                            - 0x080033e3  0x32f7
 
 "P3":                                     0x1898
-  P3 s0                       0x20000000   0x253  <Init block>
-    .data            inited   0x20000000   0x100  portCB.o [1]
-    .data            inited   0x20000100    0x90  BootApp_Cfg_FL0001A00.o [1]
-    .data            inited   0x20000190    0x80  mb.o [1]
-    .data            inited   0x20000210    0x14  BootApp_Cfg_FL0001A00.o [1]
-    .data            inited   0x20000224    0x10  stm32f10x_rcc.o [1]
-    .data            inited   0x20000234     0x8  BootApp_Cfg.o [1]
-    .data            inited   0x2000023c     0x8  BootApp_Cfg.o [1]
-    .data            inited   0x20000244     0x4  mbascii.o [1]
-    .data            inited   0x20000248     0x4  stm32f10x_rcc.o [1]
-    .data            inited   0x2000024c     0x4  system_stm32f10x.o [1]
-    .data            inited   0x20000250     0x2  BootApp_ValidateApp.o [1]
-    .data            inited   0x20000252     0x1  mb.o [1]
-  .bss               zero     0x20000254   0x400  BootApp_ReceiveData.o [1]
-  .bss               zero     0x20000654   0x3b4  BootApp_ProgramFlash.o [1]
-  .bss               zero     0x20000a08   0x200  BootApp_HandleCmd.o [1]
-  .bss               zero     0x20000c08   0x200  portCB.o [1]
-  .bss               zero     0x20000e08   0x100  BootApp_HandleCmd.o [1]
+  P3 s0                       0x20000000   0x353  <Init block>
+    .data            inited   0x20000000   0x100  BootApp_HandleCmd.o [1]
+    .data            inited   0x20000100   0x100  portCB.o [1]
+    .data            inited   0x20000200    0x90  BootApp_Cfg_FL0001A00.o [1]
+    .data            inited   0x20000290    0x80  mb.o [1]
+    .data            inited   0x20000310    0x14  BootApp_Cfg_FL0001A00.o [1]
+    .data            inited   0x20000324    0x10  stm32f10x_rcc.o [1]
+    .data            inited   0x20000334     0x8  BootApp_Cfg.o [1]
+    .data            inited   0x2000033c     0x8  BootApp_Cfg.o [1]
+    .data            inited   0x20000344     0x4  mbascii.o [1]
+    .data            inited   0x20000348     0x4  stm32f10x_rcc.o [1]
+    .data            inited   0x2000034c     0x4  system_stm32f10x.o [1]
+    .data            inited   0x20000350     0x2  BootApp_ValidateApp.o [1]
+    .data            inited   0x20000352     0x1  mb.o [1]
+  .bss               zero     0x20000354   0x400  BootApp_ReceiveData.o [1]
+  .bss               zero     0x20000754   0x3b4  BootApp_ProgramFlash.o [1]
+  .bss               zero     0x20000b08   0x200  BootApp_HandleCmd.o [1]
+  .bss               zero     0x20000d08   0x200  portCB.o [1]
   .bss               zero     0x20000f08   0x100  mbrtu.o [1]
   .bss               zero     0x20001008    0x20  mbfuncother.o [1]
   .bss               zero     0x20001028    0x18  BootApp_ReceiveData.o [1]
@@ -293,14 +293,14 @@ __SystemLibrary = DLib
           Address     Size
           -------     ----
 Zero (__iar_zero_init3)
-    1 destination range, total size 0xe40:
-          0x20000254  0xe40
+    1 destination range, total size 0xd40:
+          0x20000354  0xd40
 
 Copy/packbits (__iar_packbits_init3)
-    1 source range, total size 0x128 (49% of destination):
-          0x08003288  0x128
-    1 destination range, total size 0x253:
-          0x20000000  0x253
+    1 source range, total size 0x133 (36% of destination):
+          0x080032b0  0x133
+    1 destination range, total size 0x353:
+          0x20000000  0x353
 
 
 
@@ -310,12 +310,12 @@ Copy/packbits (__iar_packbits_init3)
 
     Module                   ro code  ro data  rw data
     ------                   -------  -------  -------
-F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj: [1]
-    BootApp_Cfg.o                          28       16
-    BootApp_Cfg_FL0001A00.o                81      164
-    BootApp_EreaseApp.o           80
-    BootApp_ErrHdlr.o              2
-    BootApp_HandleCmd.o           68               768
+D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj: [1]
+    BootApp_Cfg.o                          26       16
+    BootApp_Cfg_FL0001A00.o                60      164
+    BootApp_EreaseApp.o           84
+    BootApp_ErrHdlr.o             28
+    BootApp_HandleCmd.o           80       92      768
     BootApp_Init.o               420                 2
     BootApp_IoFunctions.o        382
     BootApp_Jump2App.o            48
@@ -328,7 +328,7 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj:
     delay.o                      116                 3
     init.o                       128
     main.o                        40
-    mb.o                         724       65      172
+    mb.o                         724       47      172
     mbascii.o                  1 000        2       16
     mbcrc.o                       68      512
     mbfunccoils.o                486
@@ -339,7 +339,7 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj:
     mbrtu.o                      668               266
     mbutils.o                     46
     misc.o                       172
-    portCB.o                     376      127      768
+    portCB.o                     376       92      768
     portevent.o                   68                 2
     portserial.o                 264                 4
     porttimer.o                  268
@@ -347,12 +347,12 @@ F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj:
     stm32f10x_flash.o            386
     stm32f10x_gpio.o             354
     stm32f10x_it.o                42
-    stm32f10x_rcc.o              308       10       20
+    stm32f10x_rcc.o              308        6       20
     stm32f10x_tim.o              336
     stm32f10x_usart.o            504
-    system_stm32f10x.o           344        2        4
+    system_stm32f10x.o           344        1        4
     --------------------------------------------------
-    Total:                    11 764      864    4 245
+    Total:                    11 806      875    4 245
 
 command line: [2]
     --------------------------------------------------
@@ -383,10 +383,10 @@ shb_l.a: [5]
     --------------------------------------------------
     Total:                        20
 
-    Gaps                          18        2        1
+    Gaps                          16        2        1
     Linker created                         44    2 048
 ------------------------------------------------------
-    Grand Total:              12 322      910    6 294
+    Grand Total:              12 362      921    6 294
 
 
 *******************************************************************************
@@ -395,16 +395,16 @@ shb_l.a: [5]
 
 Entry                      Address   Size  Type      Object
 -----                      -------   ----  ----      ------
-?main                   0x08003159         Code  Gb  cmain.o [4]
-ADCPrescTable           0x20000248    0x4  Data  Lc  stm32f10x_rcc.o [1]
-APBAHBPrescTable        0x20000224   0x10  Data  Lc  stm32f10x_rcc.o [1]
-BootApp_App_Cfg_cpcst   0x080031b4    0x4  Data  Gb  BootApp_Cfg.o [1]
-BootApp_App_Cfg_cst     0x08003188   0x10  Data  Gb  BootApp_Cfg.o [1]
+?main                   0x08003181         Code  Gb  cmain.o [4]
+ADCPrescTable           0x20000348    0x4  Data  Lc  stm32f10x_rcc.o [1]
+APBAHBPrescTable        0x20000324   0x10  Data  Lc  stm32f10x_rcc.o [1]
+BootApp_App_Cfg_cpcst   0x080031dc    0x4  Data  Gb  BootApp_Cfg.o [1]
+BootApp_App_Cfg_cst     0x080031b0   0x10  Data  Gb  BootApp_Cfg.o [1]
 BootApp_App_GpioPin_cast
-                        0x20000100   0x90  Data  Gb  BootApp_Cfg_FL0001A00.o [1]
-BootApp_App_Valid_en    0x20000250    0x2  Data  Gb  BootApp_ValidateApp.o [1]
+                        0x20000200   0x90  Data  Gb  BootApp_Cfg_FL0001A00.o [1]
+BootApp_App_Valid_en    0x20000350    0x2  Data  Gb  BootApp_ValidateApp.o [1]
 BootApp_CommunicationBuffer_un
-                        0x20000a08  0x200  Data  Gb  BootApp_HandleCmd.o [1]
+                        0x20000b08  0x200  Data  Gb  BootApp_HandleCmd.o [1]
 BootApp_CopyFromMb      0x080027a9   0x10  Code  Lc  BootApp_HandleCmd.o [1]
 BootApp_Disable_usart_rx
                         0x08000e77    0xe  Code  Gb  BootApp_IoFunctions.o [1]
@@ -416,10 +416,10 @@ BootApp_Enable_usart_rx
                         0x08000e85    0xe  Code  Gb  BootApp_IoFunctions.o [1]
 BootApp_Enable_usart_tx
                         0x08000ea1    0xe  Code  Gb  BootApp_IoFunctions.o [1]
-BootApp_Erease_App      0x080027d9   0x50  Code  Gb  BootApp_EreaseApp.o [1]
+BootApp_Erease_App      0x080027fd   0x54  Code  Gb  BootApp_EreaseApp.o [1]
 BootApp_GetApp_init_en  0x20001082    0x1  Data  Lc  BootApp_Init.o [1]
 BootApp_GetReset_Reason
-                        0x08002829   0x2a  Code  Gb  BootApp_Reset.o [1]
+                        0x08002851   0x2a  Code  Gb  BootApp_Reset.o [1]
 BootApp_Get_Cfg_Gpio    0x08000bdb   0x2a  Code  Gb  BootApp_Init.o [1]
 BootApp_Get_Cfg_Uart    0x08000c05   0x2a  Code  Gb  BootApp_Init.o [1]
 BootApp_Get_Command     0x08000111   0x14  Code  Gb  BootApp_ReceiveData.o [1]
@@ -428,16 +428,17 @@ BootApp_Get_CommunicationBuf
 BootApp_Get_ReceiveData_Info
                         0x080004c5    0x6  Code  Gb  BootApp_ReceiveData.o [1]
 BootApp_Get_State       0x080025c3    0x6  Code  Gb  BootApp_StateMachine.o [1]
+BootApp_Get_StatusBuf   0x080027cd    0x6  Code  Gb  BootApp_HandleCmd.o [1]
 BootApp_Get_Uart        0x08000ced   0x44  Code  Gb  BootApp_Init.o [1]
 BootApp_Get_board_address
                         0x08000df1   0x86  Code  Gb  BootApp_IoFunctions.o [1]
 BootApp_Gpio_Init       0x08000c3d   0x54  Code  Lc  BootApp_Init.o [1]
-BootApp_Gpio_cst        0x20000234    0x8  Data  Gb  BootApp_Cfg.o [1]
+BootApp_Gpio_cst        0x20000334    0x8  Data  Gb  BootApp_Cfg.o [1]
 BootApp_HandleCmd_Receive
                         0x08002791    0xc  Code  Gb  BootApp_HandleCmd.o [1]
 BootApp_HandleCmd_Send  0x0800279d    0xc  Code  Gb  BootApp_HandleCmd.o [1]
 BootApp_IoFunction      0x08000d31   0xc0  Code  Lc  BootApp_IoFunctions.o [1]
-BootApp_Log_Exe_Status  0x080027d5    0x2  Code  Gb  BootApp_ErrHdlr.o [1]
+BootApp_Log_Exe_Status  0x080027e1   0x1c  Code  Gb  BootApp_ErrHdlr.o [1]
 BootApp_NewCmd_Received
                         0x080000ed   0x24  Code  Gb  BootApp_ReceiveData.o [1]
 BootApp_Prog_init       0x08000b8d   0x4e  Code  Gb  BootApp_Init.o [1]
@@ -448,37 +449,37 @@ BootApp_ReceiveData_st  0x20001028   0x18  Data  Gb  BootApp_ReceiveData.o [1]
 BootApp_Receive_Data    0x080001c9  0x2f4  Code  Gb  BootApp_ReceiveData.o [1]
 BootApp_Receive_Data_Finish
                         0x080004bd    0x8  Code  Gb  BootApp_ReceiveData.o [1]
-BootApp_Reset_Sys       0x08002853    0xe  Code  Gb  BootApp_Reset.o [1]
+BootApp_Reset_Sys       0x0800287b    0xe  Code  Gb  BootApp_Reset.o [1]
 BootApp_Reset_en        0x20001084    0x1  Data  Gb  BootApp_Reset.o [1]
-BootApp_Run_App         0x0800298d   0x30  Code  Gb  BootApp_Jump2App.o [1]
+BootApp_Run_App         0x080029b5   0x30  Code  Gb  BootApp_Jump2App.o [1]
 BootApp_SectBuffer_Read
                         0x08000177   0x52  Code  Gb  BootApp_ReceiveData.o [1]
 BootApp_SectBuffer_Write
                         0x08000125   0x52  Code  Gb  BootApp_ReceiveData.o [1]
-BootApp_SectBuffer_en   0x20000254  0x400  Data  Gb  BootApp_ReceiveData.o [1]
+BootApp_SectBuffer_en   0x20000354  0x400  Data  Gb  BootApp_ReceiveData.o [1]
 BootApp_Sect_Dirty_Msk_au16
-                        0x08003108   0x24  Data  Gb  BootApp_ReceiveData.o [1]
+                        0x08003130   0x24  Data  Gb  BootApp_ReceiveData.o [1]
 BootApp_SendToMb        0x080027b9    0xe  Code  Lc  BootApp_HandleCmd.o [1]
 BootApp_Set_State       0x080025bd    0x6  Code  Gb  BootApp_StateMachine.o [1]
 BootApp_StateMachine    0x080025cd  0x188  Code  Gb  BootApp_StateMachine.o [1]
 BootApp_State_Init_Act  0x08002755   0x3c  Code  Gb  BootApp_StateMachine.o [1]
 BootApp_State_en        0x20001085    0x1  Data  Gb  BootApp_StateMachine.o [1]
-BootApp_UartPort_cast   0x20000210   0x14  Data  Gb  BootApp_Cfg_FL0001A00.o [1]
+BootApp_UartPort_cast   0x20000310   0x14  Data  Gb  BootApp_Cfg_FL0001A00.o [1]
 BootApp_Uart_Init       0x08000c91   0x5c  Code  Lc  BootApp_Init.o [1]
-BootApp_Uart_cst        0x2000023c    0x8  Data  Gb  BootApp_Cfg.o [1]
-BootApp_Validate_App    0x08002869   0x3e  Code  Gb  BootApp_ValidateApp.o [1]
-BootApp_Validate_Info   0x080028a7   0xce  Code  Lc  BootApp_ValidateApp.o [1]
-BootApp_WriteData_ast   0x20000654  0x3b4  Data  Gb  BootApp_ProgramFlash.o [1]
+BootApp_Uart_cst        0x2000033c    0x8  Data  Gb  BootApp_Cfg.o [1]
+BootApp_Validate_App    0x08002891   0x3e  Code  Gb  BootApp_ValidateApp.o [1]
+BootApp_Validate_Info   0x080028cf   0xce  Code  Lc  BootApp_ValidateApp.o [1]
+BootApp_WriteData_ast   0x20000754  0x3b4  Data  Gb  BootApp_ProgramFlash.o [1]
 BootDrv_EreaseFlash     0x08002363   0x46  Code  Gb  BootDrv_Adapter.o [1]
 BootDrv_ProgramFlash    0x080023a9   0x88  Code  Gb  BootDrv_Adapter.o [1]
 BootDrv_Reset           0x08002361    0x2  Code  Gb  BootDrv_Adapter.o [1]
-BusFault_Handler        0x080030a5    0x2  Code  Gb  stm32f10x_it.o [1]
+BusFault_Handler        0x080030cd    0x2  Code  Gb  stm32f10x_it.o [1]
 CSTACK$$Base            0x20001098          --   Gb  - Linker created -
 CSTACK$$Limit           0x20001898          --   Gb  - Linker created -
-DebugMon_Handler        0x080030ab    0x2  Code  Gb  stm32f10x_it.o [1]
+DebugMon_Handler        0x080030d3    0x2  Code  Gb  stm32f10x_it.o [1]
 Delay_Init              0x080010a9   0x28  Code  Gb  delay.o [1]
 Delay_ms                0x080010d1   0x36  Code  Gb  delay.o [1]
-EXTI9_5_IRQHandler      0x0800308f    0x2  Code  Gb  stm32f10x_it.o [1]
+EXTI9_5_IRQHandler      0x080030b7    0x2  Code  Gb  stm32f10x_it.o [1]
 FLASH_ErasePage         0x08002461   0x5e  Code  Gb  stm32f10x_flash.o [1]
 FLASH_GetBank1Status    0x0800253f   0x34  Code  Gb  stm32f10x_flash.o [1]
 FLASH_Lock              0x0800244f   0x12  Code  Gb  stm32f10x_flash.o [1]
@@ -489,35 +490,35 @@ FLASH_WaitForLastOperation
 GPIO_Init               0x08001721  0x136  Code  Gb  stm32f10x_gpio.o [1]
 GPIO_ReadInputDataBit   0x08001857   0x1a  Code  Gb  stm32f10x_gpio.o [1]
 GPIO_WriteBit           0x08001871   0x12  Code  Gb  stm32f10x_gpio.o [1]
-HardFault_Handler       0x080030a1    0x2  Code  Gb  stm32f10x_it.o [1]
-I2C1_ER_IRQHandler      0x080030b3    0x2  Code  Gb  stm32f10x_it.o [1]
-InStream_Read           0x08002d15   0x22  Code  Lc  packbits_init.o [4]
+HardFault_Handler       0x080030c9    0x2  Code  Gb  stm32f10x_it.o [1]
+I2C1_ER_IRQHandler      0x080030db    0x2  Code  Gb  stm32f10x_it.o [1]
+InStream_Read           0x08002d3d   0x22  Code  Lc  packbits_init.o [4]
 MB_USART_PORT           0x20001070    0x4  Data  Gb  portserial.o [1]
-MemManage_Handler       0x080030a3    0x2  Code  Gb  stm32f10x_it.o [1]
-NMI_Handler             0x0800309f    0x2  Code  Gb  stm32f10x_it.o [1]
-NVIC_Configuration      0x08002f93   0x48  Code  Gb  init.o [1]
+MemManage_Handler       0x080030cb    0x2  Code  Gb  stm32f10x_it.o [1]
+NMI_Handler             0x080030c7    0x2  Code  Gb  stm32f10x_it.o [1]
+NVIC_Configuration      0x08002fbb   0x48  Code  Gb  init.o [1]
 NVIC_Init               0x080013ab   0x68  Code  Gb  misc.o [1]
 NVIC_PriorityGroupConfig
                         0x080013a1    0xa  Code  Gb  misc.o [1]
-PendSV_Handler          0x080030ad    0x2  Code  Gb  stm32f10x_it.o [1]
+PendSV_Handler          0x080030d5    0x2  Code  Gb  stm32f10x_it.o [1]
 RCC_APB1PeriphClockCmd  0x08001217   0x1e  Code  Gb  stm32f10x_rcc.o [1]
 RCC_APB2PeriphClockCmd  0x080011f9   0x1e  Code  Gb  stm32f10x_rcc.o [1]
-RCC_Configuration       0x08002f6d   0x26  Code  Gb  init.o [1]
+RCC_Configuration       0x08002f95   0x26  Code  Gb  init.o [1]
 RCC_GetClocksFreq       0x0800111d   0xdc  Code  Gb  stm32f10x_rcc.o [1]
-RTCAlarm_IRQHandler     0x080030b5    0x2  Code  Gb  stm32f10x_it.o [1]
-RTC_IRQHandler          0x080030af    0x2  Code  Gb  stm32f10x_it.o [1]
-Region$$Table$$Base     0x0800312c          --   Gb  - Linker created -
-Region$$Table$$Limit    0x08003158          --   Gb  - Linker created -
-SPI2_IRQHandler         0x080030b1    0x2  Code  Gb  stm32f10x_it.o [1]
-SVC_Handler             0x080030a9    0x2  Code  Gb  stm32f10x_it.o [1]
-SetSysClock             0x08002a11    0x8  Code  Lc  system_stm32f10x.o [1]
-SetSysClockTo72         0x08002a19   0xe0  Code  Lc  system_stm32f10x.o [1]
-StatusBuffer_un         0x20000e08  0x100  Data  Gb  BootApp_HandleCmd.o [1]
+RTCAlarm_IRQHandler     0x080030dd    0x2  Code  Gb  stm32f10x_it.o [1]
+RTC_IRQHandler          0x080030d7    0x2  Code  Gb  stm32f10x_it.o [1]
+Region$$Table$$Base     0x08003154          --   Gb  - Linker created -
+Region$$Table$$Limit    0x08003180          --   Gb  - Linker created -
+SPI2_IRQHandler         0x080030d9    0x2  Code  Gb  stm32f10x_it.o [1]
+SVC_Handler             0x080030d1    0x2  Code  Gb  stm32f10x_it.o [1]
+SetSysClock             0x08002a39    0x8  Code  Lc  system_stm32f10x.o [1]
+SetSysClockTo72         0x08002a41   0xe0  Code  Lc  system_stm32f10x.o [1]
+StatusBuffer_un         0x20000000  0x100  Data  Gb  BootApp_HandleCmd.o [1]
 SysTick_CLKSourceConfig
                         0x08001413   0x20  Code  Gb  misc.o [1]
-SystemCoreClock         0x2000024c    0x4  Data  Gb  system_stm32f10x.o [1]
-SystemInit              0x080029bd   0x54  Code  Gb  system_stm32f10x.o [1]
-TIM2_IRQHandler         0x08003091    0xe  Code  Gb  stm32f10x_it.o [1]
+SystemCoreClock         0x2000034c    0x4  Data  Gb  system_stm32f10x.o [1]
+SystemInit              0x080029e5   0x54  Code  Gb  system_stm32f10x.o [1]
+TIM2_IRQHandler         0x080030b9    0xe  Code  Gb  stm32f10x_it.o [1]
 TIM4_IRQHandler         0x08000b1f   0x1c  Code  Gb  porttimer.o [1]
 TIM_ARRPreloadConfig    0x08001317   0x1c  Code  Gb  stm32f10x_tim.o [1]
 TIM_ClearFlag           0x08001337    0x8  Code  Gb  stm32f10x_tim.o [1]
@@ -528,7 +529,7 @@ TIM_ITConfig            0x08001301   0x16  Code  Gb  stm32f10x_tim.o [1]
 TIM_SetCounter          0x08001333    0x4  Code  Gb  stm32f10x_tim.o [1]
 TIM_TimeBaseInit        0x08001251   0x94  Code  Gb  stm32f10x_tim.o [1]
 USART1_IRQHandler       0x080009eb   0x44  Code  Gb  portserial.o [1]
-USART2_IRQHandler       0x0800308d    0x2  Code  Gb  stm32f10x_it.o [1]
+USART2_IRQHandler       0x080030b5    0x2  Code  Gb  stm32f10x_it.o [1]
 USART_ClearITPendingBit
                         0x08001085   0x24  Code  Gb  stm32f10x_usart.o [1]
 USART_Cmd               0x08000f95   0x1c  Code  Gb  stm32f10x_usart.o [1]
@@ -537,32 +538,32 @@ USART_ITConfig          0x08000fb1   0x56  Code  Gb  stm32f10x_usart.o [1]
 USART_Init              0x08000eb1   0xde  Code  Gb  stm32f10x_usart.o [1]
 USART_ReceiveData       0x0800100f    0x8  Code  Gb  stm32f10x_usart.o [1]
 USART_SendData          0x08001007    0x8  Code  Gb  stm32f10x_usart.o [1]
-UsageFault_Handler      0x080030a7    0x2  Code  Gb  stm32f10x_it.o [1]
+UsageFault_Handler      0x080030cf    0x2  Code  Gb  stm32f10x_it.o [1]
 __aeabi_memclr4         0x080004f1         Code  Gb  ABImemclr4.o [4]
 __as_entries_start      0xffffffff          --   Gb  command line/config [2]
 __as_table_start        0xffffffff          --   Gb  command line/config [2]
-__cmain                 0x08003159         Code  Gb  cmain.o [4]
-__exit                  0x08002ded   0x14  Code  Gb  exit.o [5]
+__cmain                 0x08003181         Code  Gb  cmain.o [4]
+__exit                  0x08002e15   0x14  Code  Gb  exit.o [5]
 __iar_Memset4_word      0x08000519         Code  Gb  ABImemset48.o [4]
 __iar_Memset8_word      0x08000519         Code  Gb  ABImemset48.o [4]
-__iar_data_init3        0x080030e1   0x28  Code  Gb  data_init.o [4]
-__iar_packbits_init3    0x08002d37   0xb0  Code  Gb  packbits_init.o [4]
-__iar_program_start     0x080031a9         Code  Gb  cstartup_M.o [4]
+__iar_data_init3        0x08003109   0x28  Code  Gb  data_init.o [4]
+__iar_packbits_init3    0x08002d5f   0xb0  Code  Gb  packbits_init.o [4]
+__iar_program_start     0x080031d1         Code  Gb  cstartup_M.o [4]
 __iar_unaligned___aeabi_memcpy
-                        0x08002fe1         Code  Gb  ABImemcpy_unaligned.o [4]
+                        0x08003009         Code  Gb  ABImemcpy_unaligned.o [4]
 __iar_unaligned___aeabi_memcpy4
-                        0x08003001         Code  Gb  ABImemcpy_unaligned.o [4]
+                        0x08003029         Code  Gb  ABImemcpy_unaligned.o [4]
 __iar_unaligned___aeabi_memcpy8
-                        0x08003001         Code  Gb  ABImemcpy_unaligned.o [4]
+                        0x08003029         Code  Gb  ABImemcpy_unaligned.o [4]
 __iar_zero_init3        0x080004f7   0x22  Code  Gb  zero_init3.o [4]
-__low_level_init        0x08003173    0x4  Code  Gb  low_level_init.o [3]
+__low_level_init        0x0800319b    0x4  Code  Gb  low_level_init.o [3]
 __vector_table          0x08000000         Data  Gb  startup_stm32f10x_md.o [1]
-_call_main              0x08003165         Code  Gb  cmain.o [4]
-_exit                   0x0800317d         Code  Gb  cexit.o [4]
-_main                   0x0800316f         Code  Gb  cmain.o [4]
-abort                   0x08002de7    0x6  Code  Gb  abort.o [3]
-aucCRCHi                0x08002b14  0x100  Data  Lc  mbcrc.o [1]
-aucCRCLo                0x08002c14  0x100  Data  Lc  mbcrc.o [1]
+_call_main              0x0800318d         Code  Gb  cmain.o [4]
+_exit                   0x080031a5         Code  Gb  cexit.o [4]
+_main                   0x08003197         Code  Gb  cmain.o [4]
+abort                   0x08002e0f    0x6  Code  Gb  abort.o [3]
+aucCRCHi                0x08002b3c  0x100  Data  Lc  mbcrc.o [1]
+aucCRCLo                0x08002c3c  0x100  Data  Lc  mbcrc.o [1]
 eBytePos                0x2000108e    0x1  Data  Lc  mbascii.o [1]
 eMBASCIIInit            0x0800054d   0x4e  Code  Gb  mbascii.o [1]
 eMBASCIIReceive         0x080005cb   0x4a  Code  Gb  mbascii.o [1]
@@ -573,14 +574,14 @@ eMBCurrentMode          0x20001088    0x1  Data  Lc  mb.o [1]
 eMBEnable               0x08001561   0x24  Code  Gb  mb.o [1]
 eMBFuncReadCoils        0x08001f97   0xc0  Code  Gb  mbfunccoils.o [1]
 eMBFuncReadDiscreteInputs
-                        0x08002e01   0xbe  Code  Gb  mbfuncdisc.o [1]
+                        0x08002e29   0xbe  Code  Gb  mbfuncdisc.o [1]
 eMBFuncReadHoldingRegister
                         0x08001c39   0xa4  Code  Gb  mbfuncholding.o [1]
 eMBFuncReadInputRegister
-                        0x08002ebf   0xa2  Code  Gb  mbfuncinput.o [1]
+                        0x08002ee7   0xa2  Code  Gb  mbfuncinput.o [1]
 eMBFuncReadWriteMultipleHoldingRegister
                         0x08001cdd  0x112  Code  Gb  mbfuncholding.o [1]
-eMBFuncReportSlaveID    0x08003059   0x2a  Code  Gb  mbfuncother.o [1]
+eMBFuncReportSlaveID    0x08003081   0x2a  Code  Gb  mbfuncother.o [1]
 eMBFuncWriteCoil        0x08002057   0x82  Code  Gb  mbfunccoils.o [1]
 eMBFuncWriteHoldingRegister
                         0x08001b65   0x4e  Code  Gb  mbfuncholding.o [1]
@@ -599,7 +600,7 @@ eMBRegCoilsCB           0x08001ec5    0xa  Code  Gb  portCB.o [1]
 eMBRegDiscreteCB        0x08001ecf    0x6  Code  Gb  portCB.o [1]
 eMBRegHoldingCB         0x08001df1   0x84  Code  Gb  portCB.o [1]
 eMBRegInputCB           0x08001e75   0x50  Code  Gb  portCB.o [1]
-eMBState                0x20000252    0x1  Data  Lc  mb.o [1]
+eMBState                0x20000352    0x1  Data  Lc  mb.o [1]
 eQueuedEvent            0x20001092    0x1  Data  Lc  portevent.o [1]
 eRcvState               0x2000108d    0x1  Data  Lc  mbascii.o [1]
 eRcvState               0x20001091    0x1  Data  Lc  mbrtu.o [1]
@@ -607,12 +608,12 @@ eReadMBRegHolding       0x08001f19   0x46  Code  Gb  portCB.o [1]
 eSndState               0x2000108c    0x1  Data  Lc  mbascii.o [1]
 eSndState               0x20001090    0x1  Data  Lc  mbrtu.o [1]
 eWriteMBRegInput        0x08001ed5   0x44  Code  Gb  portCB.o [1]
-exit                    0x08003177    0x4  Code  Gb  exit.o [3]
+exit                    0x0800319f    0x4  Code  Gb  exit.o [3]
 fac_ms                  0x20001074    0x2  Data  Lc  delay.o [1]
 fac_us                  0x20001086    0x1  Data  Lc  delay.o [1]
-init                    0x08002f61    0xc  Code  Gb  init.o [1]
+init                    0x08002f89    0xc  Code  Gb  init.o [1]
 magic_word              0x20004f00    0x2  Data  Gb  BootApp_Reset.o [1]
-main                    0x080030b9   0x28  Code  Gb  main.o [1]
+main                    0x080030e1   0x28  Code  Gb  main.o [1]
 peMBFrameReceiveCur     0x20001050    0x4  Data  Lc  mb.o [1]
 peMBFrameSendCur        0x20001044    0x4  Data  Lc  mb.o [1]
 prveMBError2Exception   0x08001f69   0x2e  Code  Gb  mbutils.o [1]
@@ -633,7 +634,7 @@ pxMBFrameCBTransmitterEmpty
                         0x2000105c    0x4  Data  Gb  mb.o [1]
 pxMBPortCBTimerExpired  0x20001060    0x4  Data  Gb  mb.o [1]
 slave_addr              0x20001083    0x1  Data  Gb  BootApp_Init.o [1]
-ucASCIIBuf              0x20000244    0x4  Data  Lc  mbascii.o [1]
+ucASCIIBuf              0x20000344    0x4  Data  Lc  mbascii.o [1]
 ucMBAddress             0x20001087    0x1  Data  Lc  mb.o [1]
 ucMBLFCharacter         0x2000108f    0x1  Data  Lc  mbascii.o [1]
 ucMBSlaveID             0x20001008   0x20  Data  Lc  mbfuncother.o [1]
@@ -642,8 +643,8 @@ usMBCRC16               0x08001b21   0x44  Code  Gb  mbcrc.o [1]
 usMBSlaveIDLen          0x2000107c    0x2  Data  Lc  mbfuncother.o [1]
 usRcvBufferPos          0x20001078    0x2  Data  Lc  mbascii.o [1]
 usRcvBufferPos          0x20001080    0x2  Data  Lc  mbrtu.o [1]
-usRegHoldingBuf         0x20000c08  0x200  Data  Gb  portCB.o [1]
-usRegInputBuf           0x20000000  0x100  Data  Gb  portCB.o [1]
+usRegHoldingBuf         0x20000d08  0x200  Data  Gb  portCB.o [1]
+usRegInputBuf           0x20000100  0x100  Data  Gb  portCB.o [1]
 usSndBufferCount        0x2000107a    0x2  Data  Lc  mbascii.o [1]
 usSndBufferCount        0x2000107e    0x2  Data  Lc  mbrtu.o [1]
 vMBPortSerialEnable     0x08000949   0x66  Code  Gb  portserial.o [1]
@@ -651,7 +652,7 @@ vMBPortTimersDelay      0x08000b13    0x2  Code  Gb  porttimer.o [1]
 vMBPortTimersDisable    0x08000aed   0x26  Code  Gb  porttimer.o [1]
 vMBPortTimersEnable     0x08000ac7   0x26  Code  Gb  porttimer.o [1]
 xEventInQueue           0x20001093    0x1  Data  Lc  portevent.o [1]
-xFuncHandlers           0x20000190   0x80  Data  Lc  mb.o [1]
+xFuncHandlers           0x20000290   0x80  Data  Lc  mb.o [1]
 xMBASCIIReceiveFSM      0x08000687  0x116  Code  Gb  mbascii.o [1]
 xMBASCIITimerT1SExpired
                         0x08000885   0x1c  Code  Gb  mbascii.o [1]
@@ -668,14 +669,14 @@ xMBRTUTimerT35Expired   0x08001ac5   0x3c  Code  Gb  mbrtu.o [1]
 xMBRTUTransmitFSM       0x08001a65   0x60  Code  Gb  mbrtu.o [1]
 
 
-[1] = F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj
+[1] = D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj
 [2] = command line
 [3] = dl7M_tln.a
 [4] = rt7M_tl.a
 [5] = shb_l.a
 
-  12 322 bytes of readonly  code memory
-     910 bytes of readonly  data memory
+  12 362 bytes of readonly  code memory
+     921 bytes of readonly  data memory
    6 294 bytes of readwrite data memory
 
 Errors: none

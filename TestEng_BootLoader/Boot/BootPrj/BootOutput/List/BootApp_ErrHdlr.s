@@ -1,52 +1,54 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       03/Jul/2019  23:23:49
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       30/Jul/2019  11:35:17
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
 //    Endian       =  little
 //    Source file  =  
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ErrHdlr.c
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ErrHdlr.c
 //    Command line =  
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ErrHdlr.c
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_ErrHdlr.c
 //        -lcN
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
 //        -lb
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\
 //        -o
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\Obj\
 //        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
 //        --no_clustering --no_scheduling --debug --endian=little
-//        --cpu=Cortex-M3 -e --fpu=None --dlib_config "E:\Program Files
+//        --cpu=Cortex-M3 -e --fpu=None --dlib_config "D:\Program Files
 //        (x86)\IAR Systems\Embedded Workbench
 //        7.0\arm\INC\c\DLib_Config_Normal.h" -I
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootApp\inc\
 //        -I
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootDrv\inc\
 //        -I
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\BootOth\inc\
 //        -I
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\CMSIS\
 //        -I
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\
 //        -I
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\ascii\
 //        -I
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\include\
 //        -I
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\modbus_port\
 //        -I
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\rtu\
 //        -I
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
-//        -On -I "E:\Program Files (x86)\IAR Systems\Embedded Workbench
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\..\modbus\tcp\
+//        -On -I "D:\Program Files (x86)\IAR Systems\Embedded Workbench
 //        7.0\arm\CMSIS\Include\"
 //    List file    =  
-//        F:\FLT\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\BootApp_ErrHdlr.s
+//        D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootPrj\BootOutput\List\BootApp_ErrHdlr.s
 //
 ///////////////////////////////////////////////////////////////////////////////
 
         #define SHT_PROGBITS 0x1
+
+        EXTERN BootApp_Get_StatusBuf
 
         PUBLIC BootApp_Log_Exe_Status
 
@@ -54,7 +56,19 @@
         SECTION `.text`:CODE:NOROOT(1)
         THUMB
 BootApp_Log_Exe_Status:
-        BX       LR               ;; return
+        PUSH     {R3-R5,LR}
+        MOVS     R4,R0
+        MOVS     R5,R1
+        MOVS     R0,#+0
+        STR      R0,[SP, #+0]
+        ADD      R0,SP,#+0
+        BL       BootApp_Get_StatusBuf
+        UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+        LDR      R0,[SP, #+0]
+        STRH     R4,[R0, #+16]
+        LDR      R0,[SP, #+0]
+        STRH     R5,[R0, #+18]
+        POP      {R0,R4,R5,PC}    ;; return
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -69,9 +83,9 @@ BootApp_Log_Exe_Status:
 
         END
 // 
-// 2 bytes in section .text
+// 28 bytes in section .text
 // 
-// 2 bytes of CODE memory
+// 28 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

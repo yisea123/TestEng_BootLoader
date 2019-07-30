@@ -24,13 +24,18 @@ BootApp_Status_ten BootApp_Erease_App(void)
 
     for(;str_addr < end_addr; str_addr+=sect_siz)
     {
-        if(ret)
+        ret = BootDrv_EreaseFlash(str_addr, sect_siz);
+        if(0 == ret)
         {
-            ret = BootDrv_EreaseFlash(str_addr, sect_siz);
+            break;
+        }
+        else
+        {
+            /**/
         }
     }
 
-    if(ret)
+    if( ret && (str_addr == end_addr + 1) )
     {
         status_en = BOOTAPP_EREASE_OK;
     }
@@ -51,3 +56,4 @@ BootApp_Status_ten BootApp_Erease_App(void)
  * $
  ***********************************************************************************************************************
 </BASDKey>*/
+

@@ -15,7 +15,7 @@
 #include "BootApp_Priv.h"
 
 BootApp_CommunicationBuffer_tun BootApp_CommunicationBuffer_un = {{0},};
-BootApp_StatusBuffer_tun StatusBuffer_un = {{0},};
+BootApp_StatusBuffer_tun StatusBuffer_un = {{FW_MAIN_VERSION,FW_SUB_VERSION,FW_REVISION,},};
 
 
 #if (BOOTAPP_BOARD_SUPPORT == TestEng_Debug)
@@ -35,10 +35,12 @@ void BootApp_Get_CommunicationBuf(BootApp_CommunicationBuffer_tst ** ComBuffer_p
     *ComBuffer_pst = &BootApp_CommunicationBuffer_un.com_st;
 }
 
-#else
+void BootApp_Get_StatusBuf(BootApp_StsBuffer_tst ** stsBuffer_pst)
+{
+    *stsBuffer_pst = &StatusBuffer_un.sts_st;
+}
 
-extern eMBErrorCode  eWriteMBRegInput( USHORT * pucRegBuffer, USHORT usAddress, USHORT usNRegs);
-extern eMBErrorCode  eReadMBRegHolding( USHORT * pucRegBuffer, USHORT usAddress, USHORT usNRegs);
+#else
 
 static void BootApp_CopyFromMb(void);
 static void BootApp_SendToMb(void);
@@ -64,12 +66,17 @@ void BootApp_CopyFromMb(void)
 
 void BootApp_SendToMb(void)
 {
-    eWriteMBRegInput(&StatusBuffer_un.buf_au16[0], 2, BOOTAPP_STATUS_BUF_SIZE);
+    eWriteMBRegInput(&StatusBuffer_un.buf_au16[8], 8, BOOTAPP_STATUS_BUF_SIZE-8);
 }
 
 void BootApp_Get_CommunicationBuf(BootApp_CommunicationBuffer_tst ** ComBuffer_pst)
 {
     *ComBuffer_pst = &BootApp_CommunicationBuffer_un.com_st;
+}
+
+void BootApp_Get_StatusBuf(BootApp_StsBuffer_tst ** stsBuffer_pst)
+{
+    *stsBuffer_pst = &StatusBuffer_un.sts_st;
 }
 
 #endif
