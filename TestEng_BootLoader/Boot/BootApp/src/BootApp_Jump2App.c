@@ -21,11 +21,11 @@ void BootApp_Run_App(void)
 #else
 
     __disable_irq();
-    if(((*(uint32_t*)BOOTAPP_APP_START_ADDR)&0x2FFE0000)==0x20000000)
+    if(((*(uint32_t*)BOOTAPP_MAIN_ADDR)&0x2FFE0000)==0x20000000)
     {
         uint32_t   *app_main;
-        app_main = (uint32_t *)(BOOTAPP_APP_START_ADDR + 4);
-        __set_MSP(*(volatile uint32_t*) BOOTAPP_APP_START_ADDR);
+        app_main = (uint32_t *)(BOOTAPP_MAIN_ADDR + 4);
+        __set_MSP(*(volatile uint32_t*) BOOTAPP_MAIN_ADDR);
         ((void (*)())(*app_main))();
     }
 

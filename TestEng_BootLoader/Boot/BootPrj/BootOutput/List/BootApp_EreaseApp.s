@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       30/Jul/2019  11:16:00
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       01/Sep/2019  15:31:04
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -58,7 +58,7 @@
 BootApp_Erease_App:
         PUSH     {R4-R8,LR}
         MOVS     R4,#+1
-        LDR.N    R5,??BootApp_Erease_App_0  ;; 0x800c400
+        LDR.N    R5,??BootApp_Erease_App_0  ;; 0x800c000
         LDR.N    R6,??BootApp_Erease_App_0+0x4  ;; 0x801ffff
         MOV      R7,#+1024
         MOVW     R8,#+4098
@@ -94,7 +94,7 @@ BootApp_Erease_App:
         POP      {R4-R8,PC}       ;; return
         DATA
 ??BootApp_Erease_App_0:
-        DC32     0x800c400
+        DC32     0x800c000
         DC32     0x801ffff
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)

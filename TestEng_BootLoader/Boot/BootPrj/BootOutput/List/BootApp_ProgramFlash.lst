@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        30/Jul/2019  11:16:01
+# IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM        01/Sep/2019  15:31:05
 # Copyright 1999-2014 IAR Systems AB.
 #
 #    Cpu mode     =  thumb
@@ -268,14 +268,14 @@ D:\GitHub\TestEng_BootLoader\TestEng_BootLoader\Boot\BootApp\src\BootApp_Program
        4  ??DataTable1_1
      422  BootApp_Program_Flash
       54  BootApp_Program_Flash_Finish
-     948  BootApp_WriteData_ast
+     960  BootApp_WriteData_ast
 
  
- 948 bytes in section .bss
+ 960 bytes in section .bss
  484 bytes in section .text
  
  484 bytes of CODE memory
- 948 bytes of DATA memory
+ 960 bytes of DATA memory
 
 Errors: none
 Warnings: none

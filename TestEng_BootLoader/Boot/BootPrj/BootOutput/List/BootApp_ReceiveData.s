@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       30/Jul/2019  11:16:02
+// IAR ANSI C/C++ Compiler V7.20.2.7424/W32 for ARM       01/Sep/2019  15:31:06
 // Copyright 1999-2014 IAR Systems AB.
 //
 //    Cpu mode     =  thumb
@@ -307,7 +307,7 @@ BootApp_Receive_Data:
         B.N      ??BootApp_Receive_Data_1
 ??BootApp_Receive_Data_0:
         LDRH     R0,[SP, #+12]
-        CMP      R0,#+80
+        CMP      R0,#+81
         BGE.N    ??BootApp_Receive_Data_2
         LDRH     R0,[SP, #+12]
         CMP      R0,#+0
@@ -452,7 +452,7 @@ BootApp_Receive_Data:
         CMP      R4,#+0
         BEQ.N    ??BootApp_Receive_Data_17
         LDR      R0,[SP, #+16]
-        LDR.N    R1,??DataTable6_4  ;; 0x800c400
+        LDR.N    R1,??DataTable6_4  ;; 0x800c000
         CMP      R0,R1
         BCC.N    ??BootApp_Receive_Data_18
         LDR      R0,[SP, #+20]
@@ -475,7 +475,7 @@ BootApp_Receive_Data:
         CMP      R0,#+0
         BNE.N    ??BootApp_Receive_Data_20
         LDR      R0,[SP, #+16]
-        LDR.N    R1,??DataTable6_4  ;; 0x800c400
+        LDR.N    R1,??DataTable6_4  ;; 0x800c000
         CMP      R0,R1
         BNE.N    ??BootApp_Receive_Data_21
         MOVS     R0,#+1
@@ -491,7 +491,7 @@ BootApp_Receive_Data:
         LDR      R0,[SP, #+16]
         LDRH     R1,[SP, #+12]
         MOV      R2,#+1024
-        LDR.N    R3,??DataTable6_6  ;; 0x800c000
+        LDR.N    R3,??DataTable6_6  ;; 0x800bc00
         MLA      R1,R2,R1,R3
         CMP      R0,R1
         BNE.N    ??BootApp_Receive_Data_22
@@ -629,7 +629,7 @@ BootApp_Enable_ReceiveData:
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable6_4:
-        DC32     0x800c400
+        DC32     0x800c000
 
         SECTION `.text`:CODE:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
@@ -641,7 +641,7 @@ BootApp_Enable_ReceiveData:
         SECTION_TYPE SHT_PROGBITS, 0
         DATA
 ??DataTable6_6:
-        DC32     0x800c000
+        DC32     0x800bc00
 
         SECTION `.iar_vfe_header`:DATA:NOALLOC:NOROOT(2)
         SECTION_TYPE SHT_PROGBITS, 0
