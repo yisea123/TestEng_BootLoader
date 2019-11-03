@@ -594,7 +594,7 @@
         <option>
           <name>OOCOutputFormat</name>
           <version>2</version>
-          <state>1</state>
+          <state>2</state>
         </option>
         <option>
           <name>OCOutputOverride</name>
@@ -602,7 +602,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>Boot.hex</state>
+          <state>BootLoader.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>

@@ -106,12 +106,6 @@ Fmt17={W}1:sect_siz	4	0
 Fmt18={W}1:start_addr_u32	4	0
 Fmt19={W}1:str_addr	4	0
 Fmt20={W}1:str_addr_u32	4	0
-[Trace1]
-Enabled=0
-ShowSource=1
-[Trace2]
-Enabled=0
-ShowSource=0
 [SWOTraceWindow]
 PcSampling=0
 InterruptLogs=0
@@ -150,10 +144,6 @@ GraphEnabled=0
 ShowTimeLog=1
 ShowTimeSum=1
 SumSortOrder=0
-[Disassemble mode]
-mode=1
-[Breakpoints2]
-Count=0
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
@@ -161,12 +151,6 @@ Category=_ 0
 [TermIOLog]
 LoggingEnabled=_ 0
 LogFile=_ ""
-[Aliases]
-A0=_ "C:\Documents and Settings\he.huang\Desktop\burn_in_2_v350301\dfb\DFB_src\main.c" ""
-A1=_ "C:\Users\he.huang\Desktop\burn_in_2_v350504\dfb\DFB_src\command.c" ""
-A2=_ "C:\Users\he.huang\Desktop\burn_in_2_v350504\dfb\DFB_src\main.c" ""
-Count=3
-SuppressDialog=0
 [CallStackLog]
 Enabled=0
 [PowerProbe]
@@ -179,3 +163,13 @@ Mode=3
 Graph=0
 Symbiont=0
 Exclusions=
+[Disassemble mode]
+mode=1
+[Breakpoints2]
+Count=0
+[Aliases]
+A0=_ "C:\Documents and Settings\he.huang\Desktop\burn_in_2_v350301\dfb\DFB_src\main.c" ""
+A1=_ "C:\Users\he.huang\Desktop\burn_in_2_v350504\dfb\DFB_src\command.c" ""
+A2=_ "C:\Users\he.huang\Desktop\burn_in_2_v350504\dfb\DFB_src\main.c" ""
+Count=3
+SuppressDialog=0

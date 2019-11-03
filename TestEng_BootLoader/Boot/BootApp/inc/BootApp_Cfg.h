@@ -52,9 +52,9 @@
 #define BOOTAPP_EPILOG_END_ADDR    0x0801FFFF
 #define BOOTAPP_EPILOG_SIZE        (BOOTAPP_EPILOG_END_ADDR - BOOTAPP_EPILOG_BASE_ADDR + 1)
 
-#define FW_MAIN_VERSION            0x2019
-#define FW_SUB_VERSION             0x0520
-#define FW_REVISION                0x9999
+#define FW_MAIN_VERSION            0xFB19
+#define FW_SUB_VERSION             0x2019
+#define FW_REVISION                0x1102
 
 #if(BOOTAPP_APP_PAGE_NUM > BOOTAPP_APP_MAX_PAGE_NUM)
 #error "Invalid page length configured!"
